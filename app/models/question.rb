@@ -1,11 +1,10 @@
-class Vote
+class Question
   include Mongoid::Document
   include Mongoid::Timestamps
   field :title, type: String
-  field :finish_at, type: Time
+  embedded_in :vote
 
-  belongs_to :user
-  embeds_many :questions
+  embeds_many :answers
 
   validates_presence_of :title
 end
