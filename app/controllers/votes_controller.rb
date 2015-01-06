@@ -23,27 +23,28 @@ class VotesController < ApplicationController
     respond_with(@vote)
   end
 
-  def edit
-  end
+  #def edit
+  #end
 
   def create
     @vote = current_user.votes.new(vote_params)
     if @vote.save
-      respond_with(@vote)
+      redirect_to votes_path
+      #respond_with(@vote)
     else
       render :new
     end
   end
 
-  def update
-    @vote.update(vote_params)
-    respond_with(@vote)
-  end
+  #def update
+    #@vote.update(vote_params)
+    #respond_with(@vote)
+  #end
 
-  def destroy
-    @vote.destroy
-    respond_with(@vote)
-  end
+  #def destroy
+    #@vote.destroy
+    #respond_with(@vote)
+  #end
 
   private
   def set_vote

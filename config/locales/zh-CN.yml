@@ -216,6 +216,8 @@ zh-CN:
     username: 用户名
     description: 描述
     remember_me: 记住我
+    title: 主题
+    finish_at: 结束时间
 
   will_paginate:
     previous_label: "&#8592; 上一页"
