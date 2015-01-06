@@ -1,0 +1,11 @@
+<div class="sign-in">
+  <%#= image_tag "http://img.teamkn.com/i/NXbOZbCy.png@300w.png" %>
+  <p class="lead">
+    Touch Idea
+  </p>
+  <%- resource_class.omniauth_providers.each do |provider| %>
+    <div class="">
+      <%= link_to "新浪微博登录", omniauth_authorize_path(resource_name, provider), class: 'btn-lg btn-primary' %><br />
+    </div>
+  <% end -%>
+</div>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= content_for?(:title) ? yield(:title) : "做日常（Done List） - 内测版仅供体验，用户数据可能会不定期清空" %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "做日常（Done List） - 内测版仅供体验，用户数据可能会不定期清空" %>">
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= yield(:head) %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+    <header>
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <%= link_to 'Done List', root_url, class: 'navbar-brand', title: 'Done List - 内测版仅供体验，用户数据可能会不定期清空' %>
+          </div>
+          <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li>
+                <%= link_to 'GTD 信息图', dashboard_path %>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+              <li>
+                <%= link_to '登出', destroy_user_session_path, method: :delete %>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main role="main">
+      <div class="container" id="container">
+        <%= render 'layouts/messages' %>
+        <%= yield %>
+      </div>
+    </main>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        alert('请注意：\n\nDone List 并不是一种待办事项（TODO）管理工具，它只记录你实际做完的，回想起来觉得有意义的事。\n\n具体说来，Done List 适合用来记录你最近已经完成（Done）的任务，而不是记录你准备做（TODO）的任务。\n\n先举个正面的例子：“跟老王沟通过项目需求了” 这是已完成任务，请用 Done List 来记录；\n\n再举个反例：“记得跟老王沟通一下项目需求” 这是准备做的任务，不妨先把它完成，然后后再来记录。：）')
+      });
+    </script>
+  </body>
+</html>
