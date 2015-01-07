@@ -55,13 +55,11 @@ class User
 
   has_many :user_tokens
   has_many :votes
+  has_many :friendships, inverse_of: 'user'
+  has_many :friend_users, inverse_of: 'friend', class_name: 'Friendship', primary_key: :uid, foreign_key: :uid
 
-  def self.new_with_session(params, session)
-    super.tap do |user|
-      if data = session[:omniauth]
-        user.user_tokens.build(:provider => data['provider'], :uid => data['uid'])
-      end
-    end
+  def friends
+    friendships.includes(:friend).map(&:friend).compact
   end
 
   def apply_omniauth(omniauth)
@@ -69,14 +67,13 @@ class User
     #self.name = omniauth['user_info']['name'] if name.blank?
     #self.nickname = omniauth['user_info']['nickname'] if nickname.blank?
 
-    unless omniauth['credentials'].blank?
+    if omniauth['credentials'].blank?
       user_tokens.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
-      #user_tokens.build(:provider => omniauth['provider'], 
-      #                  :uid => omniauth['uid'],
-      #                  :token => omniauth['credentials']['token'], 
-      #                  :secret => omniauth['credentials']['secret'])
     else
-      user_tokens.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
+      user_tokens.build(:provider => omniauth['provider'], 
+                        :uid => omniauth['uid'],
+                        :token => omniauth['credentials']['token'], 
+                        :expires_at => omniauth['credentials']['expires_at'])
     end
     #self.confirm!# unless user.email.blank?
   end
@@ -87,5 +84,15 @@ class User
 
   def email_required?
     false
+  end
+
+  protected
+  after_create :get_weibo_friends_bilateral
+  def get_weibo_friends_bilateral
+    client = WeiboOAuth2::Client.new
+    user_token = user_tokens.last
+    client.get_token_from_hash access_token: user_token.token, expires_at: user_token.expires_at
+    friends_bilateral = client.friendships.friends_bilateral(uid)
+    friendships.create friends_bilateral.users.map {|user| {name: user.name, uid: user.id} }
   end
 end
