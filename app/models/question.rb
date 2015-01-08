@@ -2,9 +2,9 @@ class Question
   include Mongoid::Document
   include Mongoid::Timestamps
   field :title, type: String
-  embedded_in :vote
+  belongs_to :vote
 
-  embeds_many :answers
+  has_many :answers
 
   validates_presence_of :title
 end
