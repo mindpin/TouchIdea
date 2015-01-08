@@ -6,7 +6,7 @@ class VotesController < ApplicationController
   respond_to :js, only: [:new]
 
   def index
-    @votes = current_user.votes
+    @votes = Vote.by_user(current_user).recent
     respond_with(@votes)
   end
 

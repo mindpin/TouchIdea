@@ -12,3 +12,41 @@
     </div>
   </div>
 </form>
+
+<div class="votes">
+  <% @votes.each do |vote| %>
+    <div class="vote">
+      <div class="vote-title">
+        <% if Time.now >= vote.finish_at %>
+          <span class="vote-finish">
+            【已结束】
+          </span>
+        <% else %>
+          <% if false %>
+            <span class="vote-voted">
+              【已投票】
+            </span>
+          <% else %>
+            <span class="vote-no-vote">
+              【未投票】
+            </span>
+          <% end %>
+        <% end %>
+        <%= link_to vote.title, vote %>
+      </div>
+      <div class="vote-meta">
+        <div class="vote-time pull-left">
+          <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+          <%= vote.created_at.strftime('%m/%d') %>
+          ~
+          <%= vote.finish_at.strftime('%m/%d/%Y') %>
+        </div>
+        <div class="vote-time pull-right">
+          <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+          <%= vote.invite_uids.try(:count) || 0 %>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  <% end -%>
+</div>
