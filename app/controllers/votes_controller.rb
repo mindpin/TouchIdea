@@ -11,7 +11,11 @@ class VotesController < ApplicationController
   end
 
   def show
-    respond_with(@vote)
+    if @vote.answered_by? current_user
+      redirect_to result_vote_path(@vote)
+    else
+      respond_with(@vote)
+    end
   end
 
   def new
