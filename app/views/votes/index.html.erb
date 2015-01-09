@@ -43,6 +43,7 @@
         </div>
         <div class="vote-time pull-right">
           <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+          <%= vote.voted_users.count %> /
           <%= vote.invite_uids.try(:count) || 0 %>
         </div>
         <div class="clearfix"></div>

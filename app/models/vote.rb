@@ -3,11 +3,12 @@ class Vote
   include Mongoid::Timestamps
   field :title, type: String
   field :finish_at, type: Time
-  field :invite_uids, type: Array
+  field :invite_uids, type: Array, default: []
 
   belongs_to :user, inverse_of: :votes
   has_many :questions
   has_and_belongs_to_many :users, inverse_of: 'invited_votes'
+  has_and_belongs_to_many :voted_users, class_name: 'User', inverse_of: nil
 
   validates_presence_of :title
   validates_presence_of :finish_at
