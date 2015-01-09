@@ -9,4 +9,8 @@ class Answer
   accepts_nested_attributes_for :answer_records, :reject_if => :all_blank, :allow_destroy => true
 
   validates_presence_of :title
+
+  def answered_by? user
+    !!answer_records.where(user: user).first
+  end
 end

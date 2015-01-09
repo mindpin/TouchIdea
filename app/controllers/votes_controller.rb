@@ -1,6 +1,6 @@
 class VotesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_vote, only: [:show, :edit, :update, :destroy]
+  before_action :set_vote, only: [:show, :edit, :update, :destroy, :result]
 
   respond_to :html
   respond_to :js, only: [:new]
@@ -47,6 +47,9 @@ class VotesController < ApplicationController
     #respond_with(@vote)
   #end
 
+  def result
+    
+  end
   private
   def set_vote
     @vote = current_user.votes.find(params[:id])
