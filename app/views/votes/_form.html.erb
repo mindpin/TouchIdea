@@ -10,6 +10,7 @@
         <%= link_to_add_association '再加一题', f, :questions, class: 'btn btn-default' %>
       </div>
     </div>
+    <%= f.input :invite_uids, collection: current_user.friendships.map{|friendship| [friendship.name, friendship.uid]}, as: :check_boxes %>
     <%= f.input :finish_at, as: :date_picker %>
   </div>
 
