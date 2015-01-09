@@ -6,5 +6,7 @@ class Answer
   
   has_many :answer_records
 
+  accepts_nested_attributes_for :answer_records, :reject_if => :all_blank, :allow_destroy => true
+
   validates_presence_of :title
 end

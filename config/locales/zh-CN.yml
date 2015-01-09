@@ -203,6 +203,10 @@ zh-CN:
       user:
         phone: 手机号码
         name: 用户名
+      question:
+        title: 问题内容
+      answer:
+        title: 选项
 
   attributes:
     created_at: 创建于

@@ -1,0 +1,12 @@
+<div class="nested-fields">
+  <%= f.input :title %>
+  <div id="answers" class="">
+    <%= f.simple_fields_for :answers do |answer| %>
+      <%= render "answer_fields", :f => answer %>
+    <% end -%>
+    <div class="links">
+      <%= link_to_add_association '+ 再加一项', f, :answers, class: 'btn btn-default' %>
+    </div>
+  </div>
+</div>
+

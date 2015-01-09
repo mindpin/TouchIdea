@@ -17,4 +17,5 @@
 //= require moment
 //= require moment.zh-cn
 //= require bootstrap-datetimepicker
+//= require cocoon
 //= require_tree .
