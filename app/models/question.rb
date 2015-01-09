@@ -9,4 +9,8 @@ class Question
   accepts_nested_attributes_for :answers, :reject_if => :all_blank, :allow_destroy => true
 
   validates_presence_of :title
+
+  def answered_by? user
+    answers.map{|answer| answer.answered_by?(user)}.include?(true)
+  end
 end

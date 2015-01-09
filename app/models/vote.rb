@@ -17,4 +17,8 @@ class Vote
 
   scope :recent, -> { desc(:id) }
   scope :by_user, -> (user) { any_of({:user_id => user.id}, {:user_ids.in => [user.id]}) }
+
+  def answered_by? user
+    questions.map{|question| question.answered_by?(user)}.uniq == [true]
+  end
 end

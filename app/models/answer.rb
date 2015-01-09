@@ -4,13 +4,13 @@ class Answer
   field :title, type: String
   belongs_to :question
   
-  has_many :answer_records
+  has_and_belongs_to_many :users, inverse_of: nil
 
-  accepts_nested_attributes_for :answer_records, :reject_if => :all_blank, :allow_destroy => true
+  attr_accessor :controller
 
   validates_presence_of :title
 
   def answered_by? user
-    !!answer_records.where(user: user).first
+    users.include?(user)
   end
 end
