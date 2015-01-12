@@ -22,7 +22,7 @@
             【已结束】
           </span>
         <% else %>
-          <% if false %>
+          <% if vote.answered_by?(current_user) %>
             <span class="vote-voted">
               【已投票】
             </span>
