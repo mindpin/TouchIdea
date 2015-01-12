@@ -14,6 +14,7 @@ class VotesController < ApplicationController
     if @vote.answered_by? current_user
       redirect_to result_vote_path(@vote)
     else
+      @vote.questions.each{|q| q.answers.new}
       respond_with(@vote)
     end
   end
@@ -41,10 +42,10 @@ class VotesController < ApplicationController
     end
   end
 
-  #def update
-    #@vote.update(vote_params)
-    #respond_with(@vote)
-  #end
+  def update
+    @vote.update(vote_params)
+    respond_with(@vote)
+  end
 
   #def destroy
     #@vote.destroy
@@ -60,7 +61,7 @@ class VotesController < ApplicationController
   end
 
   def vote_params
-    params.require(:vote).permit(:title, :finish_at, user_ids: [], invite_uids: [], questions_attributes: [:title, answers_attributes: [:title]])
+    params.require(:vote).permit(:title, :finish_at, user_ids: [], invite_uids: [], questions_attributes: [:id, :title, answers_attributes: [:id, :title, :voter_id, :_destroy]])
   end
 end
 

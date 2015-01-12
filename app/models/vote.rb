@@ -21,4 +21,16 @@ class Vote
   def answered_by? user
     questions.map{|question| question.answered_by?(user)}.uniq == [true]
   end
+
+  protected
+  before_save :add_voter_to_answers_users
+  def add_voter_to_answers_users
+    questions.map(&:answers).flatten.each do |answer|
+      unless answer.voter_id.blank?
+        tmp = answer.voter_id
+        answer.voter_id = nil
+        answer.users << User.find(tmp)
+      end
+    end
+  end
 end
