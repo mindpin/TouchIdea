@@ -10,12 +10,25 @@
       </div>
       <div class="answers">
         <% question.answers.each do |answer| %>
-          <div class="answer">
-            <label>
-              <input type="checkbox" disabled="disabled" <%= 'checked="checked"' if answer.answered_by?(current_user) %>>
-              <%= answer.title %>
-            </label>
+          <% percent = (answer.users.count.to_f / @vote.invite_uids.count * 100).to_i %>
+          <div class="col-xs-1 answer-select">
+            <% if answer.answered_by?(current_user) %>
+              √
+            <% end %>
           </div>
+          <div class="col-xs-10 answer-progress">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
+                <span class="answers-result">
+                  <%= answer.title %>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-1 answer-percent">
+            <%= '%d%' % percent %>
+          </div>
+          <div class="clearfix"></div>
         <% end -%>
       </div>
     </div>
