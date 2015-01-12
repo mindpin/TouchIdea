@@ -3,7 +3,7 @@
 <h2><%= @vote.title %></h2>
 
 <div class="questions">
-  <% @vote.questions.includes(:answers).each_with_index do |question, index| %>
+  <% @questions.each_with_index do |question, index| %>
     <div class="question">
       <div class="question-title">
         <%= index + 1 %>. <%= question.title %>
@@ -11,27 +11,48 @@
       <div class="answers">
         <% question.answers.each do |answer| %>
           <% percent = (answer.users.count.to_f / @vote.invite_uids.count * 100).to_i %>
-          <div class="col-xs-1 answer-select">
-            <% if answer.answered_by?(current_user) %>
-              √
-            <% end %>
-          </div>
-          <div class="col-xs-10 answer-progress">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
-                <span class="answers-result">
-                  <%= answer.title %>
-                </span>
+          <div class="answer-result" data-id="<%= answer.id %>" data-toggle="modal" data-target="#model-<%= answer.id %>">
+            <div class="col-xs-1 answer-select">
+              <% if answer.answered_by?(current_user) %>
+                √
+              <% end %>
+            </div>
+            <div class="col-xs-10 answer-progress">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
+                  <span class="answer-result-title">
+                    <%= answer.title %>
+                  </span>
+                </div>
               </div>
             </div>
+            <div class="col-xs-1 answer-percent">
+              <%= '%d%' % percent %>
+            </div>
+            <div class="clearfix"></div>
           </div>
-          <div class="col-xs-1 answer-percent">
-            <%= '%d%' % percent %>
-          </div>
-          <div class="clearfix"></div>
         <% end -%>
       </div>
     </div>
   <% end -%>
 </div>
 
+<% @questions.map(&:answers).flatten.each do |answer| %>
+  <div class="modal fade" id="modal-<%= answer.id %>" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div>
+            <strong>选项：</strong><%= answer.title %>
+          </div>
+          <div>
+            <strong>投票人：</strong>
+            <% answer.users.each do |user| %>
+              <%= user.nickname %>
+            <% end -%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end -%>

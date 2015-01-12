@@ -53,7 +53,7 @@ class VotesController < ApplicationController
   #end
 
   def result
-    
+    @questions = @vote.questions.includes(:answers)
   end
   private
   def set_vote
