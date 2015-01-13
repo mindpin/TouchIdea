@@ -1,6 +1,6 @@
 class VotesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_vote, only: [:show, :edit, :update, :destroy, :result]
+  before_action :set_vote, only: [:edit, :destroy]
 
   respond_to :html
   respond_to :js, only: [:new]
@@ -11,7 +11,8 @@ class VotesController < ApplicationController
   end
 
   def show
-    if @vote.answered_by? current_user
+    @vote = Vote.find params[:id]
+    if @vote.finished? or @vote.answered_by?(current_user)
       redirect_to result_vote_path(@vote)
     else
       @vote.questions.each{|q| q.answers.new}
@@ -43,6 +44,7 @@ class VotesController < ApplicationController
   end
 
   def update
+    @vote = Vote.find params[:id]
     @vote.update(vote_params)
     respond_with(@vote)
   end
@@ -53,6 +55,7 @@ class VotesController < ApplicationController
   #end
 
   def result
+    @vote = Vote.find params[:id]
     @questions = @vote.questions.includes(:answers)
   end
   private

@@ -88,12 +88,18 @@ class User
   end
 
   protected
-  after_create :get_weibo_friends_bilateral
+  after_create :get_weibo_friends_bilateral, :add_to_vote_users
   def get_weibo_friends_bilateral
     client = WeiboOAuth2::Client.new
     user_token = user_tokens.last
     client.get_token_from_hash access_token: user_token.token, expires_at: user_token.expires_at
     friends_bilateral = client.friendships.friends_bilateral(uid)
     friendships.create friends_bilateral.users.map {|user| {name: user.name, uid: user.id} }
+  end
+
+  def add_to_vote_users
+    Vote.where(:invite_uids.in => [self.uid]).each do |vote|
+      vote.users << self
+    end
   end
 end

@@ -17,7 +17,7 @@
   <% @votes.each do |vote| %>
     <div class="vote">
       <div class="vote-title">
-        <% if Time.now >= vote.finish_at %>
+        <% if vote.finished? %>
           <span class="vote-finish">
             【已结束】
           </span>
