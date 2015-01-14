@@ -16,8 +16,9 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
         if authentication
           flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => omniauth['provider']
-          sign_in_and_redirect(:user, authentication.user)
+          #sign_in_and_redirect(:user, authentication.user)
           #sign_in_and_redirect(authentication.user, :event => :authentication)
+          sign_in_and_redirect(authentication.user)
         else
 
           #create a new user

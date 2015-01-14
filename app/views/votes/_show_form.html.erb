@@ -7,7 +7,6 @@
           <%= index + 1 %>. <%= question.object.try(:title) %>
         </div>
         <div class="answers">
-          <% byebug %>
           <% if question.object.answered_by? current_user %>
             <div class="row">
               <%= question.simple_fields_for :answers do |answer| %>

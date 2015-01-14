@@ -17,6 +17,7 @@ class Question
   protected
   before_create :clear_voters_if_new_record
   def clear_voters_if_new_record
-    vote.voted_users.delete_all if new_record?
+    vote.voted_users.clear if new_record?
+    byebug
   end
 end
