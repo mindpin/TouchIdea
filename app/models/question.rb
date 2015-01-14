@@ -18,6 +18,5 @@ class Question
   before_create :clear_voters_if_new_record
   def clear_voters_if_new_record
     vote.voted_users.clear if new_record?
-    byebug
   end
 end
