@@ -1,52 +1,20 @@
 <h1><%= @vote.title %></h1>
 
-<% index = 0 %>
-<%= simple_form_for @vote do |f| %>
-  <div class="questions">
-    <%= f.simple_fields_for :questions do |question| %>
-      <div class="question">
-        <div class="question-title">
-          <%= index + 1 %>. <%= question.object.try(:title) %>
-        </div>
-        <div class="answers">
-          <% if question.object.answered_by? current_user %>
-            <div class="row">
-              <%= question.simple_fields_for :answers do |answer| %>
-                <% unless answer.object.new_record? %>
-                  <div class="col-sm-1">
-                    <% if answer.object.answered_by? current_user %>
-                      <span class="glyphicon glyphicon-ok"></span>
-                    <% end %>
-                  </div>
-                  <div class="col-sm-11">
-                    <%= answer.object.title %>
-                  </div>
-                <% end %>
-              <% end -%>
-            </div>
-          <% else %>
-            <%= question.simple_fields_for :answers do |answer| %>
-              <div class="answer">
-                <%= answer.input :voter_id, as: :boolean, label: answer.object.try(:title) || answer.input(:title, wrapper: :inline_form), checked_value: current_user.id, unchecked_value: nil %>
-                <% if !answer.object.new_record? %>
-                  <%= answer.input :id, as: :hidden %>
-                  <%= answer.input :title, as: :hidden %>
-                <% end %>
-              </div>
-            <% end -%>
-          <% end -%>
-        </div>
-        <%= question.input :id, as: :hidden %>
+<div id="vote-form" class="">
+  <%= render "show_form", vote: @vote %>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">再加一题</h4>
       </div>
-
-      <% index += 1%>
-    <% end -%>
+      <div id="modal-question-form">
+        <%= render "questions/form", vote: @vote %>
+      </div>
+    </div>
   </div>
-
-  <div class="links">
-    <%= link_to_add_association '再加一题', f, :questions, class: 'btn btn-default btn-block' %>
-  </div>
-  <div class="form-actions">
-    <%= f.button :submit, '提交结果', class: 'btn btn-primary btn-block' %>
-  </div>
-<% end %>
+</div>
