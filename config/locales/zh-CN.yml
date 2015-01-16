@@ -207,6 +207,8 @@ zh-CN:
         title: 问题内容
       answer:
         title: 选项
+      vote:
+        invite_uids: 微博好友
 
   attributes:
     created_at: 创建于
