@@ -15,9 +15,16 @@
     </header>
     <main role="main">
       <div class="container" id="container">
-        <%= render 'layouts/messages' %>
+        <div id="messages">
+          <%= render 'layouts/messages' %>
+        </div>
         <%= yield %>
       </div>
+      <% if current_user %>
+        <script type="text/javascript">
+          var user_id = '<%= current_user.id %>';
+        </script>
+      <% end %>
     </main>
   </body>
 </html>

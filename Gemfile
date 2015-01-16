@@ -55,6 +55,7 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_21]
   gem 'quiet_assets'
+  gem 'thin'
 end
 
 gem 'omniauth'
@@ -63,8 +64,9 @@ gem 'weibo_2'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'momentjs-rails', '>= 2.8.1', :github => 'derekprior/momentjs-rails'
 gem 'cocoon'
+gem 'faye-rails'
 
-gem "unicorn"
+gem "unicorn", group: :production
 
 gem "mina",
     :git => "git://github.com/fushang318/mina.git",

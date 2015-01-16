@@ -6,9 +6,11 @@ class QuestionsController < ApplicationController
 
   def create
     @vote = Vote.find params[:vote_id]
+    @user_ids = @vote.voted_users.map(&:id)
     @question = @vote.questions.new(question_params)
     if @question.save
       @vote.questions.each{|q| q.answers.new}
+      @editor = current_user
     else
       render :new
     end

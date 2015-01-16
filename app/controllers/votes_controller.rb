@@ -3,7 +3,7 @@ class VotesController < ApplicationController
   before_action :set_vote, only: [:edit, :destroy]
 
   respond_to :html
-  respond_to :js, only: [:new]
+  respond_to :js, only: [:new, :create]
 
   def index
     @votes = Vote.by_user(current_user).recent
@@ -36,6 +36,8 @@ class VotesController < ApplicationController
   def create
     @vote = current_user.votes.new(vote_params)
     if @vote.save
+      user_ids = @vote.users.map(&:id)
+      notify_subscribers user_ids, partial: 'votes/create'
       redirect_to votes_path
       #respond_with(@vote)
     else
@@ -45,6 +47,7 @@ class VotesController < ApplicationController
 
   def update
     @vote = Vote.find params[:id]
+    user_ids = @vote.voted_users.map(&:id)
     @vote.update(vote_params)
     respond_with(@vote)
   end
@@ -67,4 +70,3 @@ class VotesController < ApplicationController
     params.require(:vote).permit(:title, :finish_at, user_ids: [], invite_uids: [], questions_attributes: [:id, :title, answers_attributes: [:id, :title, :voter_id, :_destroy]])
   end
 end
-

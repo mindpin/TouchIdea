@@ -10,6 +10,8 @@ class Vote
   has_and_belongs_to_many :users, inverse_of: 'invited_votes'
   has_and_belongs_to_many :voted_users, class_name: 'User', inverse_of: nil
 
+  attr_accessor :is_clear_voted_users
+
   accepts_nested_attributes_for :questions, :reject_if => :all_blank, :allow_destroy => true
 
   validates_presence_of :title
