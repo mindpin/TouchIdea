@@ -25,7 +25,7 @@ class Vote
   end
 
   def finished?
-    Time.now >= finish_at or voted_users.count == invite_uids.count
+    Time.now > finish_at.end_of_day or voted_users.count == invite_uids.count
   end
 
   protected
