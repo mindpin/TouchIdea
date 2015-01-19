@@ -54,9 +54,9 @@ class Vote
   before_update :add_to_voted_users
   def add_to_voted_users
     if questions.count > 0
-      array = questions.first.answers.map(&:users).flatten.uniq
+      array = questions.first.answers.map{|answer| answer.users.to_a}.flatten.uniq
       questions[1..-1].each do |question|
-        array = array & question.answers.map(&:users).flatten.uniq
+        array = array & question.answers.map{|answer| answer.users.to_a}.flatten.uniq
       end
       self.voted_users = array
     end
