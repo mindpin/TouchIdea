@@ -55,7 +55,7 @@ class Vote
   def add_to_voted_users
     if questions.count > 0
       array = questions.first.answers.map{|answer| answer.users.to_a}.flatten.uniq
-      questions[1..-1].each do |question|
+      questions.to_a[1..-1].each do |question|
         array = array & question.answers.map{|answer| answer.users.to_a}.flatten.uniq
       end
       self.voted_users = array
