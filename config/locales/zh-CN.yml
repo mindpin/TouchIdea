@@ -204,11 +204,12 @@ zh-CN:
         phone: 手机号码
         name: 用户名
       question:
-        title: 问题内容
+        title: 要点描述
       answer:
         title: 选项
       vote:
         invite_uids: 微博好友
+        title: 议题描述
 
   attributes:
     created_at: 创建于
