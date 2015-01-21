@@ -12,27 +12,30 @@
                 <div class="row">
                   <%= question.simple_fields_for :answers do |answer| %>
                     <% unless answer.object.new_record? %>
-                      <div class="col-sm-1">
+                      <div class="col-xs-1 col-xs-offset-3">
                         <% if answer.object.answered_by? current_user %>
                           <span class="glyphicon glyphicon-ok"></span>
                         <% end %>
                       </div>
-                      <div class="col-sm-11">
+                      <div class="col-sm-8">
                         <%= answer.object.title %>
                       </div>
                     <% end %>
                   <% end -%>
                 </div>
               <% else %>
-                <%= question.simple_fields_for :answers do |answer| %>
-                  <div class="answer">
-                    <%= answer.input :voter_id, as: :boolean, label: answer.object.try(:title) || answer.input(:title, wrapper: :inline_form), checked_value: current_user.id, unchecked_value: nil %>
-                    <% if !answer.object.new_record? %>
-                      <%= answer.input :id, as: :hidden %>
-                      <%= answer.input :title, as: :hidden %>
-                    <% end %>
+                <div class="row" style="position: relative;">
+                  <div class="col-xs-offset-4 col-xs-8">
+                    <div class="row">
+                      <%= question.simple_fields_for :answers do |answer| %>
+                        <%= render "votes/show_form_answer_fields", f: answer %>
+                      <% end -%>
+                      <div>
+                        <%= link_to_add_association '+ 增加一个要点', question, :answers, class: 'btn btn-default col-xs-offset-7 col-xs-5 btn-vote-question-add-answer', style: 'position: absolute;', partial: 'votes/show_form_answer_fields' %>
+                      </div>
+                    </div>
                   </div>
-                <% end -%>
+                </div>
               </div>
             <% end -%>
           </div>
