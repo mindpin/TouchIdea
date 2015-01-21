@@ -10,12 +10,14 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title text-center">讨论要点 <%= link_to_add_association '+ 增加一个要点', f, :questions, class: 'btn btn-default' %></h3>
+      <h3 class="panel-title text-center">讨论要点 <%= link_to_add_association '+ 增加一个要点', f, :questions, class: 'btn btn-default', 'data-association-insertion-node': '#div-vote-questions' %></h3>
     </div>
     <div class="panel-body">
-      <%= f.simple_fields_for :questions do |question| %>
-        <%= render "question_fields", :f => question %>
-      <% end -%>
+      <div id="div-vote-questions" class="">
+        <%= f.simple_fields_for :questions do |question| %>
+          <%= render "question_fields", :f => question %>
+        <% end -%>
+      </div>
       <%= f.input :finish_at, as: :date_picker %>
     </div>
   </div>
