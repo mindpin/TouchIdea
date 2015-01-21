@@ -1,4 +1,11 @@
-<h1><%= @vote.title %></h1>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title text-center">参与议题讨论，贡献我的想法</h3>
+  </div>
+  <div class="panel-body">
+    <h1 class="text-center">议题：<%= @vote.title %></h1>
+  </div>
+</div>
 
 <div id="vote-form" class="">
   <%= render "show_form", vote: @vote %>

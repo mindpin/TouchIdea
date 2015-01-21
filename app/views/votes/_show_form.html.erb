@@ -1,49 +1,50 @@
-<% index = 0 %>
 <%= simple_form_for vote do |f| %>
   <div class="questions">
     <%= f.simple_fields_for :questions do |question| %>
       <div class="question">
-        <div class="question-title">
-          <%= index + 1 %>. <%= question.object.try(:title) %>
-        </div>
         <div class="answers">
-          <% if question.object.answered_by? current_user %>
-            <div class="row">
-              <%= question.simple_fields_for :answers do |answer| %>
-                <% unless answer.object.new_record? %>
-                  <div class="col-sm-1">
-                    <% if answer.object.answered_by? current_user %>
-                      <span class="glyphicon glyphicon-ok"></span>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title text-center">讨论要点：<%= question.object.title %></h3>
+            </div>
+            <div class="panel-body">
+              <% if question.object.answered_by? current_user %>
+                <div class="row">
+                  <%= question.simple_fields_for :answers do |answer| %>
+                    <% unless answer.object.new_record? %>
+                      <div class="col-sm-1">
+                        <% if answer.object.answered_by? current_user %>
+                          <span class="glyphicon glyphicon-ok"></span>
+                        <% end %>
+                      </div>
+                      <div class="col-sm-11">
+                        <%= answer.object.title %>
+                      </div>
+                    <% end %>
+                  <% end -%>
+                </div>
+              <% else %>
+                <%= question.simple_fields_for :answers do |answer| %>
+                  <div class="answer">
+                    <%= answer.input :voter_id, as: :boolean, label: answer.object.try(:title) || answer.input(:title, wrapper: :inline_form), checked_value: current_user.id, unchecked_value: nil %>
+                    <% if !answer.object.new_record? %>
+                      <%= answer.input :id, as: :hidden %>
+                      <%= answer.input :title, as: :hidden %>
                     <% end %>
                   </div>
-                  <div class="col-sm-11">
-                    <%= answer.object.title %>
-                  </div>
-                <% end %>
-              <% end -%>
-            </div>
-          <% else %>
-            <%= question.simple_fields_for :answers do |answer| %>
-              <div class="answer">
-                <%= answer.input :voter_id, as: :boolean, label: answer.object.try(:title) || answer.input(:title, wrapper: :inline_form), checked_value: current_user.id, unchecked_value: nil %>
-                <% if !answer.object.new_record? %>
-                  <%= answer.input :id, as: :hidden %>
-                  <%= answer.input :title, as: :hidden %>
-                <% end %>
+                <% end -%>
               </div>
             <% end -%>
-          <% end -%>
+          </div>
         </div>
         <%= question.input :id, as: :hidden %>
       </div>
-
-      <% index += 1%>
     <% end -%>
   </div>
 
   <div class="form-actions">
-    <button type="button" class="btn btn-default btn-block" onclick="return false;" data-toggle="modal" data-target="#myModal">再加一题</button>
-    <%= f.button :submit, '提交结果', class: 'btn btn-primary btn-block' %>
+    <button type="button" class="btn btn-default btn-block" onclick="return false;" data-toggle="modal" data-target="#myModal">+ 增加一个讨论要点</button>
+    <%= f.button :submit, '贡献我的想法', class: 'btn btn-primary btn-block' %>
   </div>
 <% end %>
 
