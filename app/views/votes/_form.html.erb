@@ -27,8 +27,11 @@
       <h3 class="panel-title text-center">邀请微薄好友参与讨论</h3>
     </div>
     <div class="panel-body">
-      <%= f.input :invite_uids, as: :check_boxes, wrappers: :diy_boolean, collection: current_user.friendships.map{|friendship| [friendship.name, friendship.uid]} %>
+      <div class="div-invite-uids">
+        <%= f.collection_check_boxes(:invite_uids, current_user.friendships, :uid, :name){|b| b.label(:"data-value" => b.value) { b.check_box + b.text}  } %>
+      </div>
     </div>
+
   </div>
 
   <div class="form-actions">
