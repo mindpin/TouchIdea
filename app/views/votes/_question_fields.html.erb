@@ -1,6 +1,6 @@
 <div class="nested-fields">
   <%= f.input :title %>
-  <div id="answers" class="">
+  <div id="answers" class="clearfix">
     <%= f.simple_fields_for :answers do |answer| %>
       <%= render "answer_fields", :f => answer %>
     <% end -%>
@@ -8,5 +8,6 @@
       <%= link_to_add_association '+ 增加一项可选回答', f, :answers, class: 'btn btn-default' %>
     </div>
   </div>
+  <hr />
 </div>
 
