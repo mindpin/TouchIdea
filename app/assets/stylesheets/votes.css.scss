@@ -22,6 +22,12 @@
 }
 .answer-result-title{
   color: #333;
+  position: absolute;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  overflow: hidden;
+  width: 95%;
 }
 
 .btn-vote-question-add-answer{
