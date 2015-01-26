@@ -47,6 +47,7 @@ class Vote
   end
 
   before_create :add_users_by_invite_uids
+  before_update :add_users_by_invite_uids
   def add_users_by_invite_uids
     self.users = User.where(:uid.in => invite_uids).to_a
   end
