@@ -30,8 +30,13 @@ class VotesController < ApplicationController
     respond_with(@vote)
   end
 
-  #def edit
-  #end
+  def edit
+    if @vote.finished?
+      redirect_to result_vote_path(@vote), alert: '议题已经过期'
+    else
+      render :new
+    end
+  end
 
   def create
     @vote = current_user.votes.new(vote_params)

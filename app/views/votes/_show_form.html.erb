@@ -47,6 +47,9 @@
 
   <div class="form-actions">
     <button type="button" class="btn btn-default btn-block" onclick="return false;" data-toggle="modal" data-target="#myModal">+ 增加一个讨论要点</button>
+  <% if !vote.finished? and vote.user == current_user %>
+    <%= link_to '发起人修改议题', edit_vote_path(vote), class: 'btn btn-default btn-block' %>
+  <% end %>
     <%= f.button :submit, '贡献我的想法', class: 'btn btn-primary btn-block' %>
   </div>
 <% end %>
