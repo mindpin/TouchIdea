@@ -33,8 +33,6 @@ class VotesController < ApplicationController
   def edit
     if @vote.finished?
       redirect_to result_vote_path(@vote), alert: '议题已经过期'
-    else
-      render :new
     end
   end
 

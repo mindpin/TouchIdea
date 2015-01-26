@@ -8,8 +8,6 @@ class Answer
 
   attr_accessor :voter_id
 
-  validates_presence_of :title
-
   def answered_by? user
     users.include?(user)
   end
