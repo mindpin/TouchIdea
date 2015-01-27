@@ -1,5 +1,11 @@
+<% disabled = (!f.object.new_record? and f.object.answered?) %>
 <div class="nested-fields">
-  <%= f.input :title %>
+  <% if disabled %>
+    <%= f.input :title, disabled: disabled %>
+    <%= f.input :title, as: :hidden %>
+  <% else %>
+    <%= f.input :title %>
+  <% end %>
 </div>
 
 

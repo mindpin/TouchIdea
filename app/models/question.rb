@@ -14,6 +14,10 @@ class Question
     answers.map{|answer| answer.answered_by?(user)}.include?(true)
   end
 
+  def answered?
+    answers.any?(&:answered?)
+  end
+
   protected
   before_create :clear_voters_if_new_record
   def clear_voters_if_new_record

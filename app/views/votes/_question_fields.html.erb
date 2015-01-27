@@ -1,5 +1,6 @@
+<% disabled = (!f.object.new_record? and f.object.answered?) %>
 <div class="nested-fields">
-  <%= f.input :title %>
+  <%= f.input :title, disabled: disabled %>
   <div id="answers" class="clearfix">
     <%= f.simple_fields_for :answers do |answer| %>
       <%= render "answer_fields", :f => answer %>

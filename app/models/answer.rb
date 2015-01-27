@@ -12,6 +12,10 @@ class Answer
     users.include?(user)
   end
 
+  def answered?
+    !users.blank?
+  end
+
   def voter
     User.find(voter_id) unless voter_id.blank?
   end

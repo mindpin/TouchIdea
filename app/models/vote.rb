@@ -24,6 +24,10 @@ class Vote
     questions.map{|question| question.answered_by?(user)}.uniq == [true]
   end
 
+  def answered?
+    questions.any?(&:answered?)
+  end
+
   def finished?
     Time.now > finish_at.end_of_day or voted_users.count == invite_uids.count
   end
