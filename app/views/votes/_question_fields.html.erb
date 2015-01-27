@@ -1,4 +1,4 @@
-<% disabled = (!f.object.new_record? and f.object.answered?) %>
+<% disabled = (!f.object.new_record? and (f.object.answered? or f.object.vote.questions.count == 1)) %>
 <div class="nested-fields">
   <%= f.input :title, disabled: disabled %>
   <div id="answers" class="clearfix">
