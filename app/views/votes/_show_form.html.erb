@@ -10,17 +10,15 @@
             <div class="panel-body">
               <% if question.object.answered_by? current_user %>
                 <div class="row">
-                  <%= question.simple_fields_for :answers do |answer| %>
-                    <% unless answer.object.new_record? %>
-                      <div class="col-xs-1 col-xs-offset-3">
-                        <% if answer.object.answered_by? current_user %>
-                          <span class="glyphicon glyphicon-ok"></span>
-                        <% end %>
-                      </div>
-                      <div class="col-sm-8">
-                        <%= answer.object.title %>
-                      </div>
-                    <% end %>
+                  <% question.object.answers.each do |answer| %>
+                    <div class="col-xs-1 col-xs-offset-3">
+                      <% if answer.answered_by? current_user %>
+                        <span class="glyphicon glyphicon-ok"></span>
+                      <% end %>
+                    </div>
+                    <div class="col-sm-8">
+                      <%= answer.title %>
+                    </div>
                   <% end -%>
                 </div>
               <% else %>
