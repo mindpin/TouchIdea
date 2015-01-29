@@ -12,7 +12,7 @@ set :user, 'root'
 set :shared_paths, [
   'config/mongoid.yml',
   'config/config/application.yml',
-  'tmp'
+  'tmp',
   'log'
 ]
 
