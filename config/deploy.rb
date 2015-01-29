@@ -5,7 +5,7 @@ require 'mina/git'
 set :domain, '106.186.119.248'
 set :deploy_to, '/web/touch-idea'
 set :current_path, 'current'
-set :repository, 'git://github.com/destinyd/TouchIdea.git'
+set :repository, 'git://github.com/mindpin/TouchIdea.git'
 set :branch, 'master'
 set :user, 'root'
 
@@ -31,7 +31,7 @@ task :setup => :environment do
 
   queue! %[mkdir -p "#{deploy_to}/shared/config"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/config"]
-  
+
   queue! %[touch "#{deploy_to}/shared/config/mongoid.yml"]
   queue! %[touch "#{deploy_to}/shared/config/application.yml"]
 
