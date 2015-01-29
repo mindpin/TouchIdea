@@ -55,7 +55,6 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_21]
   gem 'quiet_assets'
-  gem 'thin'
 end
 
 gem 'omniauth'
@@ -66,7 +65,7 @@ gem 'momentjs-rails', '>= 2.8.1', :github => 'derekprior/momentjs-rails'
 gem 'cocoon'
 gem 'faye-rails'
 
-gem "unicorn", group: :production
+gem 'thin'
 
 gem "mina",
     :git => "git://github.com/fushang318/mina.git",
