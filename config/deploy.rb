@@ -44,7 +44,7 @@ task :deploy => :environment do
   deploy do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
-    queue! "bundle"
+    queue! "bundle --without development test"
     invoke :'rails:assets_precompile'
 
     to :launch do
@@ -62,7 +62,7 @@ task :update_code => :environment do
   deploy do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
-    queue! "bundle"
+    queue! "bundle --without development test"
     invoke :'rails:assets_precompile'
   end
 end
