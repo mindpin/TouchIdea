@@ -11,7 +11,8 @@ set :user, 'root'
 
 set :shared_paths, [
   'config/mongoid.yml',
-  'config/config/application.yml',
+  'config/application.yml',
+  'config/secrets.yml',
   'tmp',
   'log'
 ]
@@ -29,14 +30,19 @@ task :setup => :environment do
   queue! %[mkdir -p "#{deploy_to}/shared/tmp/logs"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/tmp/logs"]
 
+  queue! %[mkdir -p "#{deploy_to}/shared/log"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/log"]
+
   queue! %[mkdir -p "#{deploy_to}/shared/config"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/config"]
 
   queue! %[touch "#{deploy_to}/shared/config/mongoid.yml"]
   queue! %[touch "#{deploy_to}/shared/config/application.yml"]
+  queue! %[touch "#{deploy_to}/shared/config/secrets.yml"]
 
   queue  %[echo "-----> Be sure to edit 'shared/config/mongoid.yml'."]
   queue  %[echo "-----> Be sure to edit 'shared/config/application.yml'."]
+  queue  %[echo "-----> Be sure to edit 'shared/config/secrets.yml'."]
 end
 
 desc "Deploys the current version to the server."
