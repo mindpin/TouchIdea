@@ -40,9 +40,7 @@ class VotesController < ApplicationController
     @vote = current_user.votes.new(vote_params)
     if @vote.save
       user_ids = @vote.users.map(&:id)
-      notify_subscribers user_ids, partial: 'votes/create'
       redirect_to votes_path
-      #respond_with(@vote)
     else
       render :new
     end

@@ -63,9 +63,9 @@ gem 'weibo_2'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'momentjs-rails', '>= 2.8.1', :github => 'derekprior/momentjs-rails'
 gem 'cocoon'
-gem 'faye-rails'
+#gem 'faye-rails'
 
-gem 'thin'
+#gem 'thin'
 
 gem "mina",
     :git => "git://github.com/fushang318/mina.git",
