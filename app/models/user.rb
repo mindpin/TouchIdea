@@ -55,6 +55,8 @@ class User
 
   has_many :user_tokens
   has_many :votes
+  has_many :messages
+  has_many :notifies, inverse_of: 'to', class_name: 'Message'
   has_and_belongs_to_many :invited_votes, class_name: 'Vote', inverse_of: 'users'
   has_many :friendships, inverse_of: 'user'
   has_many :friend_users, inverse_of: 'friend', class_name: 'Friendship', primary_key: :uid, foreign_key: :uid
@@ -87,6 +89,10 @@ class User
     false
   end
 
+  def invite_notify(to_user, vote)
+    messages.create to: to_user, vote: vote
+  end
+
   protected
   after_create :get_weibo_friends_bilateral, :add_to_vote_users
   def get_weibo_friends_bilateral
@@ -100,6 +106,7 @@ class User
   def add_to_vote_users
     Vote.where(:invite_uids.in => [self.uid]).each do |vote|
       vote.users << self
+      vote.user.invite_notify self, vote
     end
   end
 end

@@ -15,6 +15,20 @@
         <%= render 'layouts/navigation_links' %>
       </ul>
       <ul class="nav navbar-nav pull-right">
+        <% if current_user %>
+          <li>
+            <%= link_to current_user.nickname, '#' %>
+          </li>
+          <li>
+            <%= link_to messages_path do %>
+              <span class="glyphicon glyphicon-bell">
+              </span>
+              <% if current_user.notifies.unread.any? %>
+                <span class="badge"><%= current_user.notifies.unread.count %></span>
+              <% end %>
+            <% end -%>
+          </li>
+        <% end %>
         <li>
           <% if current_user %>
             <%= link_to '登出', destroy_user_session_path, method: :delete %>

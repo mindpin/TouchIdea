@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :messages
   resources :votes do
     resources :questions
     get :result, on: :member

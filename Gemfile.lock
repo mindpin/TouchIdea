@@ -118,6 +118,12 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.2)
     jwt (1.2.0)
+    kaminari (0.16.2)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
+    kaminari-bootstrap (3.0.1)
+      kaminari (>= 0.13.0)
+      rails
     kgio (2.9.3)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
@@ -276,6 +282,8 @@ DEPENDENCIES
   figaro (>= 1.0.0)
   jbuilder (~> 2.0)
   jquery-rails
+  kaminari
+  kaminari-bootstrap
   mina!
   momentjs-rails (>= 2.8.1)!
   mongoid (= 4.0.0)

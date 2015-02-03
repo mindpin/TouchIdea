@@ -50,6 +50,8 @@ gem 'devise'
 gem 'devise-i18n'
 gem 'figaro', '>= 1.0.0'
 gem 'simple_form'
+gem 'kaminari'
+gem 'kaminari-bootstrap'
 
 group :development do
   gem 'better_errors'

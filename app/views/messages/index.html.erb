@@ -1,0 +1,32 @@
+<div class="messages" id="messages">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title text-center">通知列表</h3>
+    </div>
+    <table class="table">
+      <tbody>
+        <% if @messages.blank? %>
+          <tr>
+            <td>暂无通知</td>
+          </tr>
+        <% end %>
+        <% @messages.each do |message| %>
+          <tr id="<%= message.id %>" class="<%= 'warning' unless message.read? %>">
+            <td>
+              <strong>议题描述</strong>
+            </td>
+            <td>
+              <%= link_to message.vote.title, message.vote %>
+            </td>
+            <td class="text-right">
+              <%= message.user.nickname %> 邀请你参与讨论
+            </td>
+          </div>
+        <% end -%>
+      </tbody>
+    </table>
+    <div class="panel-footer">
+      <%= paginate @messages %>
+    </div>
+  </div>
+</div>

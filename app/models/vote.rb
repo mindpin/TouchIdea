@@ -50,10 +50,14 @@ class Vote
     invite_uids << user.uid unless invite_uids.include?(user.uid)
   end
 
-  before_create :add_users_by_invite_uids
-  before_update :add_users_by_invite_uids
-  def add_users_by_invite_uids
+  before_create :add_users_by_invite_uids_and_notify
+  before_update :add_users_by_invite_uids_and_notify
+  def add_users_by_invite_uids_and_notify
+    tmp = User.where(:uid.in => invite_uids).to_a - self.users.to_a
     self.users = User.where(:uid.in => invite_uids).to_a
+    tmp.each do |u|
+      user.invite_notify u, self
+    end
   end
 
   before_update :add_to_voted_users
