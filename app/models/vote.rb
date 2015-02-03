@@ -54,7 +54,8 @@ class Vote
   before_update :add_users_by_invite_uids_and_notify
   def add_users_by_invite_uids_and_notify
     tmp = User.where(:uid.in => invite_uids).to_a - self.users.to_a
-    self.users = User.where(:uid.in => invite_uids).to_a
+    self.users = tmp
+    tmp = tmp - [self.user]
     tmp.each do |u|
       user.invite_notify u, self
     end
