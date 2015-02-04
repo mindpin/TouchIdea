@@ -17,10 +17,18 @@
       <ul class="nav navbar-nav pull-right">
         <% if current_user %>
           <li>
-            <%= link_to current_user.nickname, '#' %>
+            <% if current_user and !current_user.avatar_url.blank? %>
+              <%= image_tag current_user.avatar_url, class: 'img-circle navbar-avatar', alt: current_user.nickname %>
+            <% else %>
+              <span class="glyphicon glyphicon-user navbar-avatar">
+              </span>
+            <% end %>
           </li>
           <li>
-            <%= link_to messages_path do %>
+            <p class="navbar-text"> <%= current_user.nickname %> </p>
+          </li>
+          <li>
+            <%= link_to messages_path, title: '提醒' do %>
               <span class="glyphicon glyphicon-bell">
               </span>
               <% if current_user.notifies.unread.any? %>

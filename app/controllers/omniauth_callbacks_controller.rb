@@ -18,6 +18,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
           flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => omniauth['provider']
           #sign_in_and_redirect(:user, authentication.user)
           #sign_in_and_redirect(authentication.user, :event => :authentication)
+          authentication.user.update_attribute :avatar_url, omniauth.extra.try(:raw_info).try(:avatar_hd) if omniauth.extra.try(:raw_info).try(:avatar_hd)
           sign_in_and_redirect(authentication.user)
         else
 
@@ -25,6 +26,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
           unless omniauth.uid.blank?
             user = User.where(uid: omniauth.uid).first
             user ||= User.new(:uid => omniauth.uid, :nickname => omniauth.info.nickname)
+            user.avatar_url = omniauth.extra.try(:raw_info).try(:avatar_hd)
           else
             user = User.new
           end

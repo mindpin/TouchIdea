@@ -12,13 +12,14 @@
         <% end %>
         <% @messages.each do |message| %>
           <tr id="<%= message.id %>" class="<%= 'warning' unless message.read? %>">
-            <td>
+            <td id="v-middle">
               <strong>议题描述</strong>
             </td>
-            <td>
-              <%= link_to message.vote.title, message.vote %>
+            <td id="v-middle">
+                <%= link_to message.vote.title, message.vote %>
             </td>
-            <td class="text-right">
+            <td class="text-right" id="v-middle">
+              <%= image_tag message.user.avatar_url, class: 'navbar-avatar' %>
               <%= message.user.nickname %> 邀请你参与讨论
             </td>
           </div>

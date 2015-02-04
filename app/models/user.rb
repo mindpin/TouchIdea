@@ -39,6 +39,7 @@ class User
   # field :locked_at,       type: Time
   field :uid,    type: String
   field :nickname,    type: String
+  field :avatar_url,    type: String
 
   # https://github.com/mongoid/mongoid/issues/3626#issuecomment-64700154
   def self.serialize_from_session(key, salt)
