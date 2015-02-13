@@ -1,0 +1,14 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title text-center">参与议题讨论，贡献我的想法</h3>
+  </div>
+  <div class="panel-body">
+    <h1 class="text-center">议题：<%= @vote.title %></h1>
+    <%= text_field_tag nil, token_url(@vote.token), class: 'form-control', disabled: true %>
+  </div>
+</div>
+
+<div id="vote-form" class="">
+  <%= render "show_form_disabled", vote: @vote %>
+</div>
+

@@ -1,5 +1,5 @@
 class VotesController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except: [:show_by_token]
   before_action :set_vote, only: [:edit, :destroy]
 
   respond_to :html
@@ -62,6 +62,15 @@ class VotesController < ApplicationController
     @vote = Vote.find params[:id]
     @questions = @vote.questions.includes(:answers)
   end
+
+  def show_by_token
+    @vote = Vote.where(token: params[:id]).first
+    if current_user
+      @vote.users << current_user unless @vote.users.include? current_user
+      redirect_to @vote
+    end
+  end
+
   private
   def set_vote
     @vote = current_user.votes.find(params[:id])

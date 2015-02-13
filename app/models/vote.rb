@@ -5,6 +5,8 @@ class Vote
   field :finish_at, type: Time
   field :invite_uids, type: Array, default: []
 
+  field :token, type: String
+
   belongs_to :user, inverse_of: :votes
   has_many :questions
   has_and_belongs_to_many :users, inverse_of: 'invited_votes'
@@ -17,8 +19,15 @@ class Vote
   validates_presence_of :title
   validates_presence_of :finish_at
 
+  validates :token,    uniqueness: true,    presence: true
+
   scope :recent, -> { desc(:id) }
   scope :by_user, -> (user) { any_of({:user_id => user.id}, {:user_ids.in => [user.id]}) }
+
+
+  def self.parse(token)
+    Vote.where(token: token).first
+  end
 
   def answered_by? user
     questions.map{|question| question.answered_by?(user)}.uniq == [true]
@@ -32,6 +41,13 @@ class Vote
     Time.now > finish_at.end_of_day or voted_users.count == invite_uids.count
   end
 
+  def build_uniq_token_if_blank
+    until !self.token.blank?
+      tmp = randstr
+      self.token = tmp unless Vote.where(token: tmp).first
+    end
+  end
+
   protected
   before_save :add_voter_to_answers_users
   def add_voter_to_answers_users
@@ -42,6 +58,11 @@ class Vote
         answer.users << User.find(tmp)
       end
     end
+  end
+
+  before_validation :init_token
+  def init_token
+    build_uniq_token_if_blank if self.token.blank?
   end
 
   before_create :add_self_to_invite_uids
@@ -70,5 +91,15 @@ class Vote
       end
       self.voted_users = array
     end
+  end
+
+  def randstr(length=6)
+    base = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    size = base.size
+    re = '' << base[rand(size-10)]
+    (length - 1).times {
+      re << base[rand(size)]
+    }
+    re
   end
 end
