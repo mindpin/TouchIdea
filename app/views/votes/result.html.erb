@@ -17,23 +17,15 @@
         <div class="answers">
           <% question.answers.each do |answer| %>
             <% percent = (answer.users.count.to_f / @vote.invite_uids.count * 100).to_i %>
-            <div class="answer-result" data-id="<%= answer.id %>" data-toggle="modal" data-target="#model-<%= answer.id %>">
-              <div class="col-xs-1 answer-select">
-                <% if answer.answered_by?(current_user) %>
-                  √
-                <% end %>
+            <div class="row div-answer" data-id="<%= answer.id %>">
+              <div class="col-xs-5 answer-count-and-title">
+                <div class="label label-primary"><%= answer.users.count > 0 ? answer.users.count : '' %></div>
+                <span class="label label-default"><%= answer.title %></span>
               </div>
-              <div class="col-xs-10 answer-progress">
-                <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
-                  </div>
-                  <div class="answer-result-title">
-                    <%= answer.title %>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xs-1 answer-percent">
-                <%= '%d%' % percent %>
+              <div class="col-xs-7 answer-users text-right">
+                <% answer.users.each do |user| %>
+                  <%= image_tag user.avatar_url, class: 'navbar-avatar', alt: user.nickname, title: user.nickname %>
+                <% end -%>
               </div>
               <div class="clearfix"></div>
             </div>
