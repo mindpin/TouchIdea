@@ -25,6 +25,11 @@
           var user_id = '<%= current_user.id %>';
         </script>
       <% end %>
+      <% if Rails.env.production? %>
+        <div class="hidden">
+        <script src="https://s4.cnzz.com/z_stat.php?id=1254445939&web_id=1254445939" language="JavaScript"></script>
+        </div>
+      <% end %>
     </main>
   </body>
 </html>
