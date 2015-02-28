@@ -93,6 +93,11 @@ class Vote
     end
   end
 
+  after_create :share_to_weibo
+  def share_to_weibo
+    ShareToWeibo.new.post_statuses_for_vote_invite_users self
+  end
+
   def randstr(length=6)
     base = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     size = base.size
