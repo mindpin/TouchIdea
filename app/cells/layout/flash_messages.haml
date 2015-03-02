@@ -1,0 +1,21 @@
+- @flash.each do |name, message|
+  - if message.is_a?(String)
+    .flash-message{:class => name}
+      %a.close{:herf => 'javascript:;'}
+        %i.fa.fa-times
+        %span 关闭
+      .text= message
+
+    / %div{:class => "alert alert-#{name.to_s == 'notice' ? 'success' : 'danger'} alert-dismissible"}
+    /   %button.close{"data-dismiss" => "alert", :type => "button"}
+    /     %span{"aria-hidden" => "true"} &times;
+    /     %span.sr-only Close
+  / = msg
+  / - elsif msg.is_a?(Array)
+  /   - msg.each_with_index do |str, index|
+  /     %div{:class => "alert alert-#{name.to_s == 'notice' ? 'success' : 'danger'} alert-dismissible"}
+  /       %button.close{"data-dismiss" => "alert", :type => "button"}
+  /         %span{"aria-hidden" => "true"} &times;
+  /         %span.sr-only Close
+  /       = msg
+- @flash.discard(:notice)

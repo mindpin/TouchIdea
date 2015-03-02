@@ -1,7 +1,0 @@
-- flash.each do |name, msg|
-  - if msg.is_a?(String)
-    = render "layouts/message", msg: msg, name: name
-  - elsif msg.is_a?(Array)
-    - msg.each_with_index do |str, index|
-      = render "layouts/message", msg: str, name: 'notice'
-- flash.discard(:notice)

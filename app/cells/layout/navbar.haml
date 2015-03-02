@@ -1,0 +1,18 @@
+.navbar.container
+  .row
+    .col-pad-12
+      %a.home{:href => '/'} pinIdea
+      .right
+        .avatar= avatar @user
+        .username= @user.nickname
+        .messages
+          %a{:href => messages_path, :title => '提醒'}
+            %i.fa.fa-bell
+            - count = @user.notifies.unread.count
+            - if count > 0
+              %span.count.active= count
+            - else
+              %span.count 0
+        .sign-out
+          %a{:href => destroy_user_session_path, :title => '退出', :data => {:method => :delete}}
+            %i.fa.fa-power-off

@@ -70,7 +70,7 @@ gem 'cocoon'
 #gem 'thin'
 
 gem "haml"
-
+gem "cells"
 gem "mina",
     :git => "git://github.com/fushang318/mina.git",
     :tag => "v0.2.0fix"
