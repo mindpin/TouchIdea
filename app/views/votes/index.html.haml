@@ -1,0 +1,12 @@
+%form#new_vote{:action => "/votes/new", :method => "get"}
+  .row
+    .col-xs-10
+      .form-group.string
+        %input.string.form-control{:name => "vote[title]", :placeholder => "新增一个投票主题...", :type => "text"}/
+    .col-xs-2
+      %button.btn.btn-primary
+        新增
+#votes.votes
+  - @votes.each do |vote|
+    .vote{:id => "#{vote.id}"}
+      = render vote

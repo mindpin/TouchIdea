@@ -1,0 +1,25 @@
+!!!
+%html{:lang => :zh}
+  %head
+    %meta{:'http-equiv' => 'Content-Type', :content => 'text/html; charset=utf-8'}
+    %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'}
+    %title= content_for?(:title) ? yield(:title) : "pinIdea - alpha"
+    = csrf_meta_tags
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+  %body.auth
+    .color-header
+      .bg
+      .container
+        .row
+          .col-pad-12
+            .lead pinIdea
+            .intro 
+              %span 使用全新方式，汇集众人意见，
+              %span 收集感兴趣的信息
+            = yield
+      .mindpin
+        .container
+          .row
+            .col-pad-12
+              %span DESIGNED AND DEVELOPED MINDPIN TEAM, 2015

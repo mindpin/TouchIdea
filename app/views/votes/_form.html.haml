@@ -1,0 +1,31 @@
+= simple_form_for @vote, wrapper: :horizontal_form do |f|
+  - disabled = (!f.object.new_record? and f.object.answered?)
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title.text-center 编辑新议题
+    .panel-body
+      = f.input :title, disabled: disabled
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title.text-center
+        讨论要点 #{link_to_add_association '+ 增加一个要点', f, :questions, 'class' => 'btn btn-default', 'data-association-insertion-node' => '#div-vote-questions'}
+    .panel-body
+      #div-vote-questions
+        = f.simple_fields_for :questions do |question|
+          = render "question_fields", :f => question
+      = f.input :finish_at, as: :date_picker
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title.text-center 邀请微博好友参与讨论
+    .panel-body
+      .div-invite-uids
+        = f.collection_check_boxes(:invite_uids, current_user.friendships, :uid, :name){|b| b.label(:"data-value" => b.value) { selected=f.object.invite_uids.include?(b.object.uid.to_s); b.check_box(checked: selected, class: (selected ?'hidden' : '') ) + b.text }  }
+  .form-actions
+    = f.button :submit, @vote.new_record? ? '发布新议题' : '修改议题', class: 'btn btn-primary btn-block'
+:javascript
+  $(document).on('ready page:change', function() {
+    $('.date_picker.vote_finish_at').datetimepicker({
+      language: 'zh-CN',
+      pickTime: false
+    });
+  });

@@ -1,0 +1,24 @@
+.vote-title
+  - if vote.finished?
+    %span.vote-finish
+      【已结束】
+  - else
+    - if vote.answered_by?(current_user)
+      %span.vote-voted
+        【已投票】
+    - else
+      %span.vote-no-vote
+        【未投票】
+  = link_to vote.title, vote
+.vote-meta
+  .vote-time.pull-left
+    %span.glyphicon.glyphicon-time{"aria-hidden" => "true"}
+    = vote.created_at.strftime('%m/%d')
+    \~
+    \#{vote.finish_at.strftime('%m/%d/%Y')}
+  .vote-time.pull-right
+    %span.glyphicon.glyphicon-user{"aria-hidden" => "true"}
+    = vote.voted_users.count
+    \/
+    \#{vote.invite_uids.try(:count) || 0}
+  .clearfix

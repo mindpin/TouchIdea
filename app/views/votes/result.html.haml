@@ -1,0 +1,44 @@
+.panel.panel-default
+  .panel-heading
+    %h3.panel-title.text-center 查看讨论进行状态
+  .panel-body.text-center
+    %h1
+      议题：#{@vote.title}
+.panel.panel-default
+  .panel-body
+    - @questions.each do |question|
+      .question
+        .question-title
+          %h4
+            讨论要点：#{question.title}
+        .answers
+          - question.answers.each do |answer|
+            - percent = (answer.users.count.to_f / @vote.invite_uids.count * 100).to_i
+            .answer-result{"data-id" => "#{answer.id}", "data-target" => "#model-#{answer.id}", "data-toggle" => "modal"}
+              .col-xs-1.answer-select
+                - if answer.answered_by?(current_user)
+                  √
+              .col-xs-10.answer-progress
+                .progress
+                  .progress-bar{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => percent, :role => "progressbar", :style => "width: #{percent}%;"}
+                  .answer-result-title
+                    = answer.title
+              .col-xs-1.answer-percent
+                = '%d%' % percent
+              .clearfix
+      %hr/
+- if !@vote.finished? and @vote.user == current_user
+  = link_to '发起人修改议题', edit_vote_path(@vote), class: 'btn btn-default btn-block'
+- @questions.map(&:answers).flatten.each do |answer|
+  .modal.fade{"aria-hidden" => "true", :id => "modal-#{answer.id}", :role => "dialog", :tabindex => "-1"}
+    .modal-dialog.modal-sm
+      .modal-content
+        .modal-body
+          %div
+            %strong 选项：
+            = answer.title
+          %div
+            %strong 投票人：
+            - answer.users.each do |user|
+              = user.nickname
+              %br/

@@ -1,0 +1,4 @@
+$('#messages').prepend('#{j render "layouts/message", name: 'notice', msg: "您被“#{@vote.user.nickname}”邀请参加投票：" + @vote.title}')
+$('#votes').prepend('
+.vote{:id => "#{@vote.id}"}>= j render @vote
+')

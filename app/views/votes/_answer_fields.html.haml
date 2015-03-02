@@ -1,0 +1,7 @@
+- disabled = (!f.object.new_record? and f.object.answered?)
+.nested-fields
+  - if disabled
+    = f.input :title, disabled: disabled
+    = f.input :title, as: :hidden
+  - else
+    = f.input :title
