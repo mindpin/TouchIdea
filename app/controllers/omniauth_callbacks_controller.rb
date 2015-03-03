@@ -18,6 +18,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
           flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => omniauth['provider']
           #sign_in_and_redirect(:user, authentication.user)
           #sign_in_and_redirect(authentication.user, :event => :authentication)
+          authentication.update_attributes({token: omniauth['credentials']['token'], expires_at: omniauth['credentials']['expires_at']}) unless omniauth['credentials'].blank?
           authentication.user.update_attribute :avatar_url, omniauth.extra.try(:raw_info).try(:avatar_hd) if omniauth.extra.try(:raw_info).try(:avatar_hd)
           sign_in_and_redirect(authentication.user)
         else
