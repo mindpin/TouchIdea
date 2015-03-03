@@ -61,6 +61,7 @@ class User
   has_and_belongs_to_many :invited_votes, class_name: 'Vote', inverse_of: 'users'
   has_many :friendships, inverse_of: 'user'
   has_many :friend_users, inverse_of: 'friend', class_name: 'Friendship', primary_key: :uid, foreign_key: :uid
+  has_many :settings
 
   def friends
     friendships.includes(:friend).map(&:friend).compact
@@ -92,6 +93,10 @@ class User
 
   def invite_notify(to_user, vote)
     messages.create to: to_user, vote: vote
+  end
+
+  def get_setting(key, default_value = true)
+    setting = settings.where(key: key).first_or_create(value: default_value.to_s)
   end
 
   protected

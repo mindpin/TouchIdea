@@ -36,6 +36,12 @@
               <% end %>
             <% end -%>
           </li>
+          <li>
+            <%= link_to settings_path, title: '设置' do %>
+              <span class="glyphicon glyphicon-cog">
+              </span>
+            <% end -%>
+          </li>
         <% end %>
         <li>
           <% if current_user %>

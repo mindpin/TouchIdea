@@ -16,7 +16,7 @@ class ShareToWeibo
     
     plus = 0
     while !names.blank?
-      status = "【#{short_title}】 #{names.pop(@users_count_per_share).collect{|name| '!' + name}.join(' ')} 你们怎么看 #{@short_url}"
+      status = "【#{short_title}】 #{names.pop(@users_count_per_share).collect{|name| '@' + name}.join(' ')} 你们怎么看 #{@short_url}"
       times = 0
       begin
         client.statuses.update(status)

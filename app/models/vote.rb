@@ -95,7 +95,7 @@ class Vote
 
   after_create :share_to_weibo
   def share_to_weibo
-    ShareToWeibo.new.post_statuses_for_vote_invite_users self
+    ShareToWeibo.new.post_statuses_for_vote_invite_users(self) if user.get_setting('share invitation').true?
   end
 
   def randstr(length=6)
