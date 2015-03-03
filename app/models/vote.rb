@@ -82,6 +82,14 @@ class Vote
     end
   end
 
+  before_update :invite_new_user_by_weibo
+  def invite_new_user_by_weibo
+    if changes['invite_uids']
+      new_uids = changes['invite_uids'].last - changes['invite_uids'].first
+      ShareToWeibo.new.user_invite_by_uids(self.user, self, new_uids) if self.user.get_setting('share invitation').true? and !new_uids.blank?
+    end
+  end
+
   before_update :add_to_voted_users
   def add_to_voted_users
     if questions.count > 0
