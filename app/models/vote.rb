@@ -11,6 +11,7 @@ class Vote
   has_many :questions
   has_and_belongs_to_many :users, inverse_of: 'invited_votes'
   has_and_belongs_to_many :voted_users, class_name: 'User', inverse_of: nil
+  has_many :shares
 
   attr_accessor :is_clear_voted_users
 
@@ -86,7 +87,7 @@ class Vote
   def invite_new_user_by_weibo
     if changes['invite_uids']
       new_uids = changes['invite_uids'].last - changes['invite_uids'].first
-      ShareToWeibo.new.user_invite_by_uids(self.user, self, new_uids) if self.user.get_setting('share invitation').true? and !new_uids.blank?
+      shares.create(uids: new_uids.reject{|uid| uid.blank?}) if self.user.get_setting('share invitation').true? and !new_uids.blank?
     end
   end
 
@@ -103,7 +104,7 @@ class Vote
 
   after_create :share_to_weibo
   def share_to_weibo
-    ShareToWeibo.new.post_statuses_for_vote_invite_users(self) if user.get_setting('share invitation').true?
+    shares.create(uids: invite_uids.reject{|uid| uid.blank?}) if user.get_setting('share invitation').true?
   end
 
   def randstr(length=6)

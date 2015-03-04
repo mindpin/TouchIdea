@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :shares do
+    get :weibo, on: :member
+  end
+
   resources :settings
   get '/:id' => 'votes#show_by_token', id: /[a-zA-Z0-9]{6}/, as: :token
   resources :messages

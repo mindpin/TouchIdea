@@ -7,9 +7,10 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       omniauth = env["omniauth.auth"]
 
       if current_user #or User.find_by_email(auth.recursive_find_by_key("email"))
-        current_user.user_tokens.find_or_create_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
-        flash[:notice] = "Authentication successful"
-        redirect_to edit_user_registration_path
+        authentication = current_user.user_tokens.where(provitder: omniauth['provider']).last
+        authentication = current_user.user_tokens.where(provider: omniauth['provider'], uid: omniauth['uid']).first_or_create unless authentication
+        authentication.update_attributes({token: omniauth['credentials']['token'], expires_at: omniauth['credentials']['expires_at']}) unless omniauth['credentials'].blank?
+        redirect_to after_sign_in_path_for(authentication.user)
       else
 
         authentication = UserToken.where(provider: omniauth['provider'], uid: omniauth['uid']).first

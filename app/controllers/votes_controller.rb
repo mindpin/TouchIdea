@@ -40,7 +40,11 @@ class VotesController < ApplicationController
     @vote = current_user.votes.new(vote_params)
     if @vote.save
       user_ids = @vote.users.map(&:id)
-      redirect_to votes_path
+      if @vote.shares.any?
+        redirect_to @vote.shares.first
+      else
+        redirect_to votes_path
+      end
     else
       render :new
     end
@@ -49,8 +53,12 @@ class VotesController < ApplicationController
   def update
     @vote = Vote.find params[:id]
     user_ids = @vote.voted_users.map(&:id)
-    @vote.update(vote_params)
-    respond_with(@vote)
+    
+    if @vote.update(vote_params) and @vote.user == current_user and @vote.shares.un_shared.any?
+      redirect_to @vote.shares.un_shared.last
+    else
+      respond_with(@vote)
+    end
   end
 
   #def destroy

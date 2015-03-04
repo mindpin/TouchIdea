@@ -6,4 +6,8 @@ class UserToken
   field :token,     type: String
   field :expires_at,     type: Time
   belongs_to :user
+
+  def expired?
+    Time.now >= expires_at
+  end
 end
