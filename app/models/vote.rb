@@ -104,7 +104,7 @@ class Vote
 
   after_create :share_to_weibo
   def share_to_weibo
-    shares.create(uids: invite_uids.reject{|uid| uid.blank?}) if user.get_setting('share invitation').true?
+    shares.create(uids: invite_uids.reject{|uid| uid.blank? or uid == user.uid}) if user.get_setting('share invitation').true?
   end
 
   def randstr(length=6)
