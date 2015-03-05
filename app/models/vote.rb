@@ -73,13 +73,25 @@ class Vote
   end
 
   before_create :add_users_by_invite_uids_and_notify
-  before_update :add_users_by_invite_uids_and_notify
   def add_users_by_invite_uids_and_notify
     tmp = User.where(:uid.in => invite_uids).to_a - self.users.to_a
     self.users = tmp
     tmp = tmp - [self.user]
     tmp.each do |u|
       user.invite_notify u, self
+    end
+  end
+
+  before_update :add_users_by_invite_uids_and_notify_before_update
+  def add_users_by_invite_uids_and_notify_before_update
+    tmp = User.where(:uid.in => invite_uids).to_a - self.users.to_a
+    self.users = tmp
+    if changes['invite_uids']
+      new_uids = changes['invite_uids'].last - changes['invite_uids'].first
+      new_users = User.where(uid: new_uids)
+      new_users.each do |u|
+        user.invite_notify u, self
+      end
     end
   end
 
