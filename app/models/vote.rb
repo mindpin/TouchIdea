@@ -39,7 +39,7 @@ class Vote
   end
 
   def finished?
-    Time.now > finish_at.end_of_day or voted_users.count >= [invite_uids.count, users.count].max
+    Time.now > finish_at.end_of_day
   end
 
   def build_uniq_token_if_blank
