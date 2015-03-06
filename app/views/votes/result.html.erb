@@ -4,6 +4,7 @@
   </div>
   <div class="panel-body text-center">
     <h1>议题：<%= @vote.title %></h1>
+    <%= text_field_tag nil, token_url(@vote.token), class: 'form-control', disabled: true %>
   </div>
 </div>
 
