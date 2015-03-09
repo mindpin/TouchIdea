@@ -6,7 +6,6 @@ class VotesController < ApplicationController
   respond_to :js, only: [:new, :create]
 
   def index
-    flash[:danger] = '已经成功通过新浪微博登录'
     @votes = Vote.by_user(current_user).recent
     respond_with(@votes)
   end

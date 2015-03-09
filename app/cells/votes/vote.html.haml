@@ -1,0 +1,26 @@
+%a.vote{href: url_for(@vote), data: {id: @vote.id}}
+  .vote-title
+    - if @vote.finished?
+      %span.label.vote-finish 已结束
+    - elsif @vote.answered_by?(@user)
+      %span.label.vote-voted 已投票
+    - else
+      %span.label.vote-no-vote 未投票
+
+    .title-text{:href => url_for(@vote)}= @vote.title
+
+  .vote-meta
+    .vote-time
+      %span.start
+        %i.fa.fa-clock-o
+        %span= @vote.created_at.strftime('%m/%d/%Y')
+      %span ~
+      %span.end
+        %i.fa.fa-clock-o
+        %span= @vote.finish_at.strftime('%m/%d/%Y')
+
+    .vote-user-count
+      %i.fa.fa-user
+      %span.voted= @vote.voted_users.count
+      %span /
+      %span.invited #{@vote.invite_uids.try(:count) || 0}
