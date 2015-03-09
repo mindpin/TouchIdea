@@ -74,7 +74,10 @@ class VotesController < ApplicationController
   def show_by_token
     @vote = Vote.where(token: params[:id]).first
     if current_user
-      @vote.users << current_user unless @vote.users.include? current_user
+      unless @vote.invite_uids.include?(current_user.uid)
+        @vote.invite_uids << current_user.uid
+        @vote.save
+      end
       redirect_to @vote
     end
   end

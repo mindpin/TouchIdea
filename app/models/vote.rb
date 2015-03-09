@@ -23,7 +23,7 @@ class Vote
   validates :token,    uniqueness: true,    presence: true
 
   scope :recent, -> { desc(:id) }
-  scope :by_user, -> (user) { any_of({:user_id => user.id}, {:user_ids.in => [user.id]}) }
+  scope :by_user, -> (user) { any_of({:user_id => user.id}, {:user_ids.in => [user.id]}, {:invite_uids.in => [user.uid]}) }
 
 
   def self.parse(token)
@@ -84,8 +84,11 @@ class Vote
 
   before_update :add_users_by_invite_uids_and_notify_before_update
   def add_users_by_invite_uids_and_notify_before_update
-    tmp = User.where(:uid.in => invite_uids).to_a - self.users.to_a
-    self.users = tmp
+    tmp_users = User.where(:uid.in => invite_uids).to_a - self.users.to_a
+    # fix user hidden bug
+    tmp_users.each do |tmp_user|
+      self.users << tmp_user unless self.users.include?(tmp_user)
+    end
     if changes['invite_uids']
       new_uids = changes['invite_uids'].last - changes['invite_uids'].first
       new_users = User.where(uid: new_uids)
