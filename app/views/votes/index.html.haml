@@ -1,6 +1,6 @@
 .row
   .col-pad-8
-    %form#new_vote{:action => "/votes/new", :method => "get"}
+    %form.new-vote-shortcut{:action => "/votes/new", :method => "get"}
       .form-group.string
         %input.string.form-control{:name => "vote[title]", :placeholder => "新增一个讨论议题…", :type => "text"}/
       .form-submits

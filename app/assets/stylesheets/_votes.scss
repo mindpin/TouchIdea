@@ -1,8 +1,15 @@
-form#new_vote {
-  background-color: #F9F9F9;
+// 可以考虑的样式参考
+// https://dribbble.com/shots/1390801-Mixpanel-Survey-Analytics-UI-UX/attachments/201133
+// https://dribbble.com/shots/1912257-Checkout-Form/attachments/327582
+
+$border-color: #E6EAED;
+$panel-bg-color: #F9F9F9;
+
+form.new-vote-shortcut {
+  background-color: $panel-bg-color;
   padding: $grid-gap / 2;
   margin-bottom: $grid-gap / 2;
-  border:solid 1px #E6EAED;
+  border:solid 1px $border-color;
 
   @include -below(phone) {
     margin-top: -$grid-gap / 2;
@@ -33,7 +40,7 @@ form#new_vote {
 
   a.vote {
     display: block;
-    border-bottom: solid 1px #E6EAED;
+    border-bottom: solid 1px $border-color;
     padding: $grid-gap / 2;
     &:hover {
       text-decoration: none;
@@ -69,6 +76,45 @@ form#new_vote {
         float: right;
         font-size: 13px;
       }
+    }
+  }
+}
+
+form#new_vote {
+  .panel {
+    @include clearfix;
+    border-bottom:solid 1px $border-color;
+    padding-bottom: $grid-gap / 2;
+    margin-bottom: $grid-gap / 2;
+    .panel-heading {
+      background-color: $panel-bg-color;
+      height:40px;line-height:40px;
+      padding: 0 $grid-gap / 2;
+      border-radius: 100px;
+      margin-bottom: $grid-gap / 2;
+    }
+  }
+
+  .form-group {
+    label {
+      position:relative;
+      font-weight: normal;
+      float: left;
+      abbr[title=required] {
+        float:right;
+        height:21px;line-height:100em;font-size:0;overflow:hidden;
+        &:before {
+          $w: 7px;
+          content:"";
+          width:$w;height:$w;
+          position:absolute;
+          background-color:lighten($area-danger, 20%);
+          border-radius:100%;
+          top:(21px - $w)/2 - 1px;right: -$w - 3px;
+        }
+      }
+    }
+    input {
     }
   }
 }
