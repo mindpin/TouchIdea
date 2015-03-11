@@ -13,8 +13,9 @@
     %main
       .container
         .row
-          .col-pad-12
+          .col-pad-8
             .page-messages= render_cell :layout, :flash_messages, flash
+          .col-pad-12
             .pege-content= yield
 
     - if current_user

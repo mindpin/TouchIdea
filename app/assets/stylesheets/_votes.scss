@@ -82,16 +82,64 @@ form.new-vote-shortcut {
 
 form#new_vote {
   .panel {
+    $pd: $grid-gap / 2;
     @include clearfix;
     border-bottom:solid 1px $border-color;
-    padding-bottom: $grid-gap / 2;
-    margin-bottom: $grid-gap / 2;
-    .panel-heading {
-      background-color: $panel-bg-color;
-      height:40px;line-height:40px;
-      padding: 0 $grid-gap / 2;
-      border-radius: 100px;
-      margin-bottom: $grid-gap / 2;
+    padding-bottom: $grid-gap;
+    margin-bottom: $grid-gap;
+
+    .panel-title {
+      margin-bottom: $grid-gap;
+      font-size: 16px;
+    }
+
+    .add-btn a {
+      display: inline-block;
+      border: solid 1px $border-color;
+      background-color: lighten($area-fresh, 60%);
+      height: 32px;line-height: 32px;
+      padding: 0 25px;
+      color: darken($area-fresh, 5%);
+      &:hover {
+        text-decoration: none;
+        background-color: lighten($area-fresh, 50%);
+      }
+    }
+
+    .vote-questions {
+      .question-panel {
+        margin-bottom: $pd;
+        // background-color: #FEFEF5;
+        background-color: $area-dawn;
+        padding: $pd;
+
+        .question {
+          position: relative;
+          margin-bottom: $pd;
+          i {
+            position: absolute;
+            font-size: 20px;
+            color: darken($area-fresh, 10%);
+            top: 7px;
+          }
+          .ipt {margin-left: 35px;}
+        }
+        .answers {
+          margin-left: 35px;
+
+          .answer-panel {
+            position: relative;
+            margin-bottom: $pd;
+            i {
+              position: absolute;
+              font-size: 14px;
+              color: darken($area-fresh, 10%);
+              top: 10px;
+            }
+            .ipt {margin-left: 35px;}
+          }
+        }
+      }
     }
   }
 
@@ -116,5 +164,35 @@ form#new_vote {
     }
     input {
     }
+  }
+}
+
+
+
+// 移除 bootstrap 依赖之前，先把样式写在这里
+.date_picker {
+  width: 200px;
+}
+
+.date_picker .input-group-btn {
+  display: none;
+}
+
+.bootstrap-datetimepicker-widget {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+  display: none;
+  background-color: #FFF;
+  border:solid 1px #ddd;
+  th {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: 20px;
+    line-height: 20px;
+    width: 20px;
+    padding: 5px;
+    text-align: center;
+  }
+  th.next, th.prev {font-size: 21px;}
+  td {
+    padding: 5px;
   }
 }

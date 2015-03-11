@@ -1,3 +1,7 @@
+/*
+ *= require bootstrap-datetimepicker.min
+ */
+
 $fa-font-path: "fonts" !default;
 @import "css/lily.scss";
 
@@ -101,6 +105,10 @@ body.auth {
 }
 
 body.app {
+  input {
+    box-shadow: none !important;
+  }
+
   .-avatar-img {
     width:32px;height:32px;
     img {

@@ -1,9 +1,15 @@
-- disabled = (!f.object.new_record? and (f.object.answered? or f.object.vote.questions.count == 1))
-.nested-fields
-  = f.input :title, disabled: disabled
-  #answers.clearfix
+:ruby
+  disabled = (!f.object.new_record? and (f.object.answered? or f.object.vote.questions.count == 1))
+
+.question-panel
+  .question
+    %i.fa.fa-question-circle
+    .ipt= f.input :title, :disabled => disabled, :label => false, :placeholder => '填写要点描述'
+
+  .answers
     = f.simple_fields_for :answers do |answer|
       = render "answer_fields", :f => answer
-    .links.col-sm-offset-3.col-sm-9
-      = link_to_add_association '+ 增加一项可选回答', f, :answers, class: 'btn btn-default'
-  %hr/
+    .add-btn
+      = link_to_add_association f, :answers do
+        %i.fa.fa-plus
+        %span 增加一项可选回答

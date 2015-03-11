@@ -3,31 +3,37 @@
 
 = simple_form_for @vote do |f|
   .panel
+    .panel-title 议题描述
     .panel-body
-      = f.input :title, disabled: disabled
+      = f.input :title, :disabled => disabled, :placeholder => '填写议题描述', :label => false
+
+  .panel
+    .panel-title 讨论要点
+
+    .panel-body
+      .vote-questions
+        = f.simple_fields_for :questions do |question|
+          = render "question_fields", :f => question
+
+      .add-btn
+        = link_to_add_association f, :questions, :'data-association-insertion-node' => '.vote-questions', :'data-association-insertion-method' => :append do
+          %i.fa.fa-plus
+          %span 增加一个要点
+
+
+  .panel
+    .panel-title 讨论结束日期
+    .panel-body
+      = f.input :finish_at, :as => :date_picker, :label => false, :placeholder => '点此输入日期'
 
   .panel
     .panel-heading
-      .panel-title
-        讨论要点 #{link_to_add_association '+ 增加一个要点', f, :questions, 'class' => 'btn btn-default', 'data-association-insertion-node' => '#div-vote-questions'}
-    .panel-body
-      #div-vote-questions
-        = f.simple_fields_for :questions do |question|
-          = render "question_fields", :f => question
-      = f.input :finish_at, as: :date_picker
-
-  .panel.panel-default
-    .panel-heading
-      %h3.panel-title.text-center 邀请微博好友参与讨论
+      .panel-title 邀请微博好友参与讨论
     .panel-body
       .div-invite-uids
         = f.collection_check_boxes(:invite_uids, @user.friendships, :uid, :name){|b| b.label(:"data-value" => b.value) { selected=f.object.invite_uids.include?(b.object.uid.to_s); b.check_box(checked: selected, class: (selected ?'hidden' : '') ) + b.text }  }
-  .form-actions
-    = f.button :submit, @vote.new_record? ? '发布新议题' : '修改议题', class: 'btn btn-primary btn-block'
-:javascript
-  $(document).on('ready page:change', function() {
-    $('.date_picker.vote_finish_at').datetimepicker({
-      language: 'zh-CN',
-      pickTime: false
-    });
-  });
+
+  .form-submits
+    %a.submit.btn.btn-flat-fresh
+      %i.fa.fa-pencil
+      %span= @vote.new_record? ? '发布新议题' : '修改议题'

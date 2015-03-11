@@ -1,7 +1,6 @@
-- disabled = (!f.object.new_record? and f.object.answered?)
-.nested-fields
-  - if disabled
-    = f.input :title, disabled: disabled
-    = f.input :title, as: :hidden
-  - else
-    = f.input :title
+:ruby
+  disabled = (!f.object.new_record? and f.object.answered?)
+
+.answer-panel
+  %i.fa.fa-circle
+  .ipt= f.input :title, disabled: disabled, :label => false, :placeholder => '填写选项描述'
