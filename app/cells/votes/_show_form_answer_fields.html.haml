@@ -1,0 +1,5 @@
+.answer
+  = f.input :voter_id, as: :boolean, label: false, inline_label: f.object.try(:title) || f.input(:title, wrapper: :inline_form, :placeholder => '填写选项'), checked_value: @user.id, unchecked_value: nil
+  - if !f.object.new_record?
+    = f.input :id, as: :hidden
+    = f.input :title, as: :hidden

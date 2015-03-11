@@ -1,12 +1,9 @@
-.panel.panel-default
-  .panel-heading
-    %h3.panel-title.text-center 参与议题讨论，贡献我的想法
-  .panel-body
-    %h1.text-center
-      议题：#{@vote.title}
-#vote-form
-  = render "show_form", vote: @vote
-/ Modal
+.page-vote-show
+  .heading 参与议题讨论，贡献我的想法 …
+  .title 议题：#{@vote.title}
+
+  = render_cell :votes, :show_form, :vote => @vote, :user => current_user
+
 #myModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
@@ -15,4 +12,4 @@
           %span{"aria-hidden" => "true"} ×
         %h4#myModalLabel.modal-title 再加一题
       #modal-question-form
-        = render "questions/form", vote: @vote
+        = render_cell :questions, :form, :vote => @vote

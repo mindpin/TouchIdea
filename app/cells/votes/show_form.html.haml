@@ -1,0 +1,45 @@
+.vote-show-form
+  = simple_form_for @vote do |f|
+    .questions
+      = f.simple_fields_for :questions do |question|
+        .question
+          .answers
+            .panel
+              .panel-title
+                %i.fa.fa-question-circle 
+                %span 讨论要点：#{question.object.title}
+
+              .panel-body
+                - if question.object.answered_by? @user
+                  .row
+                    - question.object.answers.each do |answer|
+                      .col-xs-1.col-xs-offset-3
+                        - if answer.answered_by? current_user
+                          %span.glyphicon.glyphicon-ok
+                      .col-sm-8
+                        = answer.title
+                - else
+                  .row
+                    .answers-panel.col-pad-6
+                      = question.simple_fields_for :answers do |answer|
+                        = render "show_form_answer_fields", f: answer
+                      .add-btn
+                        = link_to_add_association question, :answers, :partial => 'show_form_answer_fields' do
+                          %i.fa.fa-plus
+                          %span 补充一个选项
+
+          = question.input :id, :as => :hidden
+
+
+    .form-actions
+      %button.btn.btn-flat{"data-target" => "#myModal", "data-toggle" => "modal", :onclick => "return false;", :type => "button"} + 增加一个讨论要点
+
+      - if !@vote.finished? and @vote.user == @user
+        .edit
+          %a.edit.btn.btn-flat{:href => edit_vote_path(@vote)}
+            %span 发起人修改议题
+
+      .submit
+        %a.submit.btn.btn-flat-fresh
+          %i.fa.fa-pencil
+          %span 贡献我的想法

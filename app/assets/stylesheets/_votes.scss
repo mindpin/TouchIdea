@@ -81,68 +81,6 @@ form.new-vote-shortcut {
 }
 
 form#new_vote {
-  .panel {
-    $pd: $grid-gap / 2;
-    @include clearfix;
-    border-bottom:solid 1px $border-color;
-    padding-bottom: $grid-gap;
-    margin-bottom: $grid-gap;
-
-    .panel-title {
-      margin-bottom: $grid-gap;
-      font-size: 16px;
-    }
-
-    .add-btn a {
-      display: inline-block;
-      border: solid 1px $border-color;
-      background-color: lighten($area-fresh, 60%);
-      height: 32px;line-height: 32px;
-      padding: 0 25px;
-      color: darken($area-fresh, 5%);
-      &:hover {
-        text-decoration: none;
-        background-color: lighten($area-fresh, 50%);
-      }
-    }
-
-    .vote-questions {
-      .question-panel {
-        margin-bottom: $pd;
-        // background-color: #FEFEF5;
-        background-color: $area-dawn;
-        padding: $pd;
-
-        .question {
-          position: relative;
-          margin-bottom: $pd;
-          i {
-            position: absolute;
-            font-size: 20px;
-            color: darken($area-fresh, 10%);
-            top: 7px;
-          }
-          .ipt {margin-left: 35px;}
-        }
-        .answers {
-          margin-left: 35px;
-
-          .answer-panel {
-            position: relative;
-            margin-bottom: $pd;
-            i {
-              position: absolute;
-              font-size: 14px;
-              color: darken($area-fresh, 10%);
-              top: 10px;
-            }
-            .ipt {margin-left: 35px;}
-          }
-        }
-      }
-    }
-  }
-
   .form-group {
     label {
       position:relative;
@@ -165,8 +103,110 @@ form#new_vote {
     input {
     }
   }
+  .form-submits {
+    margin-bottom: $grid-gap * 2;
+  }
 }
 
+.panel {
+  $pd: $grid-gap / 2;
+  @include clearfix;
+  border-bottom:solid 1px $border-color;
+  padding-bottom: $grid-gap;
+  margin-bottom: $grid-gap;
+
+  .panel-title {
+    margin-bottom: $grid-gap;
+    font-size: 16px;
+  }
+
+  .add-btn a {
+    display: inline-block;
+    border: solid 1px $border-color;
+    background-color: lighten($area-fresh, 60%);
+    height: 32px;line-height: 32px;
+    padding: 0 25px;
+    color: darken($area-fresh, 5%);
+    &:hover {
+      text-decoration: none;
+      background-color: lighten($area-fresh, 50%);
+    }
+  }
+
+  .vote-questions {
+    .question-panel {
+      margin-bottom: $pd;
+      // background-color: #FEFEF5;
+      background-color: $area-dawn;
+      padding: $pd;
+
+      .question {
+        position: relative;
+        margin-bottom: $pd;
+        i {
+          position: absolute;
+          font-size: 20px;
+          color: darken($area-fresh, 10%);
+          top: 7px;
+        }
+        .ipt {margin-left: 35px;}
+      }
+      .answers {
+        margin-left: 35px;
+
+        .answer-panel {
+          position: relative;
+          margin-bottom: $pd;
+          i {
+            position: absolute;
+            font-size: 14px;
+            color: darken($area-fresh, 10%);
+            top: 10px;
+          }
+          .ipt {margin-left: 35px;}
+        }
+      }
+    }
+  }
+}
+
+
+.page-vote-show {
+  $pd: $grid-gap / 2;
+  .heading {
+    padding-bottom: $pd;
+    margin-bottom: $pd;
+    border-bottom: dashed 1px #E6EAED;
+    color: #999;
+  }
+  .title {
+    font-size: 24px;
+    padding-bottom: $pd;
+    margin-bottom: $pd;
+    border-bottom: dashed 1px #E6EAED;
+    height: 40px;line-height: 40px;
+  }
+
+  .answers-panel {
+    margin-left: $grid-gap / 2;
+    position: relative;
+
+    .sr-only {
+      display: none;
+    }
+
+    .add-btn {
+      position: absolute;
+      right:-151px; bottom:10px;
+    }
+  }
+
+  .form-actions {
+    .btn {
+      margin-bottom: $grid-gap / 2;
+    }
+  }
+}
 
 
 // 移除 bootstrap 依赖之前，先把样式写在这里

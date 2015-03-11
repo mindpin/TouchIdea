@@ -1,4 +1,4 @@
-= simple_form_for [vote, Question.new],remote: true do |f|
+= simple_form_for [@vote, Question.new],remote: true do |f|
   .modal-body
     = f.input :title
     = f.simple_fields_for :answers do |answer|

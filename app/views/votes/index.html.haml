@@ -1,13 +1,11 @@
-.row
-  .col-pad-8
-    %form.new-vote-shortcut{:action => "/votes/new", :method => "get"}
-      .form-group.string
-        %input.string.form-control{:name => "vote[title]", :placeholder => "新增一个讨论议题…", :type => "text"}/
-      .form-submits
-        %a.submit.btn.btn-flat-fresh
-          %i.fa.fa-pencil
-          %span 新增
-          
-    #votes.votes
-      - @votes.each do |vote|
-        = render_cell :votes, :vote, :vote => vote, :user => current_user
+%form.new-vote-shortcut{:action => "/votes/new", :method => "get"}
+  .form-group.string
+    %input.string.form-control{:name => "vote[title]", :placeholder => "新增一个讨论议题…", :type => "text"}/
+  .form-submits
+    %a.submit.btn.btn-flat-fresh
+      %i.fa.fa-pencil
+      %span 新增
+      
+#votes.votes
+  - @votes.each do |vote|
+    = render_cell :votes, :vote, :vote => vote, :user => current_user

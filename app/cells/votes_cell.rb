@@ -12,4 +12,10 @@ class VotesCell < Cell::Rails
     @user = option[:user]
     render
   end
+
+  def show_form(option)
+    @vote = option[:vote]
+    @user = option[:user]
+    render
+  end
 end

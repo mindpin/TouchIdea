@@ -31,9 +31,12 @@
       .panel-title 邀请微博好友参与讨论
     .panel-body
       .div-invite-uids
-        = f.collection_check_boxes(:invite_uids, @user.friendships, :uid, :name){|b| b.label(:"data-value" => b.value) { selected=f.object.invite_uids.include?(b.object.uid.to_s); b.check_box(checked: selected, class: (selected ?'hidden' : '') ) + b.text }  }
+        = f.collection_check_boxes(:invite_uids, @user.friendships, :uid, :name){|b| b.label(:"data-value" => b.value) { selected=f.object.invite_uids.include?(b.object.uid.to_s); b.check_box(checked: selected, class: (selected ? 'hidden' : '') ) + b.text }  }
 
   .form-submits
     %a.submit.btn.btn-flat-fresh
       %i.fa.fa-pencil
       %span= @vote.new_record? ? '发布新议题' : '修改议题'
+
+    %a.back.btn.btn-flat{:href => 'javascript:history.go(-1)'}
+      %span 取消

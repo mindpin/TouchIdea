@@ -3,7 +3,7 @@ $(document).on "ready page:change", ->
     $("#modal-" + $(this).data('id')).modal('show')
 
 jQuery(document).on 'ready page:load', ->
-  jQuery('.vote-questions').on 'cocoon:after-insert', (evt, item)->
+  jQuery(document).on 'cocoon:after-insert', (evt, item)->
     item.hide().fadeIn()
 
   jQuery('.date_picker.vote_finish_at').datetimepicker({
