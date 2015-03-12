@@ -1,5 +1,5 @@
 class VotesController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except: [:show_by_token]
   before_action :set_vote, only: [:edit, :destroy]
 
   respond_to :html
@@ -40,7 +40,11 @@ class VotesController < ApplicationController
     @vote = current_user.votes.new(vote_params)
     if @vote.save
       user_ids = @vote.users.map(&:id)
-      redirect_to votes_path
+      if @vote.shares.any?
+        redirect_to @vote.shares.first
+      else
+        redirect_to votes_path
+      end
     else
       render :new
     end
@@ -49,8 +53,12 @@ class VotesController < ApplicationController
   def update
     @vote = Vote.find params[:id]
     user_ids = @vote.voted_users.map(&:id)
-    @vote.update(vote_params)
-    respond_with(@vote)
+    
+    if @vote.update(vote_params) and @vote.user == current_user and @vote.shares.un_shared.any?
+      redirect_to @vote.shares.un_shared.last
+    else
+      respond_with(@vote)
+    end
   end
 
   #def destroy
@@ -62,6 +70,18 @@ class VotesController < ApplicationController
     @vote = Vote.find params[:id]
     @questions = @vote.questions.includes(:answers)
   end
+
+  def show_by_token
+    @vote = Vote.where(token: params[:id]).first
+    if current_user
+      unless @vote.invite_uids.include?(current_user.uid)
+        @vote.invite_uids << current_user.uid
+        @vote.save
+      end
+      redirect_to @vote
+    end
+  end
+
   private
   def set_vote
     @vote = current_user.votes.find(params[:id])

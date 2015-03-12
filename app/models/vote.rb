@@ -5,10 +5,13 @@ class Vote
   field :finish_at, type: Time
   field :invite_uids, type: Array, default: []
 
+  field :token, type: String
+
   belongs_to :user, inverse_of: :votes
   has_many :questions
   has_and_belongs_to_many :users, inverse_of: 'invited_votes'
   has_and_belongs_to_many :voted_users, class_name: 'User', inverse_of: nil
+  has_many :shares
 
   attr_accessor :is_clear_voted_users
 
@@ -17,8 +20,15 @@ class Vote
   validates_presence_of :title
   validates_presence_of :finish_at
 
+  validates :token,    uniqueness: true,    presence: true
+
   scope :recent, -> { desc(:id) }
-  scope :by_user, -> (user) { any_of({:user_id => user.id}, {:user_ids.in => [user.id]}) }
+  scope :by_user, -> (user) { any_of({:user_id => user.id}, {:user_ids.in => [user.id]}, {:invite_uids.in => [user.uid]}) }
+
+
+  def self.parse(token)
+    Vote.where(token: token).first
+  end
 
   def answered_by? user
     questions.map{|question| question.answered_by?(user)}.uniq == [true]
@@ -29,7 +39,14 @@ class Vote
   end
 
   def finished?
-    Time.now > finish_at.end_of_day or voted_users.count == invite_uids.count
+    Time.now > finish_at.end_of_day
+  end
+
+  def build_uniq_token_if_blank
+    until !self.token.blank?
+      tmp = randstr
+      self.token = tmp unless Vote.where(token: tmp).first
+    end
   end
 
   protected
@@ -44,6 +61,11 @@ class Vote
     end
   end
 
+  before_validation :init_token
+  def init_token
+    build_uniq_token_if_blank if self.token.blank?
+  end
+
   before_create :add_self_to_invite_uids
   def add_self_to_invite_uids
     invite_uids.reject!{|uid| uid == ""}
@@ -51,13 +73,36 @@ class Vote
   end
 
   before_create :add_users_by_invite_uids_and_notify
-  before_update :add_users_by_invite_uids_and_notify
   def add_users_by_invite_uids_and_notify
     tmp = User.where(:uid.in => invite_uids).to_a - self.users.to_a
     self.users = tmp
     tmp = tmp - [self.user]
     tmp.each do |u|
       user.invite_notify u, self
+    end
+  end
+
+  before_update :add_users_by_invite_uids_and_notify_before_update
+  def add_users_by_invite_uids_and_notify_before_update
+    tmp_users = User.where(:uid.in => invite_uids).to_a - self.users.to_a
+    # fix user hidden bug
+    tmp_users.each do |tmp_user|
+      self.users << tmp_user unless self.users.include?(tmp_user)
+    end
+    if changes['invite_uids']
+      new_uids = changes['invite_uids'].last - changes['invite_uids'].first
+      new_users = User.where(uid: new_uids)
+      new_users.each do |u|
+        user.invite_notify u, self
+      end
+    end
+  end
+
+  before_update :invite_new_user_by_weibo
+  def invite_new_user_by_weibo
+    if changes['invite_uids']
+      new_uids = changes['invite_uids'].last - changes['invite_uids'].first
+      shares.create(uids: new_uids.reject{|uid| uid.blank?}) if self.user.get_setting('share invitation').true? and !new_uids.blank?
     end
   end
 
@@ -70,5 +115,21 @@ class Vote
       end
       self.voted_users = array
     end
+  end
+
+  after_create :share_to_weibo
+  def share_to_weibo
+    uids = invite_uids.reject{|uid| uid.blank? or uid == user.uid}
+    shares.create(uids: invite_uids.reject{|uid| uid.blank? or uid == user.uid}) if user.get_setting('share invitation').true? and !uids.blank?
+  end
+
+  def randstr(length=6)
+    base = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    size = base.size
+    re = '' << base[rand(size-10)]
+    (length - 1).times {
+      re << base[rand(size)]
+    }
+    re
   end
 end

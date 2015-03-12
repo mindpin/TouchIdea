@@ -1,3 +1,5 @@
 SINA_APP_KEY: test
 SINA_APP_SERCET: test
 SINA_REDIRECT_URI: 'http://localhost:3000/users/auth/weibo/callback'
+BASE_URL: 'http://done-list.local.realityandapp.com:3000'
+USERS_COUNT_PER_SHARE: '10'
