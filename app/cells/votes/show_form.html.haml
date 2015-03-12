@@ -14,7 +14,7 @@
                   .row
                     - question.object.answers.each do |answer|
                       .col-xs-1.col-xs-offset-3
-                        - if answer.answered_by? current_user
+                        - if answer.answered_by? @user
                           %span.glyphicon.glyphicon-ok
                       .col-sm-8
                         = answer.title
