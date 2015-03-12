@@ -5,6 +5,8 @@
       .right
         .avatar= avatar @user
         .username= @user.nickname
+        .settings
+          %a{:href => settings_path, :title => '设置'}
         .messages
           %a{:href => messages_path, :title => '提醒'}
             %i.fa.fa-bell
