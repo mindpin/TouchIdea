@@ -25,11 +25,19 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title text-center">邀请微博好友参与讨论</h3>
+      <h3 class="panel-title text-center">邀请微博好友参与讨论 <button id="wb_selector" type="button" class="btn btn-primary">+ 添加好友</button></h3>
     </div>
     <div class="panel-body">
+      <strong>已邀请好友：</strong>
+      <div class="div-invited-uids">
+        <% @vote.invite_uids.each do |invite_uid| %>
+          <input class="hidden" type="checkbox" value="<%= invite_uid %>" checked="checked" name="vote[invite_uids][]" id="vote_invite_uids_<%= invite_uid %>"><%= @vote.user.friendships.where(uid: invite_uid).first.try(:name) %>
+        <% end -%>
+      </div>
+      <hr />
+      <strong>此次邀请好友：</strong>
       <div class="div-invite-uids">
-        <%= f.collection_check_boxes(:invite_uids, current_user.friendships, :uid, :name){|b| b.label(:"data-value" => b.value) { selected=f.object.invite_uids.include?(b.object.uid.to_s); b.check_box(checked: selected, class: (selected ?'hidden' : '') ) + b.text }  } %>
+        <%#= f.collection_check_boxes(:invite_uids, current_user.friendships, :uid, :name){|b| b.label(:"data-value" => b.value) { selected=f.object.invite_uids.include?(b.object.uid.to_s); b.check_box(checked: selected, class: (selected ?'hidden' : '') ) + b.text }  } %>
       </div>
     </div>
   </div>
@@ -44,6 +52,23 @@
     $('.date_picker.vote_finish_at').datetimepicker({
       language: 'zh-CN',
       pickTime: false
+    });
+
+    WB2.anyWhere(function(W){
+      W.widget.selector({
+        id : "wb_selector",
+        tab: {list: [1],index: 1},
+        callback: function(data) {
+          var jsonStr = JSON.stringify(data, null, '\t');
+          $.each(data, function(e){
+            var uid = (Number)(this.id);
+            if($('#vote_invite_uids_' + this.id).length == 0){
+              $.post('/friendships', {friendship: {uid: uid, name: this.screen_name}});
+              $('.div-invite-uids').append('<span><label for="vote_invite_uids_' + this.id + '"><label data-value="' + this.id + '" for="vote_invite_uids_' + this.id + '"><input class="" type="checkbox" value="' + this.id + '" name="vote[invite_uids][]" id="vote_invite_uids_' + this.id + '" checked="checked">' + this.screen_name + '</label></label></span>');
+            }
+          });
+        }
+      });
     });
   });
 </script>
