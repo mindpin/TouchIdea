@@ -3,39 +3,27 @@ class Vote
   include Mongoid::Timestamps
   field :title, type: String
   field :finish_at, type: Time
-  field :invite_uids, type: Array, default: []
-
   field :token, type: String
+  field :url, type: String
 
   belongs_to :user, inverse_of: :votes
-  has_many :questions
-  has_and_belongs_to_many :users, inverse_of: 'invited_votes'
-  has_and_belongs_to_many :voted_users, class_name: 'User', inverse_of: nil
-  has_many :shares
+  has_many :vote_items
+  has_many :voted_users, class_name: 'User', inverse_of: nil
+  # todo images
+  # has_many images
 
-  attr_accessor :is_clear_voted_users
-
-  accepts_nested_attributes_for :questions, :reject_if => :all_blank, :allow_destroy => true
+  accepts_nested_attributes_for :vote_items, :reject_if => :all_blank, :allow_destroy => true
 
   validates_presence_of :title
   validates_presence_of :finish_at
-
   validates :token,    uniqueness: true,    presence: true
 
   scope :recent, -> { desc(:id) }
-  scope :by_user, -> (user) { any_of({:user_id => user.id}, {:user_ids.in => [user.id]}, {:invite_uids.in => [user.uid]}) }
+  #scope :by_user, -> (user) { any_of({:user_id => user.id}, {:user_ids.in => [user.id]}, {:invite_uids.in => [user.uid]}) }
 
 
   def self.parse(token)
     Vote.where(token: token).first
-  end
-
-  def answered_by? user
-    questions.map{|question| question.answered_by?(user)}.uniq == [true]
-  end
-
-  def answered?
-    questions.any?(&:answered?)
   end
 
   def finished?
@@ -50,77 +38,16 @@ class Vote
   end
 
   protected
-  before_save :add_voter_to_answers_users
-  def add_voter_to_answers_users
-    questions.map(&:answers).flatten.each do |answer|
-      unless answer.voter_id.blank?
-        tmp = answer.voter_id
-        answer.voter_id = nil
-        answer.users << User.find(tmp)
-      end
+  before_create :fill_vote_items_user
+  def fill_vote_items_user
+    vote_items.each do |vote_item|
+      vote_item.user = self.user
     end
   end
 
   before_validation :init_token
   def init_token
     build_uniq_token_if_blank if self.token.blank?
-  end
-
-  before_create :add_self_to_invite_uids
-  def add_self_to_invite_uids
-    invite_uids.reject!{|uid| uid == ""}
-    invite_uids << user.uid unless invite_uids.include?(user.uid)
-  end
-
-  before_create :add_users_by_invite_uids_and_notify
-  def add_users_by_invite_uids_and_notify
-    tmp = User.where(:uid.in => invite_uids).to_a - self.users.to_a
-    self.users = tmp
-    tmp = tmp - [self.user]
-    tmp.each do |u|
-      user.invite_notify u, self
-    end
-  end
-
-  before_update :add_users_by_invite_uids_and_notify_before_update
-  def add_users_by_invite_uids_and_notify_before_update
-    tmp_users = User.where(:uid.in => invite_uids).to_a - self.users.to_a
-    # fix user hidden bug
-    tmp_users.each do |tmp_user|
-      self.users << tmp_user unless self.users.include?(tmp_user)
-    end
-    if changes['invite_uids']
-      new_uids = changes['invite_uids'].last - changes['invite_uids'].first
-      new_users = User.where(uid: new_uids)
-      new_users.each do |u|
-        user.invite_notify u, self
-      end
-    end
-  end
-
-  before_update :invite_new_user_by_weibo
-  def invite_new_user_by_weibo
-    if changes['invite_uids']
-      new_uids = changes['invite_uids'].last - changes['invite_uids'].first
-      shares.create(uids: new_uids.reject{|uid| uid.blank?}) if self.user.get_setting('share invitation').true? and !new_uids.blank?
-    end
-  end
-
-  before_update :add_to_voted_users
-  def add_to_voted_users
-    if questions.count > 0
-      array = questions.first.answers.map{|answer| answer.users.to_a}.flatten.uniq
-      questions.to_a[1..-1].each do |question|
-        array = array & question.answers.map{|answer| answer.users.to_a}.flatten.uniq
-      end
-      self.voted_users = array
-    end
-  end
-
-  after_create :share_to_weibo
-  def share_to_weibo
-    uids = invite_uids.reject{|uid| uid.blank? or uid == user.uid}
-    shares.create(uids: invite_uids.reject{|uid| uid.blank? or uid == user.uid}) if user.get_setting('share invitation').true? and !uids.blank?
   end
 
   def randstr(length=6)
