@@ -39,9 +39,9 @@ class Vote
     end
   end
 
-  def rand_next user
+  def self.rand_next user
     n = (0..Vote.not_voted(user).count-1).to_a.sample
-    Vote.not_voted(user).skip(n).first
+    not_voted(user).skip(n).first
   end
 
   protected
