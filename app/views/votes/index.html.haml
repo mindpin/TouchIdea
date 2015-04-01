@@ -1,11 +1,28 @@
-%form.new-vote-shortcut{:action => "/votes/new", :method => "get"}
-  .form-group.string
-    %input.string.form-control{:name => "vote[title]", :placeholder => "新增一个讨论议题…", :type => "text"}/
-  .form-submits
-    %a.submit.btn.btn-flat-fresh
-      %i.fa.fa-pencil
-      %span 新增
-      
-#votes.votes
-  - @votes.each do |vote|
-    = render_cell :votes, :vote, :vote => vote, :user => current_user
+.page-landing{:data => {:nav => :home, :title => '议题大厅'}}
+  .filter
+    %a.item.newest.active{:href => 'javascript:;'}
+      %span 最新
+    %a.item.hotest{:href => 'javascript:;'}
+      %span 最热
+
+  .list-bg
+  .topics.list
+    - @votes.each do |vote|
+      = link_to vote, class: 'topic' do
+        .creator
+          .avatar
+            = image_tag vote.user.avatar_url
+        .data
+          .title 
+            %span.creator-name
+              = vote.user.try(:nickname).to_s
+              ：
+            %span.text= vote.title
+          .options
+            - vote.vote_items.each do |vote_item|
+              .option=vote_item.title
+        .joiner-count
+          = vote.voted_users.count
+
+    .loading 读取中…
+

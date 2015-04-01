@@ -1,4 +1,5 @@
 class VotesController < ApplicationController
+  layout 'app'
   before_filter :authenticate_user!, except: [:show_by_token]
   before_action :set_vote, only: [:edit, :destroy]
 
@@ -6,7 +7,7 @@ class VotesController < ApplicationController
   respond_to :js, only: [:new, :create]
 
   def index
-    @votes = Vote.by_user(current_user).recent
+    @votes = Vote.recent.page(params[:page])
     respond_with(@votes)
   end
 
