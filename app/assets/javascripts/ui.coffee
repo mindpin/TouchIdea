@@ -25,3 +25,8 @@ jQuery(document).delegate '.page-landing .filter a.item', 'click', ->
 jQuery(document).on 'ready page:load', ->
   back_url = jQuery('[data-back]').data('back')
   jQuery(".layout-header .back").attr 'href', back_url
+
+# 投票选项点击
+jQuery(document).delegate '.topic-options .option', 'click', ->
+  jQuery(this).toggleClass 'active'
+

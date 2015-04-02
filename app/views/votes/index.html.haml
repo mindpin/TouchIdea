@@ -1,23 +1,18 @@
 .page-landing{:data => {:nav => :home, :title => '议题大厅'}}
-  .filter
-    %a.item.newest.active{:href => 'javascript:;'}
-      %span 最新
-    %a.item.hotest{:href => 'javascript:;'}
-      %span 最热
+  .topbar
+    .filter
+      %a.item.newest.active{:href => 'javascript:;'}
+        %span 最新
+      %a.item.hotest{:href => 'javascript:;'}
+        %span 最热
+    %a.lucky{:href => 'javascript:;'}
+      %i.fa.fa-smile-o
 
-  .list-bg
   .topics.list
     - @votes.each do |vote|
       = link_to vote, class: 'topic' do
-        .creator
-          .avatar
-            = image_tag vote.user.avatar_url
         .data
-          .title 
-            %span.creator-name
-              = vote.user.try(:nickname).to_s
-              ：
-            %span.text= vote.title
+          .title=vote.title
           .options
             - vote.vote_items.each do |vote_item|
               .option=vote_item.title
@@ -25,4 +20,3 @@
           = vote.voted_users.count
 
     .loading 读取中…
-

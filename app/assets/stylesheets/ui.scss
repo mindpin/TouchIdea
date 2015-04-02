@@ -6,8 +6,21 @@ $fa-font-path: "fonts"; // 自行修改字体路径
 // --------------------------
 
 $img-auth-bg: "http://img.teamkn.com/i/wALj2Z0m.jpg";
-
 $gpd : $grid-gap / 2;
+
+@mixin height($h) {
+  height: $h; line-height: $h;
+}
+
+@mixin square($w) {
+  @include height($w);
+  width: $w;
+}
+
+@mixin circle($w) {
+  @include square($w);
+  border-radius: 1000px;
+}
 
 // 配色方案一
 // $body-bg-color: #E9EFEF;
@@ -36,12 +49,20 @@ $footer-hover-bg-color: #202427;
 $footer-icon-color: #E9E9E9;
 $footer-hover-icon-color: #00CCFF;
 $footer-new-botton-color: #4C4849;
-$filter-bg-color: $header-bg-color;
+$filter-bg-color: darken($header-bg-color, 6%);
 $filter-active-border-color: $footer-hover-icon-color;
 $list-border-color: #ddd;
 $list-count-bg-color: lighten($footer-hover-icon-color, 25%);
-$list-hover-bg-color: rgba($list-count-bg-color, 0.1);
+$list-hover-bg-color: rgba($list-count-bg-color, 0.2);
 $loading-bg-color: rgba(white, 0.5);
+$quote-bg-color: $loading-bg-color;
+// $quote-box-shadow: 1px 1px 3px rgba(black, 0.1);
+$quote-box-shadow: none;
+$infocard-bg-color: #fff;
+$infocard-box-shadow: none; //1px 1px 2px rgba(black, 0.2);
+$top-nav-icon-size: 20px;
+$common-box-shadow: 0 1px 2px rgba(black, 0.2);
+$common-box-shadow-inset: 0 1px 2px rgba(black, 0.2) inset;
 
 // 参考过的设计稿
 // timeline
@@ -51,6 +72,10 @@ $loading-bg-color: rgba(white, 0.5);
 
 body {
   background-color: $body-bg-color;
+  overflow-x:hidden;
+  a {
+    outline: 0 none !important;
+  }
 }
 body.auth {
   background-color: #222737;
@@ -59,40 +84,8 @@ body.auth {
   color: white;
 }
 
-.layout-header {
-  $h: 50px;
-  background-color: $header-bg-color;
-  height: $h; line-height: $h;
-  color: $header-text-color;
-  margin-bottom: $gpd;
-  border-bottom:solid 2px $header-border-color;
-  box-sizing:border-box;
-  font-size: 20px;
-  .page {text-align: center;}
-  a.search {
-    position: absolute;
-    top:0;right:0;bottom:2px;width:50px;
-    text-align: center;
-    color: #444;
-    text-decoration: none;
-    &:hover {
-      background-color: rgba(white, 0.5);
-    }
-  }
-  a.back {
-    position: absolute;
-    top:0;left:0;bottom:2px;width:50px;
-    text-align: center;
-    color: #444;
-    text-decoration: none;
-    &:hover {
-      background-color: rgba(white, 0.5);
-    }
-  }
-}
-
 .layout-footer {
-  $h: 50px;
+  $h: 55px;
   position: fixed;
   left:0;right:0;bottom:0;
   height:$h;
@@ -106,6 +99,19 @@ body.auth {
     text-align: center;
     font-size: 24px;
     display: block;
+    text-decoration: none;
+    &:not(.new) i {
+      font-size: 24px;
+      display: block;
+      line-height: 30px;
+      margin-top: 5px;
+    }
+    &:not(.new) .text {
+      display: block;
+      font-size: 12px;
+      line-height: 20px;
+    }
+
     &:hover, &:focus, &:active, &.active{
       background-color: $footer-hover-bg-color !important;
       color: $footer-hover-icon-color;
@@ -127,7 +133,7 @@ body.auth {
       margin-left: - $iw / 2;
       border-radius: $iw;
       font-size: 36px;
-      box-shadow: 0 0 3px rgba(black, 0.5);
+      box-shadow: $common-box-shadow;
     }
   }
 }
@@ -172,95 +178,107 @@ body.auth {
 }
 
 .page-landing {
-  .filter {
-    $h:50px;
-    height: $h; line-height: $h;
-    // background-color: $filter-bg-color;
-    background-color: darken($filter-bg-color, 2%);
-    margin-top: -$gpd;
-    margin-left: -$gpd;
-    margin-right: -$gpd;
-    margin-bottom: 0;
-    a.item {
-      height: $h; line-height: $h;
-      float: left;
-      width: percentage(1/2);
-      text-align: center;
-      box-sizing: border-box;
-      border-bottom: solid 2px transparent;
-      color: #999;
-      font-size: 16px;
-      &:hover, &:focus, &:active, &.active{
+  position: fixed;
+  top:0;left:0;right:0;bottom:55px;
+
+  &:before {
+    content:"";
+    position: fixed;
+    top:0;left:34px;width:2px;bottom:0;
+    top:0px;bottom:50px;
+    background-color: $list-border-color;
+  }
+
+  $bar-height:70px;
+  .topbar {
+    $bar-height:$bar-height;
+    $tab-height:40px;
+    $lucky-height:50px;
+
+    height: $bar-height;
+    position: absolute;
+    top:0;left:0;right:0;
+
+    .filter {
+      position: absolute;
+      @include height($tab-height);
+      top: ($bar-height - $tab-height) / 2;
+      left: $gpd;
+      right: $lucky-height + 20px;
+
+      box-shadow: $common-box-shadow;
+      background-color: $filter-bg-color;
+      border-radius:100px;
+      padding:4px;
+      box-sizing:border-box;
+
+      a.item {
+        @include height(32px);
+        float: left;
+        width: percentage(1/2);
+        text-align: center;
+        color: #888;
+        font-size: 16px;
+        border-radius: 100px;
         text-decoration: none;
-        border-bottom: solid 2px $filter-active-border-color;
-        color: #666;
-        background-color: $filter-bg-color;
+
+        &:hover, &:focus, &:active, &.active{
+          color: #666;
+          background-color: rgba(white, 0.5);
+          box-shadow: $common-box-shadow-inset;
+        }
+      }
+    }
+
+    a.lucky {
+      position: absolute;
+      top: 10px; right: 10px;
+      display: block;
+      box-shadow: $common-box-shadow;
+      @include circle($lucky-height);
+      background-color: $area-success;
+      text-decoration: none;
+      text-align: center;
+      i {
+        @include circle($lucky-height);
+        font-size: 32px;
+        color: white;
       }
     }
   }
 
-  .list-bg {
-    content:"";
-    position: fixed;
-    top:0;left:34px;width:2px;bottom:0;
-    top:100px;bottom:50px;
-    background-color: $list-border-color;
-    // background-color: red;
-  }
   .topics.list {
-    position: fixed;
-    top: 100px;left:0px;right:0;bottom:50px;
+    position: absolute;
+    top: $bar-height;left:0px;right:0;bottom:0;
     overflow-y: scroll;
-    padding: $gpd * 1.5 $gpd;
+    padding: $gpd $gpd 0;
 
     a.topic {
       margin-bottom: $gpd * 2;
       position: relative;
-      z-index:1;
       display: block;
-
       color: $text-color-default;
-      &:hover {
-        text-decoration: none;
-      }
+      text-decoration: none;
 
-      &:before {
+      &:hover:before {
         content: "";
         position: absolute;
         top: -15px; left: -15px;
         bottom: -15px; right: -15px;
-        // background-color: rgba(red, 0.2);
-        background-color: transparent;
-      }
-
-      &:hover:before {
         background-color: $list-hover-bg-color;
       }
 
-      .creator {
-        float: left;
-        $aw: 40px;
-        position: relative;
-        z-index: 1;
-        .avatar {
-          border-radius:$aw;
-          width:$aw;height:$aw;
-          img {width:$aw;height:$aw;border-radius:$aw;}
-        }
-      }
       .data {
         position: relative;
-        z-index: 1;
         margin-left: 55px;
         .title {
           font-size: 16px;
           line-height: 22px;
           margin-bottom: 10px;
-          margin-top: -2px;
         }
         .options .option {
           font-size: 14px;
-          height:20px;line-height:20px;
+          @include height(20px);
           overflow:hidden;
           color: #999;
           margin-bottom: 5px;
@@ -277,9 +295,10 @@ body.auth {
         }
       }
       .joiner-count {
+        font-size: 14px;
         position: absolute;
-        top: 55px; left: 0;
-        height: 20px; line-height: 20px;
+        top: 0px; left: 0;
+        @include height(22px);
         width: 40px;
         background-color: $list-count-bg-color;
         text-align: center;
@@ -294,21 +313,133 @@ body.auth {
       font-size: 16px;
       color: #999;
       text-align: center;
-      // margin-left: 55px;
-      // margin-right: 55px;
       margin:0 40px;
       height:20px;line-height:20px;
       position: relative;
       border-radius: $border-radius-default;
-      // &:before {
-      //   position: absolute;
-      //   content:"";
-      //   width:10px;height:10px;
-      //   background-color: #666;
-      //   border-radius:100px;
-      //   left:-40px;
-      //   top: 20px;
-      // }
+      margin-bottom: $gpd * 2;
+    }
+  }
+}
+
+.page-topic {
+  $biw: 40px;
+
+  .topic-header {
+    background-color: $quote-bg-color;
+    margin-left: -$gpd;
+    margin-right: -$gpd;
+    min-height: $biw + $gpd * 2;
+    position: relative;
+
+    a.back {
+      position: absolute;
+      width:$biw; height:$biw; line-height:$biw;
+      background-color: rgba(black, 0.05);
+      border-radius:100px;
+      font-size: $top-nav-icon-size;
+      color: #666;
+      text-decoration: none;
+      text-align: center;
+      top: $gpd;
+      left: $gpd;
+      i {
+        position: relative;
+        left: -1px;
+      }
+    }
+
+    h2.title {
+      margin:0;padding:0;
+      margin-left: $biw + $gpd * 2;
+      font-size:20px;
+      line-height: 30px;
+      padding-top: $gpd + ($biw - 30px) / 2 - 1px;
+      padding-bottom: $gpd + ($biw - 30px) / 2 + 1px;
+    }
+
+    .infocard.product {
+      $iw: 64px;
+      $h: 20px * 3 + 5px;
+
+      background-color: $infocard-bg-color;
+      margin: $gpd / 2;
+      margin-top: 0;
+      height: $h;
+      position: relative;
+      padding: 10px;
+      box-shadow: $infocard-box-shadow;
+
+      .product-logo {
+        box-sizing: border-box;
+        $bd:0px;
+        $w:$h;
+        width:$w;height:$w;
+        img {width:100%;height:100%;}
+        border:solid $bd white;
+        position: absolute;
+        box-shadow: $infocard-box-shadow;
+        background-color: #ddd;
+        top:10px;left:10px;
+      }
+      .data {
+        margin-left: $iw + 10px + 5px;
+        font-size: 14px;
+        .product-name {
+          height:20px;line-height:20px;
+          overflow:hidden;
+          margin-bottom: 5px;
+        }
+        .product-desc {
+          height: 40px; line-height: 20px;
+          overflow-y: hidden;
+          color: #888;
+        }
+      }
+    }
+  }
+
+  .topic-options {
+    .option {
+      background-color: #FFF;
+      margin-top: 4px;
+      margin-left: -$gpd;
+      margin-right: -$gpd;
+      padding: $gpd;
+      padding-right: $gpd + 40px + $gpd;
+      position: relative;
+      .text {
+        height:40px;line-height:20px;
+        overflow:hidden;
+        font-size: 16px;
+      }
+      .icon {
+        position: absolute;
+        width:40px;height:40px; line-height:40px;
+        top: $gpd;
+        right: $gpd;
+        font-size: 32px;
+        text-align: center;
+        opacity: 0.6;
+      }
+
+      &.active {
+        background-color: $footer-hover-icon-color;
+        color:white;
+      }
+    }
+  }
+
+  .topic-new-option {
+    margin-top: $gpd;
+    // margin-left: -$gpd;
+    // margin-right: -$gpd;
+    margin-bottom: $gpd;
+    a.new {
+      height:50px;line-height:50px;
+      background-color: #FFEEBE;
+      color: #A57900;
+      border-radius:100px;
     }
   }
 }
