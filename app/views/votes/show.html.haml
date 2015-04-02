@@ -1,15 +1,26 @@
-.page-vote-show
-  .heading 参与议题讨论，贡献我的想法 …
-  .title 议题：#{@vote.title}
+.page-topic{:data => {:nav => :explore, :title => '议题详情'}}
 
-  = render_cell :votes, :show_form, :vote => @vote, :user => current_user
+  .topic-header
+    %a.back{:href => 'home-1-index.html'}
+      %i.fa.fa-chevron-left
+    %h2.title=@vote.title
+    .infocard.product
+      .product-logo
+        %img{:src => 'http://img.teamkn.com/i/fyU5ZbBc.png'}
+      .data
+        .product-name 扇贝单词
+        .product-desc 这不是一款帮你“背”单词的软件，而是帮你“记住”单词的软件。只要能够完成一天的任务，你就能感受到实际的效果！
+    .clearfix &nbsp;
 
-#myModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-          %span{"aria-hidden" => "true"} ×
-        %h4#myModalLabel.modal-title 再加一题
-      #modal-question-form
-        = render_cell :questions, :form, :vote => @vote
+  .topic-options
+    - @vote.vote_items.each do |vote_item|
+      .option
+        .text=vote_item.title
+        .icon
+          %i.fa.fa-thumbs-up
+
+  .topic-new-option
+    %a.new.btn.btn-flat-success.btn-block{:href => 'javascript:;'}
+      %i.fa.fa-plus
+      %span 补充一个选项
+

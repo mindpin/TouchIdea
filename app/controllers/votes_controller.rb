@@ -13,12 +13,12 @@ class VotesController < ApplicationController
 
   def show
     @vote = Vote.find params[:id]
-    if @vote.finished? or @vote.answered_by?(current_user)
-      redirect_to result_vote_path(@vote)
-    else
-      @vote.questions.each{|q| q.answers.new}
-      respond_with(@vote)
-    end
+    #if @vote.finished? or @vote.answered_by?(current_user)
+      #redirect_to result_vote_path(@vote)
+    #else
+      #@vote.questions.each{|q| q.answers.new}
+      #respond_with(@vote)
+    #end
   end
 
   def new
