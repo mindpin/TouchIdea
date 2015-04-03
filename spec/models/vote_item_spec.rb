@@ -15,8 +15,21 @@ RSpec.describe VoteItem, type: :model do
 
     it "#praised_users << @user, @user.praised_vote_items should include @vote_item"  do
       @vote_item.praised_users << @user
-      @user.reload
       @user.praised_vote_items.should include(@vote_item)
+    end
+
+    describe "#praise_by @user" do
+      before(:each) do
+        @result = @vote_item.praise_by(@user)
+      end
+      it { @result.should == true }
+      it "praise_by twice return nil" do
+        @vote_item.praise_by(@user).should be_nil
+      end
+      it { @vote_item.praised_users.should include(@user) }
+      it "@vote voted_users should include @user" do
+        @vote.voted_users.should include(@user)
+      end
     end
   end
 end
