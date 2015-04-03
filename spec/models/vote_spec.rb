@@ -3,6 +3,15 @@ require 'rails_helper'
 RSpec.describe Vote, type: :model do
   it { should validate_presence_of :title }
   it { should validate_presence_of :finish_at }
+  
+  describe "@user create a @vote" do
+    before(:each) do
+      @user = create(:user)
+      @vote = create(:vote, user: @user)
+    end
+
+    it{ @vote.user.should == @user }
+  end
 
   it "return nil when has not not_voted vote" do
     @user = create(:user)
