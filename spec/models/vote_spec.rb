@@ -11,6 +11,12 @@ RSpec.describe Vote, type: :model do
     end
 
     it{ @vote.user.should == @user }
+
+    it "#voted_users << @user, @user.voted_votes should include @vote"  do
+      @vote.voted_users << @user
+      @user.reload
+      @user.voted_votes.should include(@vote)
+    end
   end
 
   it "return nil when has not not_voted vote" do

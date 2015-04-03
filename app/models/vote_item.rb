@@ -6,6 +6,9 @@ class VoteItem
 
   validates_presence_of :title
 
-  belongs_to :vote
-  belongs_to :user
+  belongs_to :vote, inverse_of: :vote_items
+  belongs_to :user, inverse_of: :vote_items
+
+  # 赞过的用户
+  has_and_belongs_to_many :praised_users, class_name: 'User', inverse_of: :praised_vote_items
 end

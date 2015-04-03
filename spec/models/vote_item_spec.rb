@@ -12,5 +12,11 @@ RSpec.describe VoteItem, type: :model do
 
     it { @vote_item.should be_valid}
     it { @vote_item.user.should == @user}
+
+    it "#praised_users << @user, @user.praised_vote_items should include @vote_item"  do
+      @vote_item.praised_users << @user
+      @user.reload
+      @user.praised_vote_items.should include(@vote_item)
+    end
   end
 end

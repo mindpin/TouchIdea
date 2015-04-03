@@ -8,7 +8,7 @@ class Vote
 
   belongs_to :user, inverse_of: :votes
   has_many :vote_items
-  has_and_belongs_to_many :voted_users, class_name: 'User', inverse_of: nil
+  has_and_belongs_to_many :voted_users, class_name: 'User', inverse_of: :voted_votes
   # todo images
   # has_many images
 

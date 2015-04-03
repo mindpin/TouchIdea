@@ -55,7 +55,14 @@ class User
   end
 
   has_many :user_tokens
+  # 创建的投票
   has_many :votes
+  # 参加的投票
+  has_and_belongs_to_many :voted_votes, class_name: 'Vote', inverse_of: :voted_users
+  # 创建的选项
+  has_many :vote_items
+  # 赞过的选项
+  has_and_belongs_to_many :praised_vote_items, class_name: 'VoteItem', inverse_of: :praised_users
   has_many :messages
   has_many :notifies, inverse_of: 'to', class_name: 'Message'
   has_and_belongs_to_many :invited_votes, class_name: 'Vote', inverse_of: 'users'
