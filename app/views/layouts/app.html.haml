@@ -14,13 +14,13 @@
 
     .layout-footer
       .footer-nav
-        %a.item.home{:href => 'home-1-index.html'}
+        = link_to votes_path, class: 'item home' do
           %i.fa.fa-list
           %span.text 列表
         %a.item.explore{:href => 'javascript:;'}
           %i.fa.fa-search
           %span.text 搜索
-        %a.item.new{:href => 'add-poll-0-new.html'}
+        = link_to new_vote_path, class: 'item new' do
           %i.fa.fa-plus
         %a.item.notification{:href => 'notification-0-list.html'}
           %i.fa.fa-bell
