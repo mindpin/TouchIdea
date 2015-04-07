@@ -16,11 +16,12 @@
     - @vote.vote_items.each do |vote_item|
       .option
         .text=vote_item.title
-        .icon
+        .icon.i0
           %i.fa.fa-thumbs-up
+        .icon.i1
+          %i.fa.fa-check
 
   .topic-new-option
-    %a.new.btn.btn-flat-success.btn-block{:href => 'javascript:;'}
+    = link_to new_vote_path, class: 'new btn btn-flat-success btn-block' do
       %i.fa.fa-plus
       %span 补充一个选项
-
