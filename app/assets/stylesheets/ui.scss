@@ -15,11 +15,17 @@ $gpd : $grid-gap / 2;
 @mixin square($w) {
   @include height($w);
   width: $w;
+  text-align: center;
+  display: block;
 }
 
 @mixin circle($w) {
   @include square($w);
   border-radius: 1000px;
+}
+
+@mixin default-transition($time: .2s) {
+  @include transition(all ease $time);
 }
 
 // 配色方案一
@@ -40,6 +46,9 @@ $gpd : $grid-gap / 2;
 
 // 配色方案三
 // https://dribbble.com/shots/681942-Chrome-Comp
+$base-color: #33ccff;
+$primary-icon-color: $base-color;
+
 $body-bg-color: #EEEEEE;
 $header-bg-color: #E8E8E7;
 $header-text-color: #444;
@@ -47,22 +56,20 @@ $header-border-color: #BEBEBE;
 $footer-bg-color: #383535;
 $footer-hover-bg-color: #202427; 
 $footer-icon-color: #E9E9E9;
-$footer-hover-icon-color: #00CCFF;
+$footer-hover-icon-color: $base-color;
 $footer-new-botton-color: #4C4849;
 $filter-bg-color: darken($header-bg-color, 6%);
 $filter-active-border-color: $footer-hover-icon-color;
 $list-border-color: #ddd;
-$list-count-bg-color: lighten($footer-hover-icon-color, 25%);
+$list-count-bg-color: lighten($base-color, 25%);
 $list-hover-bg-color: rgba($list-count-bg-color, 0.2);
-$loading-bg-color: rgba(white, 0.5);
-$quote-bg-color: $loading-bg-color;
-// $quote-box-shadow: 1px 1px 3px rgba(black, 0.1);
-$quote-box-shadow: none;
-$infocard-bg-color: #fff;
-$infocard-box-shadow: none; //1px 1px 2px rgba(black, 0.2);
+$detail-header-bg-color: #fafafa;
+$infocard-bg-color: #f7f7f7;
 $top-nav-icon-size: 20px;
 $common-box-shadow: 0 1px 2px rgba(black, 0.2);
 $common-box-shadow-inset: 0 1px 2px rgba(black, 0.2) inset;
+$step-bg-color: lighten($base-color, 25%);
+$step-active-bg-color: $base-color;
 
 // 参考过的设计稿
 // timeline
@@ -213,6 +220,7 @@ body.auth {
       box-sizing:border-box;
 
       a.item {
+        @include transition(background ease .2s);
         @include height(32px);
         float: left;
         width: percentage(1/2);
@@ -231,6 +239,7 @@ body.auth {
     }
 
     a.lucky {
+      @include default-transition;
       position: absolute;
       top: 10px; right: 10px;
       display: block;
@@ -243,6 +252,11 @@ body.auth {
         @include circle($lucky-height);
         font-size: 32px;
         color: white;
+      }
+      &:hover {
+        top:12px;
+        box-shadow:none;
+        background-color: darken($area-success, 10%);
       }
     }
   }
@@ -308,16 +322,19 @@ body.auth {
     }
 
     .loading {
-      background-color: $loading-bg-color;
-      padding: $gpd;
+      padding: $gpd 0;
       font-size: 16px;
       color: #999;
-      text-align: center;
-      margin:0 40px;
-      height:20px;line-height:20px;
-      position: relative;
-      border-radius: $border-radius-default;
+      margin:0 55px;
       margin-bottom: $gpd * 2;
+      i {
+        display: inline-block;
+        @include square(24px);
+      }
+      span {
+        display: inline-block;
+        @include height(24px);
+      }
     }
   }
 }
@@ -326,23 +343,22 @@ body.auth {
   $biw: 40px;
 
   .topic-header {
-    background-color: $quote-bg-color;
+    background-color: $detail-header-bg-color;
     margin-left: -$gpd;
     margin-right: -$gpd;
     min-height: $biw + $gpd * 2;
     position: relative;
+    box-shadow: $common-box-shadow;
+    overflow: hidden;
 
     a.back {
       position: absolute;
-      width:$biw; height:$biw; line-height:$biw;
-      background-color: rgba(black, 0.05);
-      border-radius:100px;
+      @include circle($biw);
       font-size: $top-nav-icon-size;
-      color: #666;
       text-decoration: none;
-      text-align: center;
       top: $gpd;
       left: $gpd;
+      color: $base-color;
       i {
         position: relative;
         left: -1px;
@@ -363,24 +379,24 @@ body.auth {
       $h: 20px * 3 + 5px;
 
       background-color: $infocard-bg-color;
-      margin: $gpd / 2;
+      margin: 0;
       margin-top: 0;
       height: $h;
       position: relative;
-      padding: 10px;
-      box-shadow: $infocard-box-shadow;
+      padding: 15px;
+
+      box-shadow: $common-box-shadow;
 
       .product-logo {
         box-sizing: border-box;
         $bd:0px;
         $w:$h;
-        width:$w;height:$w;
+        @include square($w);
         img {width:100%;height:100%;}
         border:solid $bd white;
         position: absolute;
-        box-shadow: $infocard-box-shadow;
         background-color: #ddd;
-        top:10px;left:10px;
+        top:15px;left:15px;
       }
       .data {
         margin-left: $iw + 10px + 5px;
@@ -402,12 +418,14 @@ body.auth {
   .topic-options {
     .option {
       background-color: #FFF;
-      margin-top: 4px;
+      margin-top: 5px;
       margin-left: -$gpd;
       margin-right: -$gpd;
       padding: $gpd;
       padding-right: $gpd + 40px + $gpd;
       position: relative;
+      box-shadow: $common-box-shadow;
+
       .text {
         height:40px;line-height:20px;
         overflow:hidden;
@@ -420,26 +438,182 @@ body.auth {
         right: $gpd;
         font-size: 32px;
         text-align: center;
-        opacity: 0.6;
+        &.i0 i {opacity: 0.4};
+        &.i1 i {opacity: 0.7};
+        @include default-transition;
       }
+      .icon.i0 {opacity:1;@include transform(scale(1))};
+      .icon.i1 {opacity:0;@include transform(scale(0.1))};
 
       &.active {
         background-color: $footer-hover-icon-color;
         color:white;
+        box-shadow: none;
+        .icon.i0 {opacity:0;@include transform(scale(0.1))};
+        .icon.i1 {opacity:1;@include transform(scale(1))};
       }
     }
   }
 
   .topic-new-option {
     margin-top: $gpd;
-    // margin-left: -$gpd;
-    // margin-right: -$gpd;
     margin-bottom: $gpd;
     a.new {
+      display: block;
       height:50px;line-height:50px;
       background-color: #FFEEBE;
       color: #A57900;
       border-radius:100px;
+      box-shadow: $common-box-shadow;
+    }
+  }
+}
+
+.page-new-topic {
+  $bar-height:70px;
+
+  .topbar {
+    @include height($bar-height);
+    background-color: $detail-header-bg-color;
+    box-shadow: $common-box-shadow;
+    position: fixed;
+    top:0;left:0;right:0;
+    z-index: 1;
+
+    a.back {
+      float:left;
+      background-color: $filter-bg-color;
+      color:white;
+      @include circle(40px);
+      margin-top: $gpd;
+      margin-left: $gpd;
+      font-size: $top-nav-icon-size;
+      text-decoration: none;
+      i {
+        @include square(40px);
+        position: relative;
+        left: - 1px;
+      }
+    }
+
+    .steps {
+      @include height($bar-height);
+      position: absolute;
+      top:0;left:$bar-height + $gpd;right:0;
+
+      .step {
+        float:left;
+        @include height($bar-height);
+        width: $bar-height;
+        position: relative;
+        &:after {
+          position: absolute;
+          content: "";
+          height:6px;
+          border-radius:10px;
+          top: ($bar-height - 6px) / 2;
+          right: 15px + 40px + 5px;
+          width: 20px;
+          background-color: $step-bg-color;
+          @include default-transition($time: .5s);
+        }
+
+        span {
+          @include circle(40px);
+          position: absolute;
+          top: $gpd;
+          left: 50%;
+          margin-left: -20px;
+          background-color: $step-bg-color;
+          color: white;
+          font-size: 20px;
+          @include default-transition($time: .5s);
+
+          .no, i{
+            @include square(40px);
+            position: absolute; top:0;left:0;
+            @include default-transition($time: .5s);
+          }
+          i { opacity:0;@include transform(scale(0.1)); }
+        }
+
+        &:first-child:after {
+          display: none;
+        }
+
+        &.active span{
+          background-color: $step-active-bg-color;
+        }
+        &.active:after {
+          background-color: $step-active-bg-color;
+        }
+
+        &.done span {
+          background-color: $area-success;
+          .no { opacity:0;@include transform(scale(0.1)); }
+          i { opacity:1;@include transform(scale(1)); }
+        }
+        &.done:after {
+          background-color: $area-success;
+        }
+      }
+    }
+  }
+
+  .form {
+    .part {
+      position: absolute;
+      top:75px;left:0;width:100%;
+      box-sizing:border-box;
+
+      background-color: $detail-header-bg-color;
+      padding: $gpd;
+      box-shadow: $common-box-shadow;
+      margin-bottom: 5px;
+      .fields {
+        margin-bottom: $gpd;
+        label {
+          display: block;
+          color: #666;
+          font-weight: normal;
+          margin-bottom: 10px;
+          font-size: 16px;
+        }
+        textarea {
+          resize: none;
+          padding: 6px;
+          font-size: 16px;
+          border-color: #ddd;
+          &:focus { border-color: $base-color; }
+        }
+        input {
+          font-size: 16px;
+          border-color: #ddd;
+          &:focus { border-color: $base-color; }
+          margin-bottom: 5px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+      .submits {
+        @include clearfix;
+        a.prev, a.next, a.done{
+          font-size: 16px;
+          @include height(32px);
+          text-decoration: none;
+          span{position: relative;top:1px;}
+          
+        }
+        a.prev {
+          color: #999;
+          float: left;
+        }
+        a.next, a.done{
+          color: $area-success;
+          float: right;
+        }
+      }
     }
   }
 }
