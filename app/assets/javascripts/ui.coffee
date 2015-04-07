@@ -30,3 +30,37 @@ jQuery(document).on 'ready page:load', ->
 jQuery(document).delegate '.topic-options .option', 'click', ->
   jQuery(this).toggleClass 'active'
 
+# 表单页的下一步按钮
+jQuery(document).delegate '.page-new-topic .form a.next', 'click', ->
+  $current_part = jQuery(this).closest('.part')
+  $to_part = $current_part.next('.part')
+
+  current = $current_part.data('step')
+  to = $to_part.data('step')
+
+  $current_part.fadeOut(200)
+  $to_part.fadeIn(200)
+
+  jQuery(".topbar .steps .step[data-step=#{current}]")
+    .removeClass('active')
+    .addClass('done')
+
+  jQuery(".topbar .steps .step[data-step=#{to}]")
+    .addClass('active')
+
+jQuery(document).delegate '.page-new-topic .form a.prev', 'click', ->
+  $current_part = jQuery(this).closest('.part')
+  $to_part = $current_part.prev('.part')
+
+  current = $current_part.data('step')
+  to = $to_part.data('step')
+
+  $current_part.fadeOut(200)
+  $to_part.fadeIn(200)
+
+  jQuery(".topbar .steps .step[data-step=#{current}]")
+    .removeClass('active')
+
+  jQuery(".topbar .steps .step[data-step=#{to}]")
+    .removeClass('done')
+    .addClass('active')
