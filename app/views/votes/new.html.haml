@@ -1,1 +1,55 @@
-= render_cell :votes, :form, :vote => @vote, :user => current_user
+.page-new-topic
+  .topbar
+    %a.back{:href => 'home-1-index.html'}
+      %i.fa.fa-chevron-left
+    .steps
+      .step.active{:data => {:step => 1}}
+        %span 
+          .no 1
+          %i.fa.fa-check
+      .step{:data => {:step => 2}}
+        %span 
+          .no 2
+          %i.fa.fa-check
+      .step{:data => {:step => 3}}
+        %span 
+          .no 3
+          %i.fa.fa-check
+
+  = form_for @vote, html: {class:'form'} do |f|
+    .part{:data => {:step => 1}}
+      .fields
+        %label 请输入议题描述
+        %textarea.form-control{:placeholder => '有什么事情想知道大家的看法呢？', :rows => 5, name: 'vote[title]'}
+      .submits
+        %a.next{:href => 'javascript:;'}
+          %span 下一步
+          %i.fa.fa-arrow-right
+
+    .part{:style => 'display:none;', :data => {:step => 2}}
+      .fields
+        %label 请输入预置选项（至少两个）
+        %input.form-control{:placeholder => '选项 1', name: 'vote[vote_items_attributes][0][title]'}
+        %input.form-control{:placeholder => '选项 2', name: 'vote[vote_items_attributes][1][title]'}
+      .submits
+        %a.prev{:href => 'javascript:;'}
+          %i.fa.fa-arrow-left
+          %span 上一步
+        %a.next{:href => 'javascript:;'}
+          %span 下一步
+          %i.fa.fa-arrow-right
+
+    .part{:style => 'display:none;', :data => {:step => 3}}
+      .fields
+        %label 请输入网址
+        %input.form-control{:placeholder => '网址', name: 'vote[url]'}
+      .submits
+        %a.prev{:href => 'javascript:;'}
+          %i.fa.fa-arrow-left
+          %span 上一步
+        %a.done{:href => 'javascript:;'}
+          %span 完成
+          %i.fa.fa-check
+
+    %script{:type => 'text/javascript'}
+      $('a.done').click(function(){$('#new_vote').submit();})

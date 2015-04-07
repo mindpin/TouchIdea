@@ -13,21 +13,10 @@ class VotesController < ApplicationController
 
   def show
     @vote = Vote.find params[:id]
-    #if @vote.finished? or @vote.answered_by?(current_user)
-      #redirect_to result_vote_path(@vote)
-    #else
-      #@vote.questions.each{|q| q.answers.new}
-      #respond_with(@vote)
-    #end
   end
 
   def new
-    if params[:vote]
-      @vote = current_user.votes.new vote_params
-    else
-      @vote = current_user.votes.new
-    end
-    @vote.questions.build
+    @vote = current_user.votes.new
     respond_with(@vote)
   end
 
@@ -40,12 +29,7 @@ class VotesController < ApplicationController
   def create
     @vote = current_user.votes.new(vote_params)
     if @vote.save
-      user_ids = @vote.users.map(&:id)
-      if @vote.shares.any?
-        redirect_to @vote.shares.first
-      else
-        redirect_to votes_path
-      end
+      redirect_to @vote
     else
       render :new
     end
@@ -89,6 +73,6 @@ class VotesController < ApplicationController
   end
 
   def vote_params
-    params.require(:vote).permit(:title, :finish_at, user_ids: [], invite_uids: [], questions_attributes: [:id, :title, answers_attributes: [:id, :title, :voter_id, :_destroy]])
+    params.require(:vote).permit(:title, :url, vote_items_attributes: [:id, :title])
   end
 end

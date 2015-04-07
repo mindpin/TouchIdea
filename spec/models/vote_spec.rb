@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Vote, type: :model do
   it { should validate_presence_of :title }
-  it { should validate_presence_of :finish_at }
+  #it { should validate_presence_of :finish_at }
   
   describe "@user create a @vote" do
     before(:each) do

@@ -15,7 +15,7 @@ class Vote
   accepts_nested_attributes_for :vote_items, :reject_if => :all_blank, :allow_destroy => true
 
   validates_presence_of :title
-  validates_presence_of :finish_at
+  #validates_presence_of :finish_at
   validates :token,    uniqueness: true,    presence: true
 
   scope :recent, -> { desc(:id) }
