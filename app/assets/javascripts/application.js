@@ -13,10 +13,4 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require bootstrap-sprockets
-//= require moment
-//= require moment.zh-cn
-//= require bootstrap-datetimepicker
-//= require cocoon
-//= require bootstrap-switch.min
 //= require_tree .
