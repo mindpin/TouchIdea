@@ -17,7 +17,11 @@ class VotesController < ApplicationController
 
   def new
     @vote = current_user.votes.new
-    respond_with(@vote)
+    if params[:good].blank?
+      respond_with(@vote)
+    else
+      render :new_with_good
+    end
   end
 
   def edit

@@ -1,3 +1,8 @@
+# 点击完成，提交表单
+jQuery(document).on 'ready page:load', ->
+  $('a.done').click ->
+    $('#new_vote').submit()
+
 # 用到了 turbolinks
 # 事件加载参考
 # https://github.com/rails/turbolinks/#no-jquery-or-any-other-library
