@@ -20,7 +20,7 @@
         %a.item.explore{:href => 'javascript:;'}
           %i.fa.fa-search
           %span.text 搜索
-        = link_to new_vote_path, class: 'item new' do
+        %a.item.new{:href => 'javascript:;'}
           %i.fa.fa-plus
         %a.item.notification{:href => 'notification-0-list.html'}
           %i.fa.fa-bell
@@ -28,4 +28,16 @@
         %a.item.me{:href => 'me-0-config.html'}
           %i.fa.fa-user
           %span.text 用户
+
+    .float-new-type-select
+      .tips 请选择要创建的议题类型
+      .items
+        .item
+          = link_to new_vote_path, class: 'common' do
+            %i.fa.fa-pencil
+          %span.t 普通议题
+        .item
+          = link_to new_vote_path(good: true), class: 'good' do
+            %i.fa.fa-rocket
+          %span.t 分享点评
 

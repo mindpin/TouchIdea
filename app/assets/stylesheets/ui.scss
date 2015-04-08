@@ -28,6 +28,13 @@ $gpd : $grid-gap / 2;
   @include transition(all ease $time);
 }
 
+// 呼吸闪烁
+@include keyframes(breathe) {
+  0%   { opacity: 1;}
+  50%  { opacity: 0.4;}
+  100% { opacity: 1;}
+}
+
 // 配色方案一
 // $body-bg-color: #E9EFEF;
 // $header-bg-color: #66CAC4;
@@ -71,6 +78,59 @@ $common-box-shadow-inset: 0 1px 2px rgba(black, 0.2) inset;
 $step-bg-color: lighten($base-color, 25%);
 $step-active-bg-color: $base-color;
 
+@mixin infocard {
+  $iw: 64px;
+  $h: 20px * 3 + 5px;
+
+  background-color: $infocard-bg-color;
+  margin: 0;
+  margin-top: 0;
+  height: $h;
+  position: relative;
+  padding: 15px;
+
+  // box-shadow: $common-box-shadow;
+  border-top:dashed 1px #ddd;
+
+  .product-logo {
+    box-sizing: border-box;
+    $bd:0px;
+    $w:$h;
+    @include square($w);
+    img {width:100%;height:100%;}
+    border:solid $bd white;
+    position: absolute;
+    background-color: #ddd;
+    top:15px;left:15px;
+  }
+  .data {
+    margin-left: $iw + 10px + 5px;
+    font-size: 14px;
+    .product-name {
+      min-height:20px;
+      max-height:40px;
+      line-height:20px;
+      overflow:hidden;
+      word-break: break-all;
+      margin-bottom: 5px;
+    }
+    .product-desc {
+      min-height:20px;
+      max-height:40px;
+      line-height:20px;
+      overflow:hidden;
+      word-break: break-all;
+      color: #888;
+    }
+    .product-price {
+      line-height: 20px;
+      font-weight: bold;
+      color: $area-hot;
+      font-size: 16px;
+    }
+  }
+}
+
 // 参考过的设计稿
 // timeline
 // https://dribbble.com/shots/1956586-Filter-Menu/attachments/339546
@@ -107,6 +167,7 @@ body.auth {
     font-size: 24px;
     display: block;
     text-decoration: none;
+    @include default-transition($time: 0.5s);
     &:not(.new) i {
       font-size: 24px;
       display: block;
@@ -141,6 +202,88 @@ body.auth {
       border-radius: $iw;
       font-size: 36px;
       box-shadow: $common-box-shadow;
+    }
+  }
+  .footer-nav a.cancel-new {
+    color: white;
+    @include circle(32px);
+    font-size: 24px;
+    position: absolute;
+    left: 50%;
+    margin-left: -16px;
+    pointer-events: none;
+    top: (55px - 32px) / 2;
+    opacity: 0;
+    @include default-transition($time: 0.5s);
+  }
+  .footer-nav.new-topic-type-select {
+    background-color: $filter-bg-color;
+    a.item {opacity:0;pointer-events:none;}
+    a.cancel-new {
+      opacity:1;
+      pointer-events:auto;
+    }
+  }
+}
+
+.float-new-type-select {
+  position: fixed;
+  top:0;left:0;right:0;
+  bottom: 55px;
+  background-color: rgba($body-bg-color, 1);
+  opacity: 0;
+  pointer-events: none;
+  @include default-transition($time: 0.5s);
+  overflow: hidden;
+
+  .tips {
+    text-align: center;
+    @include height(128px);
+    font-size: 20px;
+    color: #666;
+  }
+
+  &.show {
+    opacity: 1;
+    pointer-events: auto;
+    .items {
+      margin-top: 0;
+    }
+  }
+
+  .items {
+    position: absolute;
+    top: 50%; margin-top: 150px;
+    left:$gpd * 2;right:$gpd * 2;
+    @include default-transition($time: 0.3s);
+  }
+  .item {
+    @include col(1/2);
+    position: relative;
+    text-align: center;
+    $w: 80px;
+    a {
+      @include circle($w);
+      // background-color: black;
+      color: white;
+      font-size: $w * 0.4;
+      position: absolute;
+      top:0;left:50%;
+      margin-left:-$w/2;
+      &.common {
+        background-color: #35B87F;
+      }
+      &.good {
+        background-color: #5BB4DA;
+      }
+    }
+    span {
+      @include height(30px);
+      display: block;
+      text-align: center;
+      margin-top: $w + 5px;
+      font-size: 13px;
+      color: #666;
     }
   }
 }
@@ -328,12 +471,12 @@ body.auth {
       margin:0 55px;
       margin-bottom: $gpd * 2;
       i {
-        display: inline-block;
         @include square(24px);
+        display: inline-block;
       }
       span {
-        display: inline-block;
         @include height(24px);
+        display: inline-block;
       }
     }
   }
@@ -375,43 +518,7 @@ body.auth {
     }
 
     .infocard.product {
-      $iw: 64px;
-      $h: 20px * 3 + 5px;
-
-      background-color: $infocard-bg-color;
-      margin: 0;
-      margin-top: 0;
-      height: $h;
-      position: relative;
-      padding: 15px;
-
-      box-shadow: $common-box-shadow;
-
-      .product-logo {
-        box-sizing: border-box;
-        $bd:0px;
-        $w:$h;
-        @include square($w);
-        img {width:100%;height:100%;}
-        border:solid $bd white;
-        position: absolute;
-        background-color: #ddd;
-        top:15px;left:15px;
-      }
-      .data {
-        margin-left: $iw + 10px + 5px;
-        font-size: 14px;
-        .product-name {
-          height:20px;line-height:20px;
-          overflow:hidden;
-          margin-bottom: 5px;
-        }
-        .product-desc {
-          height: 40px; line-height: 20px;
-          overflow-y: hidden;
-          color: #888;
-        }
-      }
+      @include infocard;
     }
   }
 
@@ -493,6 +600,7 @@ body.auth {
         @include square(40px);
         position: relative;
         left: - 1px;
+        top: 1px;
       }
     }
 
@@ -530,11 +638,15 @@ body.auth {
           @include default-transition($time: .5s);
 
           .no, i{
+            font-weight: bold;
             @include square(40px);
             position: absolute; top:0;left:0;
             @include default-transition($time: .5s);
           }
-          i { opacity:0;@include transform(scale(0.1)); }
+          i { 
+            opacity:0;@include transform(scale(0.1)); 
+            top:1px;
+          }
         }
 
         &:first-child:after {
@@ -585,6 +697,9 @@ body.auth {
           font-size: 16px;
           border-color: #ddd;
           &:focus { border-color: $base-color; }
+          &.url {
+            font-size: 12px;
+          }
         }
         input {
           font-size: 16px;
@@ -595,25 +710,142 @@ body.auth {
             margin-bottom: 0;
           }
         }
+        .ipt {
+          margin-right: 32px;
+          position: relative;
+          a.delete {
+            position: absolute;
+            @include circle(32px);
+            top:1px;right:-40px;
+            font-size: 16px;
+            color: #999;
+            @include default-transition;
+            &.disabled {
+              opacity: 0.2;
+            }
+          }
+        }
       }
       .submits {
+        position: relative;
         @include clearfix;
-        a.prev, a.next, a.done{
+        a.additem {
+          position: absolute;
+          left:50%;
+          margin-left: -16px;
+          @include circle(32px);
+          background-color: $area-success;
+          color: white;
           font-size: 16px;
-          @include height(32px);
           text-decoration: none;
-          span{position: relative;top:1px;}
-          
+          i, i:before{@include circle(32px)};
+          i {position: relative;top:1px;}
+        }
+        .additem-text {
+          position: absolute;
+          top: 32px + 25px;
+          width: 200px;
+          left: 50%;
+          margin-left: -100px;
+          color: #999;
+          text-align: center;
+          i {display:block;font-size:16px;line-height:24px;}
+          @include animation(breathe 1s infinite);
+        }
+        a.prev, a.next, a.done, a.skip, a.loadurl{
+          font-size: 16px;
+          text-decoration: none;
+          @include height(32px);
+          &.disabled {
+            opacity: 0.5;
+          }
+        }
+        a.loadurl {
+          float: left;
+          background-color: $area-success;
+          color: white;
+          padding:0 10px;
+          border-radius: 4px;
+          font-size: 14px;
+          &.disabled {
+            opacity: 0.4;
+          }
         }
         a.prev {
           color: #999;
           float: left;
         }
-        a.next, a.done{
+        a.next, a.done, a.skip{
           color: $area-success;
           float: right;
         }
+
+        .loading {
+          .loadingtext {
+            position: absolute;
+            font-size: 12px;
+            @include height(20px);
+            top:0;left:0;
+            color:#999;
+          }
+          .loadingbar {
+            height: 10px;
+            box-sizing: border-box;
+            border:solid 1px $area-success;
+            border-radius:2px;
+            background-color: #fff;
+            position:absolute;
+            left: 0;
+            top: 22px;
+            right: 100px;
+            .p {
+              height:100%;
+              background-color: lighten($area-success, 10%);
+            }
+          }
+        }
+        .loaded-success {
+          float: left;
+          color: #999;
+          @include height(32px);
+          font-size: 16px;
+        }
+      }
+      .infocard {
+        @include infocard;
+        margin-top: $gpd;
+        margin-left: -$gpd;
+        margin-right: -$gpd;
+        margin-bottom: -$gpd;
+      }
+
+      &.tdesc .infocard {
+        margin-top: -15px;
+        margin-bottom: 15px;
+        border-top: 0 none;
+        border-bottom: dashed 1px #ddd;
       }
     }
+  }
+}
+
+.page-created {
+  .title {
+    font-size: 32px;
+    text-align: center;
+    color: #666;
+    @include height(64px);
+    margin-top: 60px;
+    margin-bottom: 30px;
+  }
+  .desc {
+    color: #666;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+  .go {
+    text-align: center;
+    margin-bottom: 30px;
   }
 }
