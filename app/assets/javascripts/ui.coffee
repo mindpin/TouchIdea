@@ -7,10 +7,11 @@ jQuery(document).on 'ready page:load', ->
 # 事件加载参考
 # https://github.com/rails/turbolinks/#no-jquery-or-any-other-library
 
+# 事件检查
 jQuery(document).on 'ready page:load', ->
   console.debug 'loaded'
 
-# 点亮 navbar
+# 点亮 footer navbar
 jQuery(document).on 'ready page:load', ->
   nav = jQuery('[data-nav]').data('nav')
   jQuery(".layout-footer a.item.#{nav}").addClass('active')
@@ -21,7 +22,7 @@ jQuery(document).on 'ready page:load', ->
   jQuery(".layout-header .page").text title
 
 # home 页页签
-jQuery(document).delegate '.page-landing .filter a.item', 'click', ->
+jQuery(document).on 'click', '.page-landing .filter a.item', ->
   $item = jQuery(this)
   $item.closest('.filter').find('a.item').removeClass('active')
   $item.addClass('active')
@@ -32,8 +33,24 @@ jQuery(document).on 'ready page:load', ->
   jQuery(".layout-header .back").attr 'href', back_url
 
 # 投票选项点击
-jQuery(document).delegate '.topic-options .option', 'click', ->
+jQuery(document).on 'click', '.topic-options .option', ->
   jQuery(this).toggleClass 'active'
+
+# ----------------------------
+
+# 导航上的“新增”按钮
+jQuery(document).on 'click', '.footer-nav .item.new', ->
+  jQuery('.footer-nav').addClass('new-topic-type-select')
+  jQuery('.float-new-type-select').addClass('show')
+
+jQuery(document).on 'click', '.footer-nav a.cancel-new', ->
+  jQuery('.footer-nav').removeClass('new-topic-type-select')
+  jQuery('.float-new-type-select').removeClass('show')
+
+# ---------------------------------
+
+is_field_empty = ($field)->
+  return jQuery.trim($field.val()).length is 0
 
 # 表单页的各种事件
 class TopicForm
@@ -52,52 +69,61 @@ class TopicForm
     @bind_events()
 
   bind_events: ->
-    @$el.off 'click'
+    # 上一步，下一步，完成
     @$el.on 'click', 'a.next:not(.disabled)', => @to_next()
     @$el.on 'click', 'a.prev:not(.disabled)', => @to_prev()
     @$el.on 'click', 'a.done.disabled', (evt)->
       evt.preventDefault()
 
+    that = this
+
+    # 增加选项
     @$el.on 'click', 'a.additem', =>
-      $input = @$el.find('.item-inputs .ipt').last().clone().val('')
-      @$el.find('.item-inputs').append $input.hide().fadeIn(200)
+      $ipt = @$el.find('.item-inputs .ipt').last().clone()
+      $ipt.find('input').val('')
+      $ipt.hide().fadeIn(200)
+      @$el.find('.item-inputs').append $ipt
       @refresh_item_ipts()
 
-    that = this
-    @$el.on 'click', '.ipt a.delete', ->
-      return if jQuery(this).hasClass('disabled')
+    # 移除选项
+    @$el.on 'click', '.ipt a.delete:not(.disabled)', ->
       jQuery(this).closest('.ipt').remove()
       that.refresh_item_ipts()
 
-    # 如果成功读取了 infocard, 就把这些信息放到下一步表单中
-    @$el.on 'click', 'a.next.urldone:not(.disabled)', =>
-      @$infocard1 = @$infocard.clone()
-      console.debug @$infocard1
-      @$el.find('.part.tdesc')
-        .find('.infocard').remove().end()
-        .prepend @$infocard1
-
-    # -------------
-
-    @$url_textarea.off('input').on 'input' , =>
-      if jQuery.trim(@$url_textarea.val()).length > 0
-        @$a_loadurl.removeClass('disabled')
-      else
-        @$a_loadurl.addClass('disabled')
-
-    # 议题描述校验
-    @$tdesc_textarea.off('input').on 'input' , =>
-      if jQuery.trim(@$tdesc_textarea.val()).length > 0
-        @$tdesc_textarea.closest('.part').find('a.next').removeClass('disabled')
-      else
-        @$tdesc_textarea.closest('.part').find('a.next').addClass('disabled')
-
-    @$el.find('.item-inputs').off('input').on 'input', =>
+    # 当输入选项时进行校验
+    @$el.find('.item-inputs').on 'input', =>
       @refresh_item_ipts()
 
-    @$a_loadurl.off('click').on 'click', =>
+    # ----------
+
+    # 输入网址后才点亮读取按钮
+    @$url_textarea.on 'input' , =>
+      if is_field_empty @$url_textarea
+        @$a_loadurl.addClass('disabled')
+      else
+        @$a_loadurl.removeClass('disabled')
+
+    # 读取网址
+    @$a_loadurl.on 'click', =>
       return if @$a_loadurl.hasClass('disabled')
       @loadurl()
+
+    # 如果成功读取了网址信息, 就把这些信息放到下一步表单中
+    @$el.on 'click', 'a.next.urldone:not(.disabled)', =>
+      @$el.find('.part.tdesc')
+        .find('.infocard').remove().end()
+        .prepend @$infocard.clone()
+
+    # -----------
+
+    # 议题描述校验
+    @$tdesc_textarea.on 'input' , =>
+      $a_next = @$tdesc_textarea.closest('.part').find('a.next')
+      if is_field_empty @$tdesc_textarea
+        $a_next.addClass('disabled')
+      else
+        $a_next.removeClass('disabled')
+
 
   refresh_item_ipts: ->
     count = 0
@@ -125,13 +151,12 @@ class TopicForm
       .animate
         'width': '100%'
       , 3000, =>
-        @$infocard.show(200)
+        @$infocard.fadeIn(200)
         @$loading.hide()
         @$loadsuccess.show()
         @$el.find('a.next.skip').hide()
         @$el.find('a.next.urldone').show()
-
-
+        @$url_textarea.attr('disabled', true)
 
   to_next: ->
     to_step = @current_step + 1
@@ -168,13 +193,3 @@ class TopicForm
 
 jQuery(document).on 'ready page:load', ->
   new TopicForm jQuery('.page-new-topic')
-
-
-# 导航上的“新增”按钮
-jQuery(document).delegate '.footer-nav .item.new', 'click', ->
-  jQuery('.footer-nav').addClass('new-topic-type-select')
-  jQuery('.float-new-type-select').addClass('show')
-
-jQuery(document).delegate '.footer-nav a.cancel-new', 'click', ->
-  jQuery('.footer-nav').removeClass('new-topic-type-select')
-  jQuery('.float-new-type-select').removeClass('show')

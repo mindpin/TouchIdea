@@ -500,7 +500,7 @@ body.auth {
       font-size: $top-nav-icon-size;
       text-decoration: none;
       top: $gpd;
-      left: $gpd;
+      left: $gpd / 2;
       color: $base-color;
       i {
         position: relative;
@@ -510,7 +510,7 @@ body.auth {
 
     h2.title {
       margin:0;padding:0;
-      margin-left: $biw + $gpd * 2;
+      margin-left: $biw + $gpd * 2 - $gpd;
       font-size:20px;
       line-height: 30px;
       padding-top: $gpd + ($biw - 30px) / 2 - 1px;
@@ -523,7 +523,8 @@ body.auth {
   }
 
   .topic-options {
-    .option {
+    a.option {
+      display: block;
       background-color: #FFF;
       margin-top: 5px;
       margin-left: -$gpd;
@@ -532,6 +533,8 @@ body.auth {
       padding-right: $gpd + 40px + $gpd;
       position: relative;
       box-shadow: $common-box-shadow;
+      text-decoration: none;
+      color: #444;
 
       .text {
         height:40px;line-height:20px;
