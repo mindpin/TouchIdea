@@ -1,7 +1,6 @@
 .page-topic{:data => {:nav => :explore, :title => '议题详情'}}
-
   .topic-header
-    %a.back{:href => 'home-1-index.html'}
+    = link_to votes_path, class: 'back' do
       %i.fa.fa-chevron-left
     %h2.title=@vote.title
     .infocard.product
@@ -10,11 +9,10 @@
       .data
         .product-name 扇贝单词
         .product-desc 这不是一款帮你“背”单词的软件，而是帮你“记住”单词的软件。只要能够完成一天的任务，你就能感受到实际的效果！
-    .clearfix &nbsp;
 
   .topic-options
     - @vote.vote_items.each do |vote_item|
-      .option
+      %a.option{:href => 'javascript:;'}
         .text=vote_item.title
         .icon.i0
           %i.fa.fa-thumbs-up
@@ -22,6 +20,6 @@
           %i.fa.fa-check
 
   .topic-new-option
-    = link_to new_vote_path, class: 'new btn btn-flat-success btn-block' do
+    %a.new.btn.btn-flat-success.btn-block{:href => 'javascript:;'}
       %i.fa.fa-plus
       %span 补充一个选项

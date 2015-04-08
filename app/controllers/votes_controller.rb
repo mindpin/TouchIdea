@@ -1,5 +1,5 @@
 class VotesController < ApplicationController
-  layout 'app'
+  layout :choose_layout
   before_filter :authenticate_user!, except: [:show_by_token]
   before_action :set_vote, only: [:edit, :destroy]
 
@@ -78,5 +78,9 @@ class VotesController < ApplicationController
 
   def vote_params
     params.require(:vote).permit(:title, :url, vote_items_attributes: [:id, :title])
+  end
+
+  def choose_layout
+    action_name == 'show' ? 'detail' : 'app'
   end
 end
