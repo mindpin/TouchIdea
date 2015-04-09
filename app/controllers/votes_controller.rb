@@ -71,6 +71,10 @@ class VotesController < ApplicationController
     end
   end
 
+  def search
+    
+  end
+
   private
   def set_vote
     @vote = current_user.votes.find(params[:id])

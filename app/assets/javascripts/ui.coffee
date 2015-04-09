@@ -192,4 +192,62 @@ class TopicForm
 
 
 jQuery(document).on 'ready page:load', ->
-  new TopicForm jQuery('.page-new-topic')
+  if jQuery('.page-new-topic').length > 0
+    new TopicForm jQuery('.page-new-topic')
+
+class SearchPage
+  constructor: (@$el)->
+    @$history = @$el.find('.history')
+    @$result = @$el.find('.result')
+    @$input = @$el.find('input[name=q]')
+    @$topbar = @$el.find('.topbar')
+
+    @bind_events()
+
+  bind_events: ->
+    that = this
+
+    # 删除搜索历史项
+    @$el.on 'click', '.history .word a.delete', ->
+      jQuery(this).closest('.word').fadeOut 200, ->
+        jQuery(this).remove()
+
+    # 点选搜索历史项
+    @$el.on 'click', '.history .word a.s', ->
+      q = jQuery(this).find('.t').text()
+      that.$input.val q
+      that.search()
+
+    # 取消搜索状态
+    @$el.on 'click', '.topbar a.cancel', ->
+      that.cancel()
+
+    # 输入搜索词
+    @$input.on 'input', =>
+      @search()
+
+    # 清除搜索历史
+    @$el.on 'click', '.history a.clear', =>
+      if confirm '确定要清除吗？'
+        @$el.find('.history .word').fadeOut 200, =>
+          @$el.find('.history .word').remove()
+
+  search: ->
+    @$topbar.addClass 'filled'
+    if not is_field_empty @$input
+      @$history.hide()
+      @$result.fadeIn(200)
+    else
+      @$history.fadeIn 200
+      @$result.hide()
+
+  cancel: ->
+    @$history.fadeIn 200
+    @$result.hide()
+    @$input.val ''
+    @$topbar.removeClass 'filled'
+
+
+jQuery(document).on 'ready page:load', ->
+  if jQuery('.page-search').length > 0
+    new SearchPage jQuery('.page-search')

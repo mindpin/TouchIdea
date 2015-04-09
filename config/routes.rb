@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :votes do
     resources :questions
     get :result, on: :member
+    get :search, on: :collection
   end
   devise_for :users, :controllers => { omniauth_callbacks: 'omniauth_callbacks' }
   root 'home#index'

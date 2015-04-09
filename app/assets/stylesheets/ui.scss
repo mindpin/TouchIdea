@@ -73,7 +73,7 @@ $list-hover-bg-color: rgba($list-count-bg-color, 0.2);
 $detail-header-bg-color: #fafafa;
 $infocard-bg-color: #f7f7f7;
 $top-nav-icon-size: 20px;
-$common-box-shadow: 0 1px 2px rgba(black, 0.2);
+$common-box-shadow: 0 1px 2px rgba(black, 0.1);
 $common-box-shadow-inset: 0 1px 2px rgba(black, 0.2) inset;
 $step-bg-color: lighten($base-color, 25%);
 $step-active-bg-color: $base-color;
@@ -128,6 +128,60 @@ $step-active-bg-color: $base-color;
       color: $area-hot;
       font-size: 16px;
     }
+  }
+}
+
+@mixin list-item-topic {
+  margin-bottom: $gpd * 2;
+  position: relative;
+  display: block;
+  color: $text-color-default;
+  text-decoration: none;
+
+  &:hover:before {
+    content: "";
+    position: absolute;
+    top: -15px; left: -15px;
+    bottom: -15px; right: -15px;
+    background-color: $list-hover-bg-color;
+  }
+
+  .data {
+    position: relative;
+    margin-left: 55px;
+    .title {
+      font-size: 16px;
+      line-height: 22px;
+      margin-bottom: 10px;
+    }
+    .options .option {
+      font-size: 14px;
+      @include height(20px);
+      overflow:hidden;
+      color: #999;
+      margin-bottom: 5px;
+      position: relative;
+      padding-left: 16px;
+      &:before {
+        content: "";
+        position: absolute;
+        width:6px;height:6px;
+        background-color: #aaa;
+        border-radius:100px;
+        top:6px;left:0;
+      }
+    }
+  }
+  .joiner-count {
+    font-size: 14px;
+    position: absolute;
+    top: 0px; left: 0;
+    @include height(22px);
+    width: 40px;
+    background-color: $list-count-bg-color;
+    text-align: center;
+    border-radius: 100px;
+    color: darken($list-count-bg-color, 50%);
   }
 }
 
@@ -202,6 +256,7 @@ body.auth {
       border-radius: $iw;
       font-size: 36px;
       box-shadow: $common-box-shadow;
+      z-index: 2;
     }
   }
   .footer-nav a.cancel-new {
@@ -235,6 +290,7 @@ body.auth {
   pointer-events: none;
   @include default-transition($time: 0.5s);
   overflow: hidden;
+  z-index: 100;
 
   .tips {
     text-align: center;
@@ -411,57 +467,7 @@ body.auth {
     padding: $gpd $gpd 0;
 
     a.topic {
-      margin-bottom: $gpd * 2;
-      position: relative;
-      display: block;
-      color: $text-color-default;
-      text-decoration: none;
-
-      &:hover:before {
-        content: "";
-        position: absolute;
-        top: -15px; left: -15px;
-        bottom: -15px; right: -15px;
-        background-color: $list-hover-bg-color;
-      }
-
-      .data {
-        position: relative;
-        margin-left: 55px;
-        .title {
-          font-size: 16px;
-          line-height: 22px;
-          margin-bottom: 10px;
-        }
-        .options .option {
-          font-size: 14px;
-          @include height(20px);
-          overflow:hidden;
-          color: #999;
-          margin-bottom: 5px;
-          position: relative;
-          padding-left: 16px;
-          &:before {
-            content: "";
-            position: absolute;
-            width:6px;height:6px;
-            background-color: #aaa;
-            border-radius:100px;
-            top:6px;left:0;
-          }
-        }
-      }
-      .joiner-count {
-        font-size: 14px;
-        position: absolute;
-        top: 0px; left: 0;
-        @include height(22px);
-        width: 40px;
-        background-color: $list-count-bg-color;
-        text-align: center;
-        border-radius: 100px;
-        color: darken($list-count-bg-color, 50%);
-      }
+      @include list-item-topic;
     }
 
     .loading {
@@ -850,5 +856,133 @@ body.auth {
   .go {
     text-align: center;
     margin-bottom: 30px;
+  }
+}
+
+.page-search {
+  $bar-height: 60px;
+  .topbar {
+    @include height($bar-height);
+    background-color: $detail-header-bg-color;
+    box-shadow: $common-box-shadow;
+    position: fixed;
+    top:0;left:0;right:0;
+    z-index: 1;
+
+    i {
+      position: absolute;
+      pointer-events: none;
+      @include square(34px);
+      color: #ccc;
+      top: ($bar-height - 34px) / 2;left:15px;
+      z-index: 1;
+    }
+    .ipt {
+      position: absolute;
+      top: ($bar-height - 34px) / 2;left: 15px;right:15px;
+      height:34px;
+      z-index: 0;
+      input {
+        padding-left: 34px;
+      }
+    }
+    a.cancel {
+      display: none;
+    }
+    &.filled {
+      .ipt {right: 15px + 30px + 15px;}
+      a.cancel {
+        display: block;
+        position: absolute;
+        @include height(34px);
+        top:($bar-height - 34px) / 2; right:15px;
+        font-size: 16px;
+        color: #999;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .search-content {
+    position: absolute;
+    top: $bar-height;left:0px;right:0;bottom:0;
+    overflow-y: scroll;
+    .history {
+      @include clearfix;
+      margin-top: 10px;
+      box-shadow: $common-box-shadow;
+      $w: 40px;
+      .word {
+        @include height($w);
+        border-bottom: solid 1px #ddd;
+        &:last-child { border-bottom: 0 none; }
+        position: relative;
+        background-color: $detail-header-bg-color;
+
+        a.s {
+          position: absolute;
+          top:0;right:$w;bottom:0;left:0;
+          color: #666;
+          text-decoration: none;
+          i {
+            @include square($w);
+            float: left;
+            color: #ccc;
+          }
+          &:hover:before {
+            content: "";
+            position: absolute;
+            top:0;left:0;right:-$w;bottom:0;
+            pointer-events: none;
+            background-color: $list-hover-bg-color;
+          }
+        }
+
+        a.delete {
+          position: absolute;
+          @include square($w);
+          top:0;right:0;
+          text-decoration: none;
+          color: #999;
+        }
+      }
+      a.clear {
+        display: block;
+        @include height($w);
+        text-align: center;
+        color: #999;
+        text-decoration: none;
+        background-color: #F7F7F7;
+        &:hover{background-color: $list-hover-bg-color;}
+        &:first-child {
+          display: none;
+        }
+      }
+    }
+    .result {
+      margin-top: 10px;
+      background-color: $detail-header-bg-color;
+      box-shadow: $common-box-shadow;
+
+      .topic {
+        @include list-item-topic;
+        padding: 15px;
+        border-bottom: solid 1px #ddd;
+        margin-bottom: 0;
+        &:last-child { border-bottom: 0 none; }
+        .joiner-count{top:15px;left:15px;}
+        .stat {
+          font-size: 12px;
+          color: #999;
+          span{margin-right:10px;}
+        }
+        span.key {
+          color: $area-hot;
+        }
+        &:hover:before {
+          top:0;left:0;right:0;bottom:0;
+        }
+      }
+    }
   }
 }
