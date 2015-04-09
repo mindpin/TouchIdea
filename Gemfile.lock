@@ -116,6 +116,19 @@ GEM
       warden (~> 1.2.3)
     devise-i18n (0.11.4)
     diff-lcs (1.2.5)
+    elasticsearch (1.0.8)
+      elasticsearch-api (= 1.0.7)
+      elasticsearch-transport (= 1.0.7)
+    elasticsearch-api (1.0.7)
+      multi_json
+    elasticsearch-model (0.1.7)
+      activesupport (> 3)
+      elasticsearch (> 0.4)
+      hashie
+    elasticsearch-rails (0.1.7)
+    elasticsearch-transport (1.0.7)
+      faraday
+      multi_json
     erubis (2.7.0)
     execjs (2.4.0)
     factory_girl (4.5.0)
@@ -400,6 +413,8 @@ DEPENDENCIES
   datetimepicker-rails!
   devise
   devise-i18n
+  elasticsearch-model
+  elasticsearch-rails
   factory_girl_rails
   faker
   figaro (>= 1.0.0)

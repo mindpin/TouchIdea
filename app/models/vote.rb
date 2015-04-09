@@ -1,6 +1,9 @@
 class Vote
   include Mongoid::Document
   include Mongoid::Timestamps
+  # for search
+  include Searchable
+
   field :title, type: String
   field :finish_at, type: Time
   field :token, type: String
@@ -37,6 +40,14 @@ class Vote
       tmp = randstr
       self.token = tmp unless Vote.where(token: tmp).first
     end
+  end
+
+  def vote_items_count
+    vote_items.count
+  end
+
+  def voted_users_count
+    voted_users.count
   end
 
   def self.rand_next user
