@@ -22,7 +22,7 @@
           %span.text 搜索
         %a.item.new{:href => 'javascript:;'}
           %i.fa.fa-plus
-        %a.item.notification{:href => 'notification-0-list.html'}
+        = link_to notifications_path, class: 'item notification' do
           %i.fa.fa-bell
           %span.text 通知
         %a.item.me{:href => 'me-0-config.html'}

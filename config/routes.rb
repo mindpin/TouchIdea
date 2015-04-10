@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :notifications
   post 'vote_items/praise'
 
   resources :friendships

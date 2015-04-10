@@ -185,6 +185,22 @@ $step-active-bg-color: $base-color;
   }
 }
 
+@mixin list-loading {
+  padding: $gpd 0;
+  font-size: 16px;
+  color: #999;
+  margin:0 55px;
+  margin-bottom: $gpd * 2;
+  i {
+    @include square(24px);
+    display: inline-block;
+  }
+  span {
+    @include height(24px);
+    display: inline-block;
+  }
+}
+
 // 参考过的设计稿
 // timeline
 // https://dribbble.com/shots/1956586-Filter-Menu/attachments/339546
@@ -471,19 +487,7 @@ body.auth {
     }
 
     .loading {
-      padding: $gpd 0;
-      font-size: 16px;
-      color: #999;
-      margin:0 55px;
-      margin-bottom: $gpd * 2;
-      i {
-        @include square(24px);
-        display: inline-block;
-      }
-      span {
-        @include height(24px);
-        display: inline-block;
-      }
+      @include list-loading;
     }
   }
 }
@@ -984,5 +988,59 @@ body.auth {
         }
       }
     }
+  }
+}
+
+.page-notification {
+  position: fixed;
+  top:0;left:0;right:0;bottom:55px;
+  overflow-y: auto;
+
+  .notifications {
+    box-shadow: $common-box-shadow;
+    .notification {
+      background-color: $detail-header-bg-color;
+      border-bottom: solid 1px #ddd;
+      &:last-child {
+        border-bottom:0 none;
+      }
+
+      a.topic {
+        padding: 10px 15px;
+        display: block;
+        color: #444;
+        text-decoration: none;
+        &:hover {background-color: $list-hover-bg-color;}
+        position: relative;
+        padding-left:40px;
+
+        i {
+          position: absolute;
+          top:10px;left:10px;
+          color: $area-fresh;
+          @include circle(20px);
+          font-size: 16px;
+        }
+        .title {
+          font-size: 16px;
+          color: #444;
+          margin-bottom: 10px;
+        }
+        .desc {
+          color: #999;
+          font-size: 12px;
+        }
+      }
+
+      &.read {
+        background-color: #f4f4f4;
+        a.topic i {color: #888;}
+        a.topic .title {color: #888;}
+      }
+    }
+  }
+  .loading {
+    @include list-loading;
+    text-align: center;
   }
 }
