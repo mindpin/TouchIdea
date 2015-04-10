@@ -30,6 +30,10 @@ RSpec.describe VoteItem, type: :model do
       it "@vote voted_users should include @user" do
         @vote.voted_users.should include(@user)
       end
+
+      it "#praised_by?(user) should == true" do
+        @vote_item.praised_by?(@user).should == true
+      end
     end
   end
 end

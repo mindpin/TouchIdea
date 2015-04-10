@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  post 'vote_items/praise'
+
   resources :friendships
   resources :shares do
     get :weibo, on: :member

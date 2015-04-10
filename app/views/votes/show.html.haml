@@ -12,7 +12,7 @@
 
   .topic-options
     - @vote.vote_items.each do |vote_item|
-      %a.option{:href => 'javascript:;'}
+      = link_to 'javascript:;', class: vote_item.praised_by?(current_user) ? 'option active' : 'option' do
         .text=vote_item.title
         .icon.i0
           %i.fa.fa-thumbs-up
