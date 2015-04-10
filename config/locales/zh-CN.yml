@@ -230,3 +230,15 @@ zh-CN:
     previous_label: "&#8592; 上一页"
     next_label: "下一页 &#8594;"
     page_gap: "&hellip;"
+
+  notification:
+    style_front:
+      own_vote_item_be_selected: '我的选项被'
+      vote_item_be_selected: '我的议题新增了'
+      voted_vote_has_new_select: '我参与的议题新增了'
+      vote_has_new_select: '我的议题新增了'
+    style_back:
+      own_vote_item_be_selected: '人投票'
+      vote_item_be_selected: '个投票'
+      voted_vote_has_new_select: '个选项'
+      vote_has_new_select: '个选项'

@@ -1,79 +1,17 @@
 .page-notification{:data => {:nav => :notification}}
   .notifications
     - @notifications.each do |notification|
-      .notification
+      = content_tag :div, class: notification.read? ? 'notification read' : 'notification' do
         = link_to notification.vote, class: 'topic' do
-          name
           %i.fa.fa-exclamation-circle
           .title= notification.vote.title
           .desc
-            %span 我的议题新增了
-            %span.count 1
-            %span 个选项
-
-    .notification
-      %a.topic{:href => 'home-2-topic.html'}
-        %i.fa.fa-exclamation-circle
-        .title twitter 相比新浪微博有哪些优点？
-        .desc
-          %span 我的议题新增了
-          %span.count 1
-          %span 个选项
-
-    .notification
-      %a.topic{:href => 'home-2-topic.html'}
-        %i.fa.fa-exclamation-circle
-        .title 你喜欢什么口味的豆腐脑？
-        .desc
-          %span 我参与的议题新增了
-          %span.count 3
-          %span 个选项
-
-    .notification
-      %a.topic{:href => 'home-2-topic.html'}
-        %i.fa.fa-exclamation-circle
-        .title “扇贝单词”有哪些令你印象深刻的地方？
-        .desc
-          %span 我的选项被
-          %span.count 5
-          %span 人投票
-
-    .notification
-      %a.topic{:href => 'home-2-topic.html'}
-        %i.fa.fa-exclamation-circle
-        .title 你觉得一度赞方便面口味怎样？
-        .desc
-          %span 我的议题新增了
-          %span.count 15
-          %span 个投票
-
-    .notification.read
-      %a.topic{:href => 'home-2-topic.html'}
-        %i.fa.fa-exclamation-circle
-        .title 费列罗榛仁巧克力
-        .desc
-          %span 我的议题新增了
-          %span.count 15
-          %span 个投票
-
-    .notification.read
-      %a.topic{:href => 'home-2-topic.html'}
-        %i.fa.fa-exclamation-circle
-        .title dropbox 有什么优点
-        .desc
-          %span 我的选项被
-          %span.count 5
-          %span 人投票
-
-    .notification.read
-      %a.topic{:href => 'home-2-topic.html'}
-        %i.fa.fa-exclamation-circle
-        .title 你喜欢春哥的哪首歌
-        .desc
-          %span 我的选项被
-          %span.count 5
-          %span 人投票
+            %span= t("notification.style_front.#{notification.style}")
+            %span.count= notification.total
+            %span= t("notification.style_back.#{notification.style}")
 
   .loading
     %i.fa.fa-circle-o-notch.fa-spin 
     %span 读取中…
+
+- @notifications.each(&:read!)

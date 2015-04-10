@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :message do
-    content "MyString"
+    style :voted_vote_has_new_select
   end
 end

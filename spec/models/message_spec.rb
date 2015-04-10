@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Message, type: :model do
   it { should validate_presence_of :vote_id }
   it { should validate_presence_of :to_id }
+  it { should validate_presence_of :style }
 
   describe "create a valid message" do
     before(:each) do
@@ -31,26 +32,26 @@ RSpec.describe Message, type: :model do
     it "我创建的选项被人投票了" do
       @vote_item.praise_by @new_select_owner
       Message.notify_vote_item_owner_be_selected @vote_item
-      @vote_creator.notifies.first.content.should == '我创建的选项被人投票了'
+      @vote_creator.notifies.first.style.should == :own_vote_item_be_selected
     end
 
     it "我创建的议题增加了选项" do
-      @new_vote_item = create(:vote_item, vote: @vote)
+      @new_vote_item = create(:vote_item, vote: @vote, user: @vote_creator)
       Message.notify_vote_has_new_select @new_vote_item
-      @vote_creator.notifies.first.content.should == '我创建的议题增加了选项'
+      @vote_creator.notifies.first.style.should == :vote_has_new_select
     end
 
     it "我创建的议题中有任意选项被人投票了" do
       @vote_item.praise_by @new_select_owner
       Message.notify_vote_item_be_selected @vote_item
-      @vote_creator.notifies.first.content.should == '我创建的议题中有任意选项被人投票了'
+      @vote_creator.notifies.first.style.should == :vote_item_be_selected
     end
 
     it "我参加的议题增加了选项" do
       @vote_item.praise_by @new_select_owner
       @new_vote_item = create(:vote_item, vote: @vote, user: @new_select_owner)
       Message.notify_voted_vote_has_new_select @new_vote_item
-      @new_select_owner.notifies.where(content: '我参加的议题增加了选项').first.should_not be_nil
+      @new_select_owner.notifies.where(style: :voted_vote_has_new_select).first.should_not be_nil
     end
   end
 end
