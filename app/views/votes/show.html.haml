@@ -1,25 +1,49 @@
 .page-topic{:data => {:nav => :explore, :title => '议题详情'}}
-  .topic-header
+  .header
     = link_to votes_path, class: 'back' do
       %i.fa.fa-chevron-left
-    %h2.title=@vote.title
-    .infocard.product
-      .product-logo
-        %img{:src => 'http://img.teamkn.com/i/fyU5ZbBc.png'}
-      .data
-        .product-name 扇贝单词
-        .product-desc 这不是一款帮你“背”单词的软件，而是帮你“记住”单词的软件。只要能够完成一天的任务，你就能感受到实际的效果！
+    .title=@vote.title
+    %a.share{:href => 'javascript:;'}
+      %i.fa.fa-share
 
-  .topic-options
-    - @vote.vote_items.each do |vote_item|
-      = link_to 'javascript:;', class: vote_item.praised_by?(current_user) ? 'option active' : 'option' do
-        .text=vote_item.title
-        .icon.i0
-          %i.fa.fa-thumbs-up
-        .icon.i1
-          %i.fa.fa-check
+  .so
+    .topic-header
+      %h2.title “扇贝单词”有哪些令你印象深刻的地方？
+      .infocard.product
+        .product-logo
+          %img{:src => 'http://img.teamkn.com/i/fyU5ZbBc.png'}
+        .data
+          .product-name 扇贝单词
+          .product-desc 这不是一款帮你“背”单词的软件，而是帮你“记住”单词的软件。只要能够完成一天的任务，你就能感受到实际的效果！
 
-  .topic-new-option
-    %a.new.btn.btn-flat-success.btn-block{:href => 'javascript:;'}
-      %i.fa.fa-plus
-      %span 补充一个选项
+    .topic-options
+      - @vote.vote_items.each do |vote_item|
+        = link_to 'javascript:;', class: vote_item.praised_by?(current_user) ? 'option active' : 'option' do
+          .text=vote_item.title
+          .icon.i0
+            %i.fa.fa-thumbs-up
+          .icon.i1
+            %i.fa.fa-check
+
+    .new-option-overlay
+      .form
+        .fields
+          %label 补充新选项
+          %textarea.form-control{:placeholder => '输入选项内容', :rows => 3}
+        .submits
+          %a.cancel{:href => 'javascript:;'}
+            %i.fa.fa-times
+            %span 取消
+          %a.ok.disabled{:href => 'javascript:;'}
+            %i.fa.fa-check
+            %span 确定
+
+    .share-overlay
+      .form
+        .fields
+          %label 分享到 …
+          .s 这里集成到最后再做
+        .submits
+          %a.cancel{:href => 'javascript:;'}
+            %i.fa.fa-times
+            %span 取消
