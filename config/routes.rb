@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :notifications
-  post 'vote_items/praise'
+  post 'vote_items/:id/praise' => 'vote_items#praise', as: :praise_vote_item
 
   resources :friendships
   resources :shares do
