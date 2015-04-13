@@ -1,7 +1,12 @@
-.sign-in
-  :ruby
-    provider = resource_class.omniauth_providers[0]
-    href = omniauth_authorize_path(resource_name, provider)
-  %a.auth.sina{:href => href} 
-    %i.fa.fa-weibo
-    %span 新浪微博登录
+:ruby
+  provider = resource_class.omniauth_providers[0]
+  href = omniauth_authorize_path(resource_name, provider)
+.page-auth
+  .header
+    .logo pinidea
+    .desc 征集朋友意见，汇集群众智慧
+  .form
+    %a.login.btn.btn-pill.btn-flat-success.btn-block{:href => href}
+      %i.fa.fa-weibo
+      %span 从新浪微博登录
+

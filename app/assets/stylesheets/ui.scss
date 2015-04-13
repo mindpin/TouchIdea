@@ -74,7 +74,7 @@ $detail-header-bg-color: #fafafa;
 $infocard-bg-color: #f7f7f7;
 $top-nav-icon-size: 20px;
 $common-box-shadow: 0 1px 2px rgba(black, 0.1);
-$common-box-shadow-inset: 0 1px 2px rgba(black, 0.2) inset;
+$common-box-shadow-inset: 0 1px 2px rgba(black, 0.1) inset;
 $step-bg-color: lighten($base-color, 25%);
 $step-active-bg-color: $base-color;
 
@@ -185,6 +185,26 @@ $step-active-bg-color: $base-color;
   }
 }
 
+@mixin list-item-topic-flat {
+  @include list-item-topic;
+  padding: 15px;
+  border-bottom: solid 1px #ddd;
+  margin-bottom: 0;
+  &:last-child { border-bottom: 0 none; }
+  .joiner-count{top:15px;left:15px;}
+  .stat {
+    font-size: 12px;
+    color: #999;
+    span{margin-right:10px;}
+  }
+  span.key {
+    color: $area-hot;
+  }
+  &:hover:before {
+    top:0;left:0;right:0;bottom:0;
+  }
+}
+
 @mixin list-loading {
   padding: $gpd 0;
   font-size: 16px;
@@ -213,6 +233,7 @@ body {
   a {
     outline: 0 none !important;
   }
+  textarea {resize: none; padding: 6px;}
 }
 body.auth {
   background-color: #222737;
@@ -493,38 +514,62 @@ body.auth {
 }
 
 .page-topic {
-  $biw: 40px;
+  position: fixed;
+  top:0;left:0;right:0;bottom:0px;
 
+  .header {
+    position: fixed;
+    top:0;left:0;right:0;height:50px;
+    box-shadow: $common-box-shadow;
+    background-color: $detail-header-bg-color;
+    z-index: 1;
+    a.back {
+      position: absolute;
+      @include height(50px);
+      top:0;padding-left:15px;padding-right:15px;
+      left:0;
+      color: #999;
+      text-decoration: none;
+      font-size: 16px;
+      i {position: relative;top:1px;}
+    }
+    .title {
+      text-align: center;
+      @include height(50px);
+      font-size: 16px;
+    }
+    a.share {
+      position: absolute;
+      @include height(50px);
+      top:0;padding-left:15px;padding-right:15px;
+      right:0;
+      color: #999;
+      text-decoration: none;
+      font-size: 16px;
+      i {position: relative;top:1px;}
+    }
+  }
+
+  .so {
+    position: fixed;
+    top:50px;left:0;right:0;bottom:0px;
+    padding-top: 10px;
+    overflow-y: auto;
+  }
+
+  $biw: 40px;
   .topic-header {
     background-color: $detail-header-bg-color;
-    margin-left: -$gpd;
-    margin-right: -$gpd;
     min-height: $biw + $gpd * 2;
     position: relative;
     box-shadow: $common-box-shadow;
     overflow: hidden;
 
-    a.back {
-      position: absolute;
-      @include circle($biw);
-      font-size: $top-nav-icon-size;
-      text-decoration: none;
-      top: $gpd;
-      left: $gpd / 2;
-      color: $base-color;
-      i {
-        position: relative;
-        left: -1px;
-      }
-    }
-
     h2.title {
-      margin:0;padding:0;
-      margin-left: $biw + $gpd * 2 - $gpd;
-      font-size:20px;
       line-height: 30px;
-      padding-top: $gpd + ($biw - 30px) / 2 - 1px;
-      padding-bottom: $gpd + ($biw - 30px) / 2 + 1px;
+      margin:0;padding:0;
+      font-size:20px;
+      padding: 15px;
     }
 
     .infocard.product {
@@ -533,18 +578,19 @@ body.auth {
   }
 
   .topic-options {
+    margin-top: 10px;
+    box-shadow: $common-box-shadow;
+
     a.option {
       display: block;
       background-color: #FFF;
-      margin-top: 5px;
-      margin-left: -$gpd;
-      margin-right: -$gpd;
       padding: $gpd;
       padding-right: $gpd + 40px + $gpd;
       position: relative;
-      box-shadow: $common-box-shadow;
       text-decoration: none;
       color: #444;
+      border-bottom: solid 1px #ddd;
+      &:last-child {border-bottom: 0 none !important;}
 
       .text {
         height:40px;line-height:20px;
@@ -571,20 +617,91 @@ body.auth {
         box-shadow: none;
         .icon.i0 {opacity:0;@include transform(scale(0.1))};
         .icon.i1 {opacity:1;@include transform(scale(1))};
+        border-bottom: solid 1px rgba(white, 0.5);
       }
     }
   }
 
   .topic-new-option {
-    margin-top: $gpd;
-    margin-bottom: $gpd;
+    margin-top: 10px;
+    margin-bottom: 10px;
     a.new {
       display: block;
       height:50px;line-height:50px;
       background-color: #FFEEBE;
       color: #A57900;
-      border-radius:100px;
       box-shadow: $common-box-shadow;
+      &:hover {
+        box-shadow: $common-box-shadow-inset;
+      }
+      &.disabled {
+        background-color: #eee;
+        color: #ccc;
+        border: solid 1px #ddd;
+        cursor: default;
+        box-shadow: none !important;
+      }
+    }
+  }
+
+  .vote-done {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    a.done {
+      display: block;
+      height:50px;line-height:50px;
+      box-shadow: $common-box-shadow;
+      &:hover {
+        box-shadow: $common-box-shadow-inset;
+      }
+      &.disabled {
+        box-shadow: none !important;
+      }
+    }
+  }
+
+  .new-option-overlay, .share-overlay {
+    background-color: rgba(black, 0.5);
+    position: fixed;
+    top:0;left:0;right:0;bottom:0;
+    padding: 5px;
+    opacity: 0;
+    pointer-events: none;
+    @include default-transition($time: 0.5s);
+    z-index:100;
+
+    &.show {
+      opacity: 1;
+      pointer-events: all;
+      .form {margin-top: 0;}
+    }
+
+    .form {
+      @include default-transition;
+      background-color: #FFF;
+      padding: 15px;
+      margin-top: -50px;
+      label {
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #666;
+        font-weight: normal;
+      }
+      textarea {
+        padding: 6px;
+        font-size: 16px;
+        margin-bottom: 15px;
+      }
+      .submits {
+        text-align: right;
+        a.cancel, a.ok {
+          font-size: 16px;text-decoration: none;
+          margin-left: 15px;
+        }
+        a.cancel {color: #999;}
+        a.ok {color: $area-success;}
+        a.ok.disabled {opacity: 0.5;}
+      }
     }
   }
 }
@@ -861,6 +978,15 @@ body.auth {
     text-align: center;
     margin-bottom: 30px;
   }
+  .loading {
+    font-size: 32px;
+    text-align: center;
+    padding:15px;
+    i {
+      @include height(40px);
+      color: #999;
+    }
+  }
 }
 
 .page-search {
@@ -969,23 +1095,7 @@ body.auth {
       box-shadow: $common-box-shadow;
 
       .topic {
-        @include list-item-topic;
-        padding: 15px;
-        border-bottom: solid 1px #ddd;
-        margin-bottom: 0;
-        &:last-child { border-bottom: 0 none; }
-        .joiner-count{top:15px;left:15px;}
-        .stat {
-          font-size: 12px;
-          color: #999;
-          span{margin-right:10px;}
-        }
-        span.key {
-          color: $area-hot;
-        }
-        &:hover:before {
-          top:0;left:0;right:0;bottom:0;
-        }
+        @include list-item-topic-flat;
       }
     }
   }
@@ -1042,5 +1152,152 @@ body.auth {
   .loading {
     @include list-loading;
     text-align: center;
+  }
+}
+
+.page-me {
+  position: fixed;
+  top:0;left:0;right:0;bottom:55px;
+  overflow-y: auto;
+
+  &.detail {
+    bottom:0px;
+    .header {
+      position: fixed;
+      top:0px; left:0; right:0;
+      z-index: 1;
+    }
+    .info-detail {
+      position: fixed;
+      top:50px; left:0; right:0; bottom:0;
+      overflow-y: auto;
+      padding-top: 10px;
+    }
+    .topics {
+      background-color: $detail-header-bg-color;
+      box-shadow: $common-box-shadow;
+      margin-bottom: 10px;
+      .topic {
+        @include list-item-topic-flat;
+      }
+    }
+    .feedback {
+      background-color: $detail-header-bg-color;
+      padding: 15px;
+      box-shadow: $common-box-shadow;
+      textarea {
+        margin-bottom: 15px;
+        font-size: 16px;
+      }
+      .success {
+        background-color: lighten($area-fresh, 50%);
+        padding: 15px;
+        color: $area-fresh;
+        font-size: 16px;
+      }
+    }
+    .about-us {
+      background-color: $detail-header-bg-color;
+      padding: 15px;
+      box-shadow: $common-box-shadow;
+    }
+  }
+
+  .set {
+    box-shadow: $common-box-shadow;
+    margin-bottom: 10px;
+    background-color: $detail-header-bg-color;
+    .item {
+      display: block;
+      border-bottom: solid 1px #ddd;
+      &:last-child { border-bottom: 0 none;}
+      padding: 10px 15px;
+      font-size: 16px;
+      color: #444;
+      text-decoration: none;
+      position: relative;
+      @include height(30px);
+      &:hover {background-color: $list-hover-bg-color;}
+      &:after {
+        @include square(30px);
+        content:"\f054";
+        position: absolute;
+        font-family: FontAwesome;
+        top:11px;right:10px;
+        color: #999;
+      }
+      &.me {
+        @include height(40px);
+        &:after {
+          top: 15px;
+        }
+        .avatar, .avatar img {
+          @include circle(40px);
+        }
+        .avatar {float: left;}
+        .name {float: left;margin-left: 15px;}
+      }
+      &.quit {
+        &:after{display:none;}
+        text-align: center;
+        color: $area-danger;
+      }
+
+      &.created, &.joined {
+        .count{float: right;margin-right: 50px - 15px;}
+      }
+    }
+
+    .item.info {
+      &:after {display:none;}
+      .t {float: left;}
+      .v {float: right;color:#666;}
+      .avatar {float: right;}
+      &:hover {
+        background-color: inherit;
+      }
+    }
+    .item.back {
+      background-color: #f4f4f4;
+      &:after {display:none;}
+      a.back {color:#666;}
+      i {
+        @include height(30px);
+        position: absolute;
+        top:11px;left:15px;
+      }
+      .title {
+        text-align: center;
+      }
+    }
+    .item.info.desc {
+      background-color: #f4f4f4;
+      color: #999;
+      @include height(20px);
+    }
+    .item.info.setting {
+      a.toggler {
+        display: block;
+        background-color: #49D866;
+        @include height(30px);
+        width: 60px;
+        position: absolute;
+        top:10px;right:10px;
+        border-radius:100px;
+        box-shadow: $common-box-shadow-inset;
+        &:before {
+          content:"";
+          @include circle(26px);
+          position: absolute;
+          top:2px;left:32px;
+          background-color:#fff;
+          box-shadow: $common-box-shadow;
+          @include default-transition;
+        }
+        &.on:before {left:32px;}
+        &.off:before {left:2px;}
+        &.off {background-color: #ddd;}
+      }
+    }
   }
 }

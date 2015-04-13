@@ -8,18 +8,8 @@
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
   %body.auth
-    .color-header
-      .bg
-      .container
+    .page-auth
+      .container-full
         .row
-          .col-pad-12
-            .lead pinIdea
-            .intro 
-              %span 使用全新方式，汇集众人意见，
-              %span 收集感兴趣的信息
+          .page-content-inner.col-pad-12
             = yield
-      .mindpin
-        .container
-          .row
-            .col-pad-12
-              %span DESIGNED AND DEVELOPED MINDPIN TEAM, 2015

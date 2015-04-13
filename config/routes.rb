@@ -17,4 +17,6 @@ Rails.application.routes.draw do
   end
   devise_for :users, :controllers => { omniauth_callbacks: 'omniauth_callbacks' }
   root 'home#index'
+
+  get '/account' => 'account#index'
 end

@@ -32,10 +32,6 @@ jQuery(document).on 'ready page:load', ->
   back_url = jQuery('[data-back]').data('back')
   jQuery(".layout-header .back").attr 'href', back_url
 
-# 投票选项点击
-jQuery(document).on 'click', '.topic-options .option', ->
-  jQuery(this).toggleClass 'active'
-
 # ----------------------------
 
 # 导航上的“新增”按钮
@@ -251,3 +247,89 @@ class SearchPage
 jQuery(document).on 'ready page:load', ->
   if jQuery('.page-search').length > 0
     new SearchPage jQuery('.page-search')
+
+# 登出
+jQuery(document).on 'click', '.page-me a.quit', ->
+  if confirm('确定要退出吗？')
+    jQuery.ajax
+      url: '/users/sign_out'
+      method: 'DELETE'
+
+# 点击设置项
+jQuery(document).on 'click', '.page-me a.toggler', ->
+  jQuery(this).toggleClass('on')
+  jQuery(this).toggleClass('off')
+
+# 输入反馈
+jQuery(document).on 'input', 'textarea.feedback-ipt', ->
+  if is_field_empty jQuery(this)
+    jQuery(this).next('a.btn').addClass('disabled')
+  else
+    jQuery(this).next('a.btn').removeClass('disabled')
+
+# 提交反馈
+jQuery(document).on 'click', 'a.submit-feedback:not(.disabled)', ->
+  jQuery('.feedback .form').hide()
+  jQuery('.feedback .success').fadeIn()
+
+# ------------
+
+# 在选项详情界面增加选项
+jQuery(document).on 'click', '.page-topic .topic-new-option a.new:not(.disabled)', ->
+  console.debug jQuery('.new-option-overlay')
+  jQuery('.new-option-overlay').addClass('show')
+
+jQuery(document).on 'click', '.new-option-overlay a.cancel', ->
+  jQuery('.new-option-overlay').removeClass('show')
+
+jQuery(document).on 'click', '.new-option-overlay a.ok:not(.disabled)', ->
+  text = jQuery('.new-option-overlay textarea').val()
+  $option = jQuery('a.option').first().clone()
+  $option.find('.text').text text
+  $option.addClass('active')
+  jQuery('.topic-options').append $option
+  jQuery('.new-option-overlay').removeClass('show')
+  refresh_voted_options()
+
+  jQuery('.page-topic .topic-new-option a.new')
+    .addClass('disabled')
+    .find('i').hide().end()
+    .find('span').text '只能补充一个，已经补充过了'
+
+jQuery(document).on 'input', '.new-option-overlay textarea', ->
+  if is_field_empty jQuery('.new-option-overlay textarea')
+    jQuery('.new-option-overlay a.ok').addClass('disabled')
+  else
+    jQuery('.new-option-overlay a.ok').removeClass('disabled')
+
+# 分享
+jQuery(document).on 'click', '.page-topic a.share', ->
+  jQuery('.share-overlay').addClass('show')
+
+jQuery(document).on 'click', '.share-overlay a.cancel', ->
+  jQuery('.share-overlay').removeClass('show')
+
+# 投票结束确认
+jQuery(document).on 'click', '.vote-done a.done:not(.disabled)', ->
+  Turbolinks.visit('home-3-vote-done.html')
+
+# ----------
+
+refresh_voted_options = ->
+  if jQuery('.topic-options .option.active').length > 0
+    jQuery('.vote-done a.done').removeClass('disabled')
+  else
+    jQuery('.vote-done a.done').addClass('disabled')
+
+# 投票选项点击
+jQuery(document).on 'click', '.topic-options .option', ->
+  jQuery(this).toggleClass 'active'
+  refresh_voted_options()
+
+
+# 完成投票，加载下一个
+jQuery(document).on 'ready page:load', ->
+  if jQuery('.page-vote-done').length
+    setTimeout ->
+      Turbolinks.visit('home-2-topic.html')
+    , 1000

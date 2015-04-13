@@ -1,0 +1,29 @@
+.page-me{:data => {:nav => :me}}
+  .set.info
+    %a.item.me{:href => 'me-1-info.html'}
+      .avatar
+        %img{:src => 'http://img.teamkn.com/i/mQTXjy9m.png'}
+      .name 月如卡卡
+
+  .set.my-topics
+    %a.item.created{:href => 'me-2-created.html'}
+      %span 我发起的议题
+      .count 3
+    %a.item.joined{:href => 'me-3-joined.html'}
+      %span 我参与的议题
+      .count 2
+
+  .set.notification-setting
+    %a.item.setting{:href => 'me-4-notification-setting.html'}
+      %span 通知设置
+
+  .set.misc
+    %a.item.feedback{:href => 'me-5-feedback.html'}
+      %span 意见反馈
+    %a.item.about{:href => 'me-6-about.html'}
+      %span 关于我们
+
+  .set.signout
+    = link_to '/users/sign_out', class: 'item quit', method: 'delete' do
+      %i.fa.fa-power-off
+      %span 退出当前账号
