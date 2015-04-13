@@ -16,11 +16,24 @@ class VoteItem
     unless praised_by?(user)
       self.praised_users << user
       self.vote.voted_users << user unless self.vote.voted_users.include?(user)
+      Message.notify_vote_item_be_selected self
+      Message.notify_vote_item_owner_be_selected self
       true
     end
   end
 
   def praised_by? user
     self.praised_users.include?(user)
+  end
+
+  protected
+  after_create :notify_if_vote_owner_create
+  def notify_if_vote_owner_create
+    Message.notify_vote_has_new_select self if user != vote.user
+  end
+
+  after_create :notify_voted_vote_has_new_select
+  def notify_voted_vote_has_new_select
+    Message.notify_voted_vote_has_new_select self
   end
 end
