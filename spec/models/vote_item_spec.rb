@@ -35,5 +35,20 @@ RSpec.describe VoteItem, type: :model do
         @vote_item.praised_by?(@user).should == true
       end
     end
+
+    describe "@other add vote_item" do
+      before(:each) do
+        @other = create(:user)
+        @new_vote_item = create(:vote_item, user: @other, vote: @vote)
+      end
+
+      it do
+        @vote.vote_items_count.should == 2
+      end
+
+      it do
+        @vote.vote_items.should include(@new_vote_item)
+      end
+    end
   end
 end
