@@ -40,6 +40,19 @@ class User
   field :uid,    type: String
   field :nickname,    type: String
   field :avatar_url,    type: String
+  field :location,     type: String
+  field :gender,       type: String
+  field :description,  type: String
+
+  def gender=(str)
+    if str == 'm'
+      self['gender'] = "男"
+    elsif str == 'f'
+      self['gender'] = "女"
+    elsif str == 'n'
+      self['gender'] = "未知"
+    end
+  end
 
   # https://github.com/mongoid/mongoid/issues/3626#issuecomment-64700154
   def self.serialize_from_session(key, salt)
@@ -68,7 +81,6 @@ class User
   has_and_belongs_to_many :invited_votes, class_name: 'Vote', inverse_of: 'users'
   has_many :friendships, inverse_of: 'user'
   has_many :friend_users, inverse_of: 'friend', class_name: 'Friendship', primary_key: :uid, foreign_key: :uid
-  has_many :settings
 
   def friends
     friendships.includes(:friend).map(&:friend).compact
@@ -102,10 +114,6 @@ class User
     messages.create to: to_user, vote: vote
   end
 
-  def get_setting(key, default_value = true)
-    setting = settings.where(key: key).first_or_create(value: default_value.to_s)
-  end
-
   protected
   def add_to_vote_users
     Vote.where(:invite_uids.in => [self.uid]).each do |vote|
@@ -113,4 +121,7 @@ class User
       vote.user.invite_notify self, vote
     end
   end
+
+  include NotificationSetting::UserMethods
+  include Feedback::UserMethods
 end

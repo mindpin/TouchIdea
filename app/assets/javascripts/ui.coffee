@@ -259,6 +259,20 @@ jQuery(document).on 'click', '.page-me a.quit', ->
 jQuery(document).on 'click', '.page-me a.toggler', ->
   jQuery(this).toggleClass('on')
   jQuery(this).toggleClass('off')
+  if jQuery(this).hasClass('on')
+    jQuery.ajax
+      method: 'PUT'
+      url: '/notification_setting'
+      data:
+        key: jQuery(this).data('key')
+        value: true
+  if jQuery(this).hasClass('off')
+    jQuery.ajax
+      method: 'PUT'
+      url: '/notification_setting'
+      data:
+        key: jQuery(this).data('key')
+        value: false
 
 # 输入反馈
 jQuery(document).on 'input', 'textarea.feedback-ipt', ->
@@ -271,6 +285,11 @@ jQuery(document).on 'input', 'textarea.feedback-ipt', ->
 jQuery(document).on 'click', 'a.submit-feedback:not(.disabled)', ->
   jQuery('.feedback .form').hide()
   jQuery('.feedback .success').fadeIn()
+  jQuery.ajax
+    url: '/feedbacks'
+    method: 'POST'
+    data:
+      content: jQuery.trim(jQuery('textarea.feedback-ipt').val())
 
 # ------------
 

@@ -1,0 +1,23 @@
+.page-me.detail{:data => {:nav => :me}}
+  .header
+    .set.info
+      .item.back
+        %a.back{:href => '/account'}
+          %i.fa.fa-chevron-left
+        .title 通知设置
+  .info-detail
+    .set.info
+      .item.info.desc
+        %span 你可以选择何时会收到通知
+      .item.info.setting
+        .t 我发起的议题被投票时
+        %a.toggler{class: "#{current_user.get_setting_value(NotificationSetting::CREATED_VOTES_ADD_PRAISE) ? 'on' : 'off'}", :href => 'javascript:;', :data=> {:key => NotificationSetting::CREATED_VOTES_ADD_PRAISE}}
+      .item.info.setting
+        .t 我发起的议题增加选项时
+        %a.toggler{class: "#{current_user.get_setting_value(NotificationSetting::CREATED_VOTES_ADD_VOTE_ITEM) ? 'on' : 'off'}", :href => 'javascript:;', :data=> {:key => NotificationSetting::CREATED_VOTES_ADD_VOTE_ITEM}}
+      .item.info.setting
+        .t 我创建的选项被投票时
+        %a.toggler{class: "#{current_user.get_setting_value(NotificationSetting::CREATED_VOTE_ITEMS_ADD_PRAISE) ? 'on' : 'off'}", :href => 'javascript:;', :data=> {:key => NotificationSetting::CREATED_VOTE_ITEMS_ADD_PRAISE}}
+      .item.info.setting
+        .t 我参加的议题增加选项时
+        %a.toggler{class: "#{current_user.get_setting_value(NotificationSetting::JOINED_VOTES_ADD_VOTE_ITEM) ? 'on' : 'off'}", :href => 'javascript:;', :data=> {:key => NotificationSetting::JOINED_VOTES_ADD_VOTE_ITEM}}

@@ -4,4 +4,10 @@ class Feedback
 
   field :content,  type: String
   belongs_to :user
+
+  module UserMethods
+    def self.included(base)
+      base.has_many :feedbacks
+    end
+  end
 end

@@ -1,0 +1,16 @@
+.page-me.detail{:data => {:nav => :me}}
+  .header
+    .set.info
+      .item.back
+        %a.back{:href => '/account'}
+          %i.fa.fa-chevron-left
+        .title 意见反馈
+  .info-detail
+    .feedback
+      .form
+        %textarea.feedback-ipt.form-control{:placeholder => '请输入您的宝贵意见…', :rows => 8}
+        %a.submit-feedback.btn.btn-pill.btn-flat-success.btn-block.disabled{:href => 'javascript:;'}
+          %i.fa.fa-check
+          %span 提交
+      .success{:style => 'display:none;'}
+        %span 意见已记录，感谢支持！

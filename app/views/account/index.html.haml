@@ -1,26 +1,26 @@
 .page-me{:data => {:nav => :me}}
   .set.info
-    %a.item.me{:href => 'me-1-info.html'}
+    = link_to '/account/info', class: 'item me' do
       .avatar
-        %img{:src => 'http://img.teamkn.com/i/mQTXjy9m.png'}
-      .name 月如卡卡
+        %img{:src => current_user.avatar_url}
+      .name= current_user.nickname
 
   .set.my-topics
-    %a.item.created{:href => 'me-2-created.html'}
+    = link_to '/account/created_votes', class: 'item created' do
       %span 我发起的议题
-      .count 3
-    %a.item.joined{:href => 'me-3-joined.html'}
+      .count= current_user.votes.count
+    = link_to '/account/joined_votes', class: 'item joined' do
       %span 我参与的议题
-      .count 2
+      .count= current_user.voted_votes.count
 
   .set.notification-setting
-    %a.item.setting{:href => 'me-4-notification-setting.html'}
+    = link_to '/account/notification_setting', class: 'item setting' do
       %span 通知设置
 
   .set.misc
-    %a.item.feedback{:href => 'me-5-feedback.html'}
+    = link_to '/account/feedback', class: 'item feedback' do
       %span 意见反馈
-    %a.item.about{:href => 'me-6-about.html'}
+    = link_to '/account/about', class: 'item about' do
       %span 关于我们
 
   .set.signout

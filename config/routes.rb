@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     get :weibo, on: :member
   end
 
-  resources :settings
+  resource :notification_setting
   get '/:id' => 'votes#show_by_token', id: /[a-zA-Z0-9]{6}/, as: :token
   resources :messages
   resources :votes do
@@ -19,4 +19,11 @@ Rails.application.routes.draw do
   root 'home#index'
 
   get '/account' => 'account#index'
+  get '/account/created_votes' => 'account#created_votes'
+  get '/account/joined_votes' => 'account#joined_votes'
+  get '/account/notification_setting' => 'account#notification_setting'
+  get '/account/feedback'     => 'account#feedback'
+  get '/account/about'     => 'account#about'
+  get '/account/info'      => 'account#info'
+  resources :feedbacks
 end

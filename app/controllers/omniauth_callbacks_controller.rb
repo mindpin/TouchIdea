@@ -20,7 +20,15 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
           #sign_in_and_redirect(:user, authentication.user)
           #sign_in_and_redirect(authentication.user, :event => :authentication)
           authentication.update_attributes({token: omniauth['credentials']['token'], expires_at: omniauth['credentials']['expires_at']}) unless omniauth['credentials'].blank?
-          authentication.user.update_attribute :avatar_url, omniauth.extra.try(:raw_info).try(:avatar_hd) if omniauth.extra.try(:raw_info).try(:avatar_hd)
+
+          if omniauth.extra.try(:raw_info)
+            authentication.user.update_attributes(
+              :avatar_url    => omniauth.extra.try(:raw_info).try(:avatar_hd),
+              :location      => omniauth.extra.try(:raw_info).try(:location),
+              :gender        => omniauth.extra.try(:raw_info).try(:gender),
+              :description   => omniauth.extra.try(:raw_info).try(:description)
+            )
+          end
           sign_in_and_redirect(authentication.user)
         else
 
@@ -29,6 +37,10 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
             user = User.where(uid: omniauth.uid).first
             user ||= User.new(:uid => omniauth.uid, :nickname => omniauth.info.nickname)
             user.avatar_url = omniauth.extra.try(:raw_info).try(:avatar_hd)
+            user.location   = omniauth.extra.try(:raw_info).try(:location)
+            user.gender     = omniauth.extra.try(:raw_info).try(:gender)
+            user.description  = omniauth.extra.try(:raw_info).try(:description)
+
           else
             user = User.new
           end

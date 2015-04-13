@@ -1,0 +1,18 @@
+.page-me.detail{:data => {:nav => :me}}
+  .header
+    .set.info
+      .item.back
+        %a.back{:href => '/account'}
+          %i.fa.fa-chevron-left
+        .title 我参与的议题
+  .info-detail
+    .topics
+      -@joined_votes.each do |vote|
+        %a.topic{:href => "/votes/#{vote.id}"}
+          .data
+            .title= vote.title
+            .options
+              - vote.vote_items.each do |vote_item|
+                .option=vote_item.title
+          .joiner-count
+            = vote.voted_users.count
