@@ -65,4 +65,10 @@ class Infocard
     end
     infocard
   end
+
+  module VoteMethods
+    def self.included(base)
+      base.belongs_to :infocard
+    end
+  end
 end

@@ -96,7 +96,7 @@ class VotesController < ApplicationController
   end
 
   def vote_params
-    params.require(:vote).permit(:title, :url, vote_items_attributes: [:id, :title])
+    params.require(:vote).permit(:infocard_id, :title, :url, vote_items_attributes: [:id, :title])
   end
 
   def choose_layout

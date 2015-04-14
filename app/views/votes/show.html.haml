@@ -2,19 +2,28 @@
   .header
     = link_to votes_path, class: 'back' do
       %i.fa.fa-chevron-left
-    .title=@vote.title
+    .title 为议题投票
     %a.share{:href => 'javascript:;'}
       %i.fa.fa-share
 
   .so
     .topic-header
-      %h2.title “扇贝单词”有哪些令你印象深刻的地方？
-      .infocard.product
-        .product-logo
-          %img{:src => 'http://img.teamkn.com/i/fyU5ZbBc.png'}
-        .data
-          .product-name 扇贝单词
-          .product-desc 这不是一款帮你“背”单词的软件，而是帮你“记住”单词的软件。只要能够完成一天的任务，你就能感受到实际的效果！
+      %h2.title= @vote.title
+      - if !@vote.infocard.blank?
+        - if @vote.infocard.kind == Infocard::Kind::PRODUCT
+          .infocard.product
+            .product-logo
+              %img{:src => @vote.infocard.pictures[0]}
+            .data
+              .product-name= @vote.infocard.title
+              .product-price= @vote.infocard.price
+        - elsif @vote.infocard.kind == Infocard::Kind::APP
+          .infocard.product
+            .product-logo
+              %img{:src => @vote.infocard.logo}
+            .data
+              .product-name= @vote.infocard.title
+              .product-desc= @vote.infocard.desc
 
     .topic-options
       - @vote.vote_items.each do |vote_item|

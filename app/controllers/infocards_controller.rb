@@ -4,6 +4,7 @@ class InfocardsController < ApplicationController
   def create
     infocard = Infocard.parse(params[:url])
     render :json => {
+      :id       => infocard.id.to_s,
       :title    => infocard.title,
       :pictures => infocard.pictures,
       :price    => infocard.price

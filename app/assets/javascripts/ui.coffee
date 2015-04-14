@@ -149,6 +149,7 @@ class TopicForm
         @$infocard.find(".product-logo img").attr("src", res.pictures[0])
         @$infocard.find(".data .product-name").text(res.title)
         @$infocard.find(".data .product-price").text(res.price)
+        jQuery("<input name='vote[infocard_id]' value='#{res.id}' type='hidden'/>").appendTo(@$infocard)
 
     ## 读取 infocard 信息 结束
     @$a_loadurl.hide()

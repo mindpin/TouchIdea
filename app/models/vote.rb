@@ -3,6 +3,7 @@ class Vote
   include Mongoid::Timestamps
   # for search
   include Searchable
+  include Infocard::VoteMethods
 
   field :title, type: String
   field :finish_at, type: Time
