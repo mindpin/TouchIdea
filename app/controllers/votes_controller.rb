@@ -4,6 +4,7 @@ class VotesController < ApplicationController
   before_action :set_vote, only: [:edit, :destroy]
 
   respond_to :html
+  respond_to :json, only: [:index]
   respond_to :js, only: [:new, :create]
 
   def index
