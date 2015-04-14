@@ -16,6 +16,7 @@ class VoteItem
     unless praised_by?(user)
       self.praised_users << user
       self.vote.voted_users << user unless self.vote.voted_users.include?(user)
+      self.vote.inc(voted_users_count: 1)
       Message.notify_vote_item_be_selected self
       Message.notify_vote_item_owner_be_selected self
       true

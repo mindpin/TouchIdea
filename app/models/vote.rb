@@ -9,6 +9,9 @@ class Vote
   field :finish_at, type: Time
   field :token, type: String
   field :url, type: String
+  # 创建当周的第一天,用于排序
+  field :first_day, type: String, default: -> { Time.now.beginning_of_week.strftime '%Y%m%d' }
+  field :voted_users_count, type: Integer, default: 0
 
   belongs_to :user, inverse_of: :votes
   has_many :vote_items
@@ -23,6 +26,7 @@ class Vote
   validates :token,    uniqueness: true,    presence: true
 
   scope :recent, -> { desc(:id) }
+  scope :hot, -> { desc(:first_day, :voted_users_count).recent}
   scope :not_finished, -> { where(:finish_at.gt => Time.now) }
   scope :not_voted, -> (user) { not_finished.where({:voted_user_ids.nin => [user.id]}) }
   #scope :by_user, -> (user) { any_of({:user_id => user.id}, {:user_ids.in => [user.id]}, {:invite_uids.in => [user.uid]}) }
