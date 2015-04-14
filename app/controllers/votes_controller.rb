@@ -80,6 +80,16 @@ class VotesController < ApplicationController
     end
   end
 
+  def lucky
+    @vote = Vote.rand_next current_user
+    if @vote
+      redirect_to @vote
+    else
+      flash[:error] = '没有您未投票的议题了!'
+      redirect_to votes_path
+    end
+  end
+
   private
   def set_vote
     @vote = current_user.votes.find(params[:id])
