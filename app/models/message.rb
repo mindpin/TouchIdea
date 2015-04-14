@@ -36,25 +36,28 @@ class Message
     message
   end
 
-  #2.1 我参加的议题增加了选项
+  # 我参加的议题增加选项时
   def self.notify_voted_vote_has_new_select vote_item
     vote_item.vote.voted_users.each do |user|
-      user.notifies.create style: :voted_vote_has_new_select, vote: vote_item.vote
+      user.notifies.create style: :voted_vote_has_new_select, vote: vote_item.vote if user.get_setting_value(NotificationSetting::JOINED_VOTES_ADD_VOTE_ITEM)
     end
   end
 
-  #2.2 我创建的选项被人投票了
+  # 我创建的选项被投票时
   def self.notify_vote_item_owner_be_selected vote_item
-    vote_item.user.notifies.create style: :own_vote_item_be_selected, vote: vote_item.vote
+    user = vote_item.user
+    user.notifies.create style: :own_vote_item_be_selected, vote: vote_item.vote if user.get_setting_value(NotificationSetting::CREATED_VOTE_ITEMS_ADD_PRAISE)
   end
 
-  #2.3 我创建的议题增加了选项
+  # 我发起的议题增加选项时
   def self.notify_vote_has_new_select vote_item
-    vote_item.vote.user.notifies.create(style: :vote_has_new_select, vote: vote_item.vote)
+    user = vote_item.vote.user
+    user.notifies.create(style: :vote_has_new_select, vote: vote_item.vote) if user.get_setting_value(NotificationSetting::CREATED_VOTES_ADD_VOTE_ITEM)
   end
 
-  #2.4 我创建的议题中有任意选项被人投票了
+  # 我发起的议题被投票时
   def self.notify_vote_item_be_selected vote_item
-    vote_item.vote.user.notifies.create style: :vote_item_be_selected, vote: vote_item.vote
+    user = vote_item.vote.user
+    user.notifies.create style: :vote_item_be_selected, vote: vote_item.vote if user.get_setting_value(NotificationSetting::CREATED_VOTES_ADD_PRAISE)
   end
 end
