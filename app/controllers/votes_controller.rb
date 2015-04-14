@@ -4,6 +4,7 @@ class VotesController < ApplicationController
   before_action :set_vote, only: [:edit, :destroy]
 
   respond_to :html
+  respond_to :json, only: [:index]
   respond_to :js, only: [:new, :create]
 
   def index
@@ -76,6 +77,16 @@ class VotesController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: @votes.as_json(only: [:_id, :title], methods: [:vote_items_count, :voted_users_count])}
+    end
+  end
+
+  def lucky
+    @vote = Vote.rand_next current_user
+    if @vote
+      redirect_to @vote
+    else
+      flash[:error] = '没有您未投票的议题了!'
+      redirect_to votes_path
     end
   end
 

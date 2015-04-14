@@ -5,7 +5,7 @@
         %span 最新
       %a.item.hotest{:href => 'javascript:;'}
         %span 最热
-    %a.lucky{:href => 'javascript:;'}
+    = link_to lucky_votes_path, method: :post, class: 'lucky' do
       %i.fa.fa-smile-o
 
   .topics.list
