@@ -4,12 +4,20 @@ class VotesController < ApplicationController
   before_action :set_vote, only: [:edit, :destroy]
 
   respond_to :html
-  respond_to :json, only: [:index]
+  respond_to :json, only: [:index, :hot]
   respond_to :js, only: [:new, :create]
 
   def index
     @votes = Vote.recent.page(params[:page])
     respond_with(@votes)
+  end
+
+  def hot
+    @votes = Vote.hot.page(params[:page])
+    respond_to do |format|
+      format.html { render :index}
+      format.json { render json: @votes }
+    end
   end
 
   def show

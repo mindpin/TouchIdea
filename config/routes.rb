@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get '/:id' => 'votes#show_by_token', id: /[a-zA-Z0-9]{6}/, as: :token
   resources :messages
   resources :votes do
+    get :hot, on: :collection
     resources :vote_items
     post :lucky, on: :collection
 

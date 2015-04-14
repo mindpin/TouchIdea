@@ -1,9 +1,9 @@
 .page-landing{:data => {:nav => :home, :title => '议题大厅'}}
   .topbar
     .filter
-      %a.item.newest.active{:href => 'javascript:;'}
+      = link_to votes_path, class: action_name == 'index' ? 'item newest active' : 'item newest' do
         %span 最新
-      %a.item.hotest{:href => 'javascript:;'}
+      = link_to hot_votes_path, class: action_name == 'hot' ? 'item hotest active' : 'item hotest' do
         %span 最热
     = link_to lucky_votes_path, method: :post, class: 'lucky' do
       %i.fa.fa-smile-o
