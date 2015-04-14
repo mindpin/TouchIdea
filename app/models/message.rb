@@ -50,12 +50,11 @@ class Message
 
   #2.3 我创建的议题增加了选项
   def self.notify_vote_has_new_select vote_item
-    message = vote_item.vote.user.notifies.create(style: :vote_has_new_select, vote: vote_item.vote)
+    vote_item.vote.user.notifies.create(style: :vote_has_new_select, vote: vote_item.vote)
   end
 
   #2.4 我创建的议题中有任意选项被人投票了
   def self.notify_vote_item_be_selected vote_item
-    vote_item.user.notifies.create style: :vote_item_be_selected, vote: vote_item.vote
-    #vote_item.vote.user.notifies.create content: '我创建的议题中有任意选项被人投票了', vote: vote_item.vote
+    vote_item.vote.user.notifies.create style: :vote_item_be_selected, vote: vote_item.vote
   end
 end
