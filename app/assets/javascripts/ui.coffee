@@ -138,6 +138,19 @@ class TopicForm
       @$el.find('.item-inputs .ipt a.delete').removeClass('disabled')
 
   loadurl: ->
+    ## 读取 infocard 信息 开始
+    url = jQuery.trim(@$url_textarea.val())
+    jQuery.ajax
+      url: "/infocards"
+      method: "POST"
+      data:
+        url: url
+      success: (res)=>
+        @$infocard.find(".product-logo img").attr("src", res.pictures[0])
+        @$infocard.find(".data .product-name").text(res.title)
+        @$infocard.find(".data .product-price").text(res.price)
+
+    ## 读取 infocard 信息 结束
     @$a_loadurl.hide()
     @$loading.show()
     @$el.find('a.next.skip').addClass('disabled')

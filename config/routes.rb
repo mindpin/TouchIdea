@@ -28,4 +28,5 @@ Rails.application.routes.draw do
   get '/account/about'     => 'account#about'
   get '/account/info'      => 'account#info'
   resources :feedbacks
+  resources :infocards
 end
