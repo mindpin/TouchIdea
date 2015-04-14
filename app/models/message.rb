@@ -55,7 +55,7 @@ class Message
     user.notifies.create(style: :vote_has_new_select, vote: vote_item.vote) if user.get_setting_value(NotificationSetting::CREATED_VOTES_ADD_VOTE_ITEM)
   end
 
-  # 我发起的议题被投票时
+  # 我创建的议题中有任意选项被人投票了
   def self.notify_vote_item_be_selected vote_item
     user = vote_item.vote.user
     user.notifies.create style: :vote_item_be_selected, vote: vote_item.vote if user.get_setting_value(NotificationSetting::CREATED_VOTES_ADD_PRAISE)
