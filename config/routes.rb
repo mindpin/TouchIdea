@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   resources :notifications
-  post 'vote_items/:id/praise' => 'vote_items#praise', as: :praise_vote_item
 
   resources :friendships
   resources :shares do
@@ -12,7 +11,9 @@ Rails.application.routes.draw do
   resources :messages
   resources :votes do
     get :hot, on: :collection
-    resources :vote_items
+    resources :vote_items do
+      post :praise, on: :collection
+    end
     post :lucky, on: :collection
 
     #resources :questions
