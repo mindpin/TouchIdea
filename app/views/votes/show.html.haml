@@ -44,25 +44,25 @@
         %i.fa.fa-check
         %span 投完了
 
-    .new-option-overlay
-      .form
-        .fields
-          %label 补充新选项
-          %textarea.form-control{:placeholder => '输入选项内容', :rows => 3}
-        .submits
-          %a.cancel{:href => 'javascript:;'}
-            %i.fa.fa-times
-            %span 取消
-          %a.ok.disabled{:href => 'javascript:;'}
-            %i.fa.fa-check
-            %span 确定
+  .new-option-overlay
+    = form_for [@vote, VoteItem.new], html: {class: 'form'} do |f|
+      .fields
+        %label 补充新选项
+        = f.text_area :title, class: 'form-control', placeholder: '输入选项内容', rows: 3
+      .submits
+        %a.cancel{:href => 'javascript:;'}
+          %i.fa.fa-times
+          %span 取消
+        %a.ok.disabled{:href => 'javascript:;'}
+          %i.fa.fa-check
+          %span 确定
 
-    .share-overlay
-      .form
-        .fields
-          %label 分享到 …
-          .s 这里集成到最后再做
-        .submits
-          %a.cancel{:href => 'javascript:;'}
-            %i.fa.fa-times
-            %span 取消
+  .share-overlay
+    .form
+      .fields
+        %label 分享到 …
+        .s 这里集成到最后再做
+      .submits
+        %a.cancel{:href => 'javascript:;'}
+          %i.fa.fa-times
+          %span 取消
