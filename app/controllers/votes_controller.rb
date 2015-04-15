@@ -112,6 +112,10 @@ class VotesController < ApplicationController
     render json: true
   end
 
+  def done
+    
+  end
+
   private
   def set_vote
     @vote = current_user.votes.find(params[:id])
@@ -122,6 +126,6 @@ class VotesController < ApplicationController
   end
 
   def choose_layout
-    action_name == 'show' ? 'detail' : 'app'
+    %w[show done].include?(action_name) ? 'detail' : 'app'
   end
 end

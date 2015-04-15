@@ -368,5 +368,5 @@ jQuery(document).on 'click', '.topic-options .option', ->
 jQuery(document).on 'ready page:load', ->
   if jQuery('.page-vote-done').length
     setTimeout ->
-      Turbolinks.visit('home-2-topic.html')
+      Turbolinks.visit('/votes/lucky')
     , 1000

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :votes do
     post :praise, on: :member
     get :hot, on: :collection
+    get :done, on: :collection
     resources :vote_items
     match :lucky, on: :collection, via: [:get, :post]
 
