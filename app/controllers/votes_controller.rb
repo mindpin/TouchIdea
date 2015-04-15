@@ -102,6 +102,16 @@ class VotesController < ApplicationController
     end
   end
 
+  def praise
+    @vote = Vote.find params[:id]
+    @vote_items = @vote.vote_items
+    @praise_vote_items = @vote_items.find params[:vote_item_ids]
+    @praise_vote_items.map{|vote_item| vote_item.praise_by current_user}
+    @vote_items.where(:id.nin => params[:vote_item_ids]).map{|vote_item| vote_item.cancel_praise_by(current_user)}
+    # 做改变即操作即可，出错则直接报错，无需处理
+    render json: true
+  end
+
   private
   def set_vote
     @vote = current_user.votes.find(params[:id])

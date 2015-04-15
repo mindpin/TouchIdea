@@ -1,8 +1,3 @@
-# 点击完成，提交表单
-jQuery(document).on 'ready page:load', ->
-  $('a.done').click ->
-    $('#new_vote').submit()
-
 # 用到了 turbolinks
 # 事件加载参考
 # https://github.com/rails/turbolinks/#no-jquery-or-any-other-library
@@ -344,7 +339,16 @@ jQuery(document).on 'click', '.share-overlay a.cancel', ->
 
 # 投票结束确认
 jQuery(document).on 'click', '.vote-done a.done:not(.disabled)', ->
-  Turbolinks.visit('home-3-vote-done.html')
+  vote_id = $('.page-topic').data('id')
+  vote_item_ids = []
+  # todo 提交投票
+  $('a.option.active').each ->
+    vote_item_ids.push $(this).data('vote_item_id')
+  $.post "/votes/#{vote_id}/praise", {vote_item_ids: vote_item_ids}, (data)->
+    if data == true
+      Turbolinks.visit('/votes/done')
+    else
+      alert('投票出错')
 
 # ----------
 
