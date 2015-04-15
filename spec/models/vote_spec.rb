@@ -84,4 +84,27 @@ RSpec.describe Vote, type: :model do
       Vote.hot[2].should == @vote1
     end
   end
+
+  describe "#praised_count" do
+    before(:each) do
+      @user1 = create(:user)
+      @user2 = create(:user)
+      @vote = create(:vote_with_vote_item, user: @user1)
+      @vote_item = @vote.vote_items.first
+    end
+
+    it do
+      @vote.praised_count.should == 0
+    end
+
+    it do
+      @vote_item.praise_by(@user1)
+      @vote_item.praise_by(@user2)
+      @vote.praised_count.should == 2
+
+      @new_vote_item = create(:vote_item, user:@user2, vote: @vote)
+      @new_vote_item.praise_by(@user2)
+      @vote.praised_count.should == 3
+    end
+  end
 end

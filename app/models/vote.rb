@@ -51,8 +51,8 @@ class Vote
     vote_items.count
   end
 
-  def voted_users_count
-    voted_users.count
+  def praised_count
+    vote_items.to_a.sum{|vote_item| vote_item.praised_count }
   end
 
   def self.rand_next user

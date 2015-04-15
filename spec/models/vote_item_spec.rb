@@ -18,6 +18,10 @@ RSpec.describe VoteItem, type: :model do
       @user.praised_vote_items.should include(@vote_item)
     end
 
+    it "@vote_item.praised_count" do
+      @vote_item.praised_count.should == 0
+    end
+
     describe "#praise_by @user" do
       before(:each) do
         @result = @vote_item.praise_by(@user)
@@ -33,6 +37,10 @@ RSpec.describe VoteItem, type: :model do
 
       it "#praised_by?(user) should == true" do
         @vote_item.praised_by?(@user).should == true
+      end
+
+      it "@vote_item.praised_count" do
+        @vote_item.praised_count.should == 1
       end
 
       it "@vote.voted_users_count" do
