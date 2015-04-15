@@ -37,7 +37,7 @@
               = vote.title.gsub(Regexp.new(params[:q]), '<span class="key">\0</span>').html_safe
             .stat
               %span
-                = "#{vote.vote_items count} 个选项"
+                = "#{vote.vote_items.count} 个选项"
               %span
-                = "#{vote.voted_users count} 人参与"
-          .joiner-count= vote.voted_users count
+                = "#{vote.voted_users.count} 人参与"
+          .joiner-count= vote.voted_users.count
