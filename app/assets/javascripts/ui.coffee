@@ -311,18 +311,8 @@ jQuery(document).on 'click', '.new-option-overlay a.cancel', ->
   jQuery('.new-option-overlay').removeClass('show')
 
 jQuery(document).on 'click', '.new-option-overlay a.ok:not(.disabled)', ->
-  text = jQuery('.new-option-overlay textarea').val()
-  $option = jQuery('a.option').first().clone()
-  $option.find('.text').text text
-  $option.addClass('active')
-  jQuery('.topic-options').append $option
-  jQuery('.new-option-overlay').removeClass('show')
-  refresh_voted_options()
-
-  jQuery('.page-topic .topic-new-option a.new')
-    .addClass('disabled')
-    .find('i').hide().end()
-    .find('span').text '只能补充一个，已经补充过了'
+  $('#new_vote_item').submit()
+  # 移至vote_items/create.js.coffee
 
 jQuery(document).on 'input', '.new-option-overlay textarea', ->
   if is_field_empty jQuery('.new-option-overlay textarea')
@@ -352,7 +342,7 @@ jQuery(document).on 'click', '.vote-done a.done:not(.disabled)', ->
 
 # ----------
 
-refresh_voted_options = ->
+@refresh_voted_options = ->
   if jQuery('.topic-options .option.active').length > 0
     jQuery('.vote-done a.done').removeClass('disabled')
   else

@@ -45,7 +45,7 @@
         %span 投完了
 
   .new-option-overlay
-    = form_for [@vote, VoteItem.new], html: {class: 'form'} do |f|
+    = form_for [@vote, VoteItem.new], remote: true, html: {class: 'form'} do |f|
       .fields
         %label 补充新选项
         = f.text_area :title, class: 'form-control', placeholder: '输入选项内容', rows: 3
