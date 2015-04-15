@@ -81,7 +81,7 @@ class VotesController < ApplicationController
   end
 
   def search
-    @votes = Vote.search(params[:q]).records
+    @votes = Vote.page_search(params[:q], params[:page]).records
     respond_to do |format|
       format.html
       format.json { render json: @votes.as_json(only: [:_id, :title, :voted_users_count], methods: [:vote_items_count, :praised_count])}

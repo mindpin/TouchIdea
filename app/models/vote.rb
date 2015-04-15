@@ -2,7 +2,8 @@ class Vote
   include Mongoid::Document
   include Mongoid::Timestamps
   # for search
-  include Searchable
+  include VoteSearchConfig
+  
   include Infocard::VoteMethods
 
   field :title, type: String

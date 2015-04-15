@@ -77,3 +77,4 @@ gem "mina",
 
 gem "elasticsearch-model", :require => "elasticsearch/model"
 gem "elasticsearch-rails", :require => "elasticsearch/rails"
+gem "sidekiq"

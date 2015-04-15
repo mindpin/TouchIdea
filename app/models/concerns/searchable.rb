@@ -8,6 +8,9 @@ module Searchable
 
     Searchable.enabled_models.add(self)
 
+    after_create  {Indexer.perform_async(:index,  self.id.to_s, self.class.name)}
+    after_update  {Indexer.perform_async(:update, self.id.to_s, self.class.name)}
+    after_destroy {Indexer.perform_async(:delete, self.id.to_s, self.class.name)}
   end
 
   def self.enabled_models
@@ -15,7 +18,7 @@ module Searchable
   end
 
   def as_indexed_json(options={})
-    as_json(only: [:title])
+    as_json(except: [:id, :_id])
   end
 
   module ClassMethods
