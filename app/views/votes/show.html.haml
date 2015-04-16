@@ -1,4 +1,4 @@
-.page-topic{:data => {:nav => :explore, :title => '议题详情'}}
+.page-topic{:data => {:nav => :explore, :title => '议题详情', :id => @vote.id}}
   .header
     = link_to votes_path, class: 'back' do
       %i.fa.fa-chevron-left
@@ -27,7 +27,7 @@
 
     .topic-options
       - @vote.vote_items.each do |vote_item|
-        = link_to 'javascript:;', class: vote_item.praised_by?(current_user) ? 'option active' : 'option' do
+        = link_to 'javascript:;', class: vote_item.praised_by?(current_user) ? 'option active' : 'option', 'data-vote_item_id' => vote_item.id do
           .text=vote_item.title
           .icon.i0
             %i.fa.fa-thumbs-up
@@ -44,25 +44,25 @@
         %i.fa.fa-check
         %span 投完了
 
-    .new-option-overlay
-      .form
-        .fields
-          %label 补充新选项
-          %textarea.form-control{:placeholder => '输入选项内容', :rows => 3}
-        .submits
-          %a.cancel{:href => 'javascript:;'}
-            %i.fa.fa-times
-            %span 取消
-          %a.ok.disabled{:href => 'javascript:;'}
-            %i.fa.fa-check
-            %span 确定
+  .new-option-overlay
+    = form_for [@vote, VoteItem.new], remote: true, html: {class: 'form'} do |f|
+      .fields
+        %label 补充新选项
+        = f.text_area :title, class: 'form-control', placeholder: '输入选项内容', rows: 3
+      .submits
+        %a.cancel{:href => 'javascript:;'}
+          %i.fa.fa-times
+          %span 取消
+        %a.ok.disabled{:href => 'javascript:;'}
+          %i.fa.fa-check
+          %span 确定
 
-    .share-overlay
-      .form
-        .fields
-          %label 分享到 …
-          .s 这里集成到最后再做
-        .submits
-          %a.cancel{:href => 'javascript:;'}
-            %i.fa.fa-times
-            %span 取消
+  .share-overlay
+    .form
+      .fields
+        %label 分享到 …
+        .s 这里集成到最后再做
+      .submits
+        %a.cancel{:href => 'javascript:;'}
+          %i.fa.fa-times
+          %span 取消

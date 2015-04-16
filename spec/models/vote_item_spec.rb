@@ -46,6 +46,29 @@ RSpec.describe VoteItem, type: :model do
       it "@vote.voted_users_count" do
         @vote.voted_users_count.should == 1
       end
+
+      describe "#cancel_praise_by @user" do
+        before(:each) do
+          @vote_item.cancel_praise_by(@user).should == true
+          @vote_item.reload
+        end
+
+        it "@vote_item.praised_count" do
+          @vote_item.praised_count.should == 0
+        end
+
+        it "@vote_item.praised_count" do
+          @vote_item.praised_users.should_not include(@user)
+        end
+
+        it "@vote.voted_users_count" do
+          @vote.voted_users_count.should == 0
+        end
+
+        it "@vote voted_users should not include @user" do
+          @vote.voted_users.should_not include(@user)
+        end
+      end
     end
 
     describe "@other add vote_item" do

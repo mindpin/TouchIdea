@@ -26,6 +26,18 @@ class VoteItem
     end
   end
 
+  def cancel_praise_by user
+    if praised_by?(user)
+      self.praised_users.delete user
+      self.inc(praised_count: -1)
+      unless self.vote.vote_items.map(&:praised_users).flatten.include?(user)
+        self.vote.voted_users.delete user 
+        self.vote.inc(voted_users_count: -1)
+      end
+      true
+    end
+  end
+
   def praised_by? user
     self.praised_users.include?(user)
   end

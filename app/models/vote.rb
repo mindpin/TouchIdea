@@ -7,7 +7,7 @@ class Vote
   include Infocard::VoteMethods
 
   field :title, type: String
-  field :finish_at, type: Time
+  field :finish_at, type: Time, default: ->{ 7.days.from_now }
   field :token, type: String
   field :url, type: String
   # 创建当周的第一天,用于排序

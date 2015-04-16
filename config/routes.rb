@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   resources :notifications
-  post 'vote_items/:id/praise' => 'vote_items#praise', as: :praise_vote_item
 
   resources :friendships
   resources :shares do
@@ -11,9 +10,11 @@ Rails.application.routes.draw do
   get '/:id' => 'votes#show_by_token', id: /[a-zA-Z0-9]{6}/, as: :token
   resources :messages
   resources :votes do
+    post :praise, on: :member
     get :hot, on: :collection
+    get :done, on: :collection
     resources :vote_items
-    post :lucky, on: :collection
+    match :lucky, on: :collection, via: [:get, :post]
 
     #resources :questions
     get :result, on: :member
