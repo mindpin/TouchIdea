@@ -26,10 +26,20 @@ class VotesController < ApplicationController
   end
 
   def hot
-    @votes = Vote.hot.page(params[:page])
+    @votes = Vote.hot.page(params[:page]).per(10)
     respond_to do |format|
       format.html { render :index}
-      format.json { render json: @votes }
+      format.json do
+        votes_hash = @votes.map do |vote|
+          {
+            :id           => vote.id.to_s,
+            :title        => vote.title,
+            :joiner_count => vote.voted_users_count,
+            :options      => vote.vote_items.map{|vi|vi.title}
+          }
+        end
+        render(json: votes_hash)
+      end
     end
   end
 
