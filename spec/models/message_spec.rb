@@ -31,8 +31,9 @@ RSpec.describe Message, type: :model do
     end
 
     it "我创建的选项被投票时" do
-      @vote_item.praise_by @praise_user
-      @vote_creator.notifies.map(&:style).should include :own_vote_item_be_selected
+      @new_vote_item = create(:extra_vote_item, vote: @vote, user: @new_select_owner)
+      @new_vote_item.praise_by @praise_user
+      @new_select_owner.notifies.map(&:style).should include :own_vote_item_be_selected
     end
 
     it "我发起的议题增加选项时" do

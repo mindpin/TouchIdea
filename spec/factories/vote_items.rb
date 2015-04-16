@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :vote_item do
-    title "MyString"
+    sequence(:title){|n| "vote_item #{n}"}
     factory :extra_vote_item do
       is_extra true
     end
