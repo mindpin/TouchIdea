@@ -366,3 +366,68 @@ jQuery(document).on 'ready page:load', ->
     setTimeout ->
       Turbolinks.visit('home-2-topic.html')
     , 1000
+
+
+# --------------
+
+# 下拉加载更多
+# .topics.list
+class VoteListMore
+  constructor: (@$el)->
+    @$loading = @$el.find('.loading')
+    @$is_loading_bool = false
+    @$current_page = 1
+    @bind_events()
+
+  generate_vote_dom: (vote_json)->
+    opts = jQuery.map vote_json.options, (opt)->
+      "<div class='option'>#{opt}</div>"
+    opts_str = opts.join("")
+    "
+      <a class='topic' href='/votes/#{vote_json.id}'>
+        <div class='data'>
+          <div class='title'>#{vote_json.title}</div>
+          <div class='options'>
+            #{opts_str}
+          </div>
+        </div>
+        <div class='joiner-count'>
+          #{vote_json.joiner_count}
+        </div>
+      </a>
+    "
+
+  is_loading: ->
+    @$is_loading_bool
+
+  start_loading: ->
+    @$is_loading_bool = true
+    @$loading.show()
+
+  end_loading: ->
+    @$is_loading_bool = false
+    @$loading.hide()
+
+  bind_events: ->
+    @$el.scroll ()=>
+      if @$el.get(0).scrollHeight-5 < @$el.get(0).clientHeight + @$el.get(0).scrollTop
+        if !@is_loading()
+          @start_loading()
+          @$current_page+=1
+          jQuery.ajax
+            url: "/votes.json"
+            method: "GET"
+            data:
+              page: @$current_page
+            success: (res)=>
+              vote_doms = jQuery.map res, (vote)=>
+                @generate_vote_dom(vote)
+              doms = vote_doms.join("")
+              @$loading.before(doms)
+              @end_loading()
+
+
+
+jQuery(document).on 'ready page:load', ->
+  if jQuery('.page-landing .topics.list').length > 0
+    new VoteListMore jQuery('.page-landing .topics.list')
