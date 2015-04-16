@@ -74,7 +74,7 @@ RSpec.describe VoteItem, type: :model do
     describe "@other add vote_item" do
       before(:each) do
         @other = create(:user)
-        @new_vote_item = create(:vote_item, user: @other, vote: @vote)
+        @new_vote_item = create(:extra_vote_item, user: @other, vote: @vote)
       end
 
       it do

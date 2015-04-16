@@ -3,6 +3,7 @@ class VoteItem
   include Mongoid::Timestamps
   field :title, type: String
   field :praised_count, type: Integer, default: 0
+  field :is_extra, type: Boolean, default: false
 
   validates_presence_of :title
 
@@ -51,5 +52,12 @@ class VoteItem
   after_create :notify_voted_vote_has_new_select
   def notify_voted_vote_has_new_select
     Message.notify_voted_vote_has_new_select self
+  end
+
+  validate :user_only_create_one_extra_vote_item
+  def user_only_create_one_extra_vote_item
+    if vote and vote.added_vote_item_by?(user) and new_record?
+      errors.add :user, :has_added_vote_item
+    end
   end
 end

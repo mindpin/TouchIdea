@@ -56,6 +56,10 @@ class Vote
     vote_items.to_a.sum{|vote_item| vote_item.praised_count }
   end
 
+  def added_vote_item_by? user
+    vote_items.any?{|vote_item| vote_item.user == user and vote_item.is_extra and !vote_item.new_record?}
+  end
+
   def self.rand_next user
     n = (0..not_voted(user).count-1).to_a.sample
     not_voted(user).skip(n).first

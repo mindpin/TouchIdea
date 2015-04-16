@@ -102,9 +102,22 @@ RSpec.describe Vote, type: :model do
       @vote_item.praise_by(@user2)
       @vote.praised_count.should == 2
 
-      @new_vote_item = create(:vote_item, user:@user2, vote: @vote)
+      @new_vote_item = create(:extra_vote_item, user:@user2, vote: @vote)
       @new_vote_item.praise_by(@user2)
       @vote.praised_count.should == 3
     end
+  end
+
+  it "#added_vote_item_by?" do
+    @user1 = create(:user)
+    @user2 = create(:user)
+    @vote = create(:vote_with_vote_item, user: @user1)
+    @vote.added_vote_item_by?(@user1).should == false
+    create(:extra_vote_item, vote: @vote, user: @user1).should be_valid
+    @vote.added_vote_item_by?(@user1).should == true
+    # 只能创建一个
+    build(:extra_vote_item, vote: @vote, user: @user1).valid?.should == false
+
+    @vote.added_vote_item_by?(@user2).should == false
   end
 end
