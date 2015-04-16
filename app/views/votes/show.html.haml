@@ -35,9 +35,14 @@
             %i.fa.fa-check
 
     .topic-new-option
-      %a.new.btn.btn-flat-success.btn-block{:href => 'javascript:;'}
-        %i.fa.fa-plus
-        %span 补充一个选项
+      - if @vote.added_vote_item_by?(current_user)
+        %a.new.btn.btn-flat-success.btn-block.disabled{:href => 'javascript:;'}
+          %i{style: 'display: none'}.fa.fa-plus
+          %span 只能补充一个，已经补充过了
+      - else
+        %a.new.btn.btn-flat-success.btn-block{:href => 'javascript:;'}
+          %i.fa.fa-plus
+          %span 补充一个选项
 
     .vote-done
       %a.done.btn.btn-flat-success.btn-block.disabled{:href => 'javascript:;'}
