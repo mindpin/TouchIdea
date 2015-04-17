@@ -36,29 +36,38 @@ class Message
     message
   end
 
-  # 我参加的议题增加选项时
-  def self.notify_voted_vote_has_new_select vote_item
+  # 我参加的（别人创建的）议题增加了（别人创建的）选项
+  def self.notify_voted_vote_has_new_select vote_item, from_user
     vote = vote_item.vote
+    vote_creator = vote.user
     vote.voted_users.each do |user|
-      notify user, vote, :voted_vote_has_new_select if user.get_setting_value(NotificationSetting::JOINED_VOTES_ADD_VOTE_ITEM)
+      if user != from_user and # 自己操作的不提醒
+        user != vote_creator and # 议题的创建者为别人
+        user.get_setting_value(NotificationSetting::JOINED_VOTES_ADD_VOTE_ITEM)
+        notify user, vote, :voted_vote_has_new_select 
+      end
     end
   end
 
-  # 我创建的选项被投票时，额外创建,且不为议题创建者时才提醒 
-  def self.notify_vote_item_owner_be_selected vote_item
-    user = vote_item.user
-    notify user, vote_item.vote, :own_vote_item_be_selected if user.get_setting_value(NotificationSetting::CREATED_VOTE_ITEMS_ADD_PRAISE) and user != vote_item.vote.user and vote_item.is_extra
+  # 我（在别人的议题中）（自己）创建的选项被（别人）投票了
+  def self.notify_vote_item_owner_be_selected vote_item, from_user
+    vote_item_creator = vote_item.user
+    if from_user != vote_item_creator and # 自己操作的不提醒
+      vote_item_creator != vote_item.vote.user and # 别人的议题
+      vote_item_creator.get_setting_value(NotificationSetting::CREATED_VOTE_ITEMS_ADD_PRAISE) # 设置了不提醒的
+    notify vote_item_creator, vote_item.vote, :own_vote_item_be_selected 
+    end
   end
 
-  # 我发起的议题增加选项时
-  def self.notify_vote_has_new_select vote_item
-    user = vote_item.vote.user
-    notify user, vote_item.vote, :vote_has_new_select if user.get_setting_value(NotificationSetting::CREATED_VOTES_ADD_VOTE_ITEM)
+  # 我（自己）创建的议题增加了（别人创建的）选项
+  def self.notify_vote_has_new_select vote_item, from_user
+    vote_creator = vote_item.vote.user
+    notify vote_creator, vote_item.vote, :vote_has_new_select if vote_creator != from_user and vote_creator.get_setting_value(NotificationSetting::CREATED_VOTES_ADD_VOTE_ITEM)
   end
 
-  # 我创建的议题中有任意选项被人投票了
-  def self.notify_vote_item_be_selected vote_item
-    user = vote_item.vote.user
-    notify user, vote_item.vote, :vote_item_be_selected if user.get_setting_value(NotificationSetting::CREATED_VOTES_ADD_PRAISE)
+  # 我（自己）创建的议题中有任意（不管是谁创建的）选项被（别人）投票了
+  def self.notify_vote_item_be_selected vote_item, from_user
+    vote_creator = vote_item.vote.user
+    notify vote_creator, vote_item.vote, :vote_item_be_selected if vote_creator != from_user and vote_creator.get_setting_value(NotificationSetting::CREATED_VOTES_ADD_PRAISE)
   end
 end

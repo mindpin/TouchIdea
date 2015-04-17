@@ -21,8 +21,8 @@ class VoteItem
         self.vote.voted_users << user 
         self.vote.inc(voted_users_count: 1)
       end
-      Message.notify_vote_item_be_selected self
-      Message.notify_vote_item_owner_be_selected self
+      Message.notify_vote_item_be_selected self, user
+      Message.notify_vote_item_owner_be_selected self, user
       true
     end
   end
@@ -46,12 +46,12 @@ class VoteItem
   protected
   after_create :notify_if_vote_owner_create
   def notify_if_vote_owner_create
-    Message.notify_vote_has_new_select self if user != vote.user
+    Message.notify_vote_has_new_select self, user
   end
 
   after_create :notify_voted_vote_has_new_select
   def notify_voted_vote_has_new_select
-    Message.notify_voted_vote_has_new_select self
+    Message.notify_voted_vote_has_new_select self, user
   end
 
   validate :user_only_create_one_extra_vote_item
