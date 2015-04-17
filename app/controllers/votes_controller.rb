@@ -130,7 +130,17 @@ class VotesController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.json { render json: @votes.as_json(only: [:_id, :title, :voted_users_count], methods: [:vote_items_count, :praised_count])}
+      format.json do 
+        vote_json = @votes.map do |vote|
+          {
+            :id    => vote.id.to_s,
+            :title => vote.title.gsub(Regexp.new(params[:q]), '<span class="key">\0</span>'),
+            :voted_users_count => vote.voted_users_count,
+            :vote_items_count  => vote.vote_items_count
+          }
+        end
+        render :json => vote_json
+      end
     end
   end
 
