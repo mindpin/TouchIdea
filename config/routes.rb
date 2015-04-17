@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resource :notification_setting
   get '/:id' => 'votes#show_by_token', id: /[a-zA-Z0-9]{6}/, as: :token
   resources :votes do
-    get :created_success
+    get :created_success, on: :member
     post :praise, on: :member
     get :hot, on: :collection
     get :done, on: :collection

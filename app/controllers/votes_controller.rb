@@ -73,6 +73,7 @@ class VotesController < ApplicationController
   end
 
   def created_success
+    @vote = current_user.votes.find params[:id]
   end
 
   def edit
