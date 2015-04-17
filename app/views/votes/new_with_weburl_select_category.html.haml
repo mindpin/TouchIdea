@@ -1,0 +1,19 @@
+/ 分类图标还未处理，代码预留在这里
+/ %a.category{:href => 'add-poll-3-infocards.html'}
+/   %i.fa.fa-mobile{:style => 'color:#5BB4DA;'}
+/   %span 应用软件
+/ %a.category{:href => 'add-poll-3-infocards.html'}
+/   %i.fa.fa-coffee{:style => 'color:#F26D5F'}
+/   %span 文化娱乐
+
+.page-infocard-list
+  .header
+    %a.back{:href => '/votes'}
+      %i.fa.fa-chevron-left
+    .title 分类点评
+  .info-detail
+    .categories
+      - InfocardAppCategory.all.each do |category|
+        %a.category{:href => new_vote_path(kind: 'weburl', category_id: category.id.to_s)}
+          %i.fa.fa-mobile{:style => 'color:#5BB4DA;'}
+          %span= category.title

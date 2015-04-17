@@ -24,6 +24,9 @@ class Infocard
   field :producer,     type: String   # 生产商
   field :desc,         type: String  # 介绍
 
+  # 只有 APP 类型的 infocard 才有这个关联
+  belongs_to :infocard_app_category
+
   # 向 urlinfo-service http api 发送请求，并把获取的信息保存 infocard
   def self.parse(url)
     urlinfo_url = "http://urlinfo.4ye.me/api/fetch_infocard?url=#{url}"

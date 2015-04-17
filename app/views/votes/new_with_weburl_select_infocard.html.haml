@@ -1,0 +1,14 @@
+.page-infocard-list
+  .header
+    %a.back{:href => new_vote_path(kind: 'weburl')}
+      %i.fa.fa-chevron-left
+    .title= @category.title
+  .info-detail
+    .infocards
+      - @category.infocards.each do |infocard|
+        %a.infocard.product{:href => new_vote_path(kind: 'weburl', category_id: @category.id.to_s, infocard_id: infocard.id.to_s)}
+          .product-logo
+            %img{:src => infocard.logo}
+          .data
+            .product-name= infocard.title
+            .product-desc= infocard.desc

@@ -1,0 +1,13 @@
+.page-created
+  .title
+    %span 议题创建成功
+
+  .desc 现在你可以去给自己的议题投票
+  .go
+    %a.btn.btn-pill.btn-flat-success.btn-large{:href => '/account/created_votes'}
+      %span 打开我的议题
+
+  .desc 也可以去看看其他人创建的议题
+  .go
+    %a.btn.btn-pill.btn-flat-success.btn-large{:href => '/votes'}
+      %span 返回议题广场

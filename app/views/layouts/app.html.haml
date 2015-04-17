@@ -28,15 +28,20 @@
         = link_to '/account', class: 'item me' do
           %i.fa.fa-user
           %span.text 用户
+        %a.cancel-new{:href => 'javascript:;'}
+          %i.fa.fa-times
     .float-new-type-select
       .tips 请选择要创建的议题类型
       .items
         .item
-          = link_to new_vote_path, class: 'common' do
-            %i.fa.fa-pencil
+          = link_to new_vote_path(kind: 'text'), class: 'text' do
+            %i.fa.fa-edit
           %span.t 普通议题
         .item
-          = link_to new_vote_path(good: true), class: 'good' do
+          = link_to new_vote_path(kind: 'comment'), class: 'comment' do
             %i.fa.fa-rocket
-          %span.t 分享点评
-
+          %span.t 网址分享
+        .item
+          = link_to new_vote_path(kind: 'weburl'), class: 'weburl' do
+            %i.fa.fa-star
+          %span.t 分类点评

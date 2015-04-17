@@ -1,0 +1,56 @@
+.page-new-topic
+  .topbar
+    %a.back{:href => new_vote_path(kind: 'weburl', category_id: @category.id.to_s)}
+      %i.fa.fa-chevron-left
+    .steps
+      .step.active{:data => {:step => 1}}
+        %span 
+          .no 1
+          %i.fa.fa-check
+      .step{:data => {:step => 2}}
+        %span 
+          .no 2
+          %i.fa.fa-check
+
+  = form_for @vote, html: {class:'form'} do |f|
+    .part.tdesc{:data => {:step => 1}}
+      %input{:name => 'vote[infocard_id]', :value => @infocard.id.to_s, :type => 'hidden'}
+      .infocard.product
+        .product-logo
+          %img{:src => @infocard.logo}
+        .data
+          .product-name= @infocard.title
+          .product-desc= @infocard.desc
+      .fields
+        %label 请输入议题描述
+        %textarea.form-control.tdesc{:placeholder => '有什么事情想知道大家的看法呢？', :rows => 5, name: 'vote[title]'}
+      .submits
+        %a.next.disabled{:href => 'javascript:;'}
+          %span 下一步
+          %i.fa.fa-arrow-right
+
+    .part{:style => 'display:none;', :data => {:step => 2}}
+      .fields
+        %label 请输入预置选项（至少两个）
+        .item-inputs
+          .ipt
+            %input.form-control{:placeholder => '选项 1', name: 'vote[vote_items_attributes][][title]'}
+            %a.delete.disabled{:href => 'javascript:;'}
+              %i.fa.fa-times
+          .ipt
+            %input.form-control{:placeholder => '选项 2', name: 'vote[vote_items_attributes][][title]'}
+            %a.delete.disabled{:href => 'javascript:;'}
+              %i.fa.fa-times
+      .submits
+        %a.prev{:href => 'javascript:;'}
+          %i.fa.fa-arrow-left
+          %span 上一步
+        %a.additem{:href => 'javascript:;'}
+          %i.fa.fa-plus
+        .additem-text
+          %i.fa.fa-arrow-up
+          %span 按这里增加选项
+         
+        %a.done.disabled{:href => 'javascript:;'}
+          %span 完成
+          %i.fa.fa-check

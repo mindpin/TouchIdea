@@ -49,11 +49,30 @@ class VotesController < ApplicationController
 
   def new
     @vote = current_user.votes.new
-    if params[:good].blank?
+    case params[:kind]
+    when 'text'
       respond_with(@vote)
-    else
-      render :new_with_good
+    when 'comment'
+      render :new_with_comment
+    when 'weburl'
+      _new_with_weburl
     end
+  end
+
+  def _new_with_weburl
+    return render :new_with_weburl_select_category if params[:category_id].blank?
+
+    if params[:infocard_id].blank?
+      @category = InfocardAppCategory.find(params[:category_id])
+      return render :new_with_weburl_select_infocard
+    end
+
+    @category = InfocardAppCategory.find(params[:category_id])
+    @infocard = Infocard.find(params[:infocard_id])
+    render :new_with_weburl_by_infocard
+  end
+
+  def created_success
   end
 
   def edit
@@ -65,7 +84,7 @@ class VotesController < ApplicationController
   def create
     @vote = current_user.votes.new(vote_params)
     if @vote.save
-      redirect_to @vote
+      redirect_to "/votes/#{@vote.id}/created_success"
     else
       render :new
     end
@@ -149,6 +168,6 @@ class VotesController < ApplicationController
   end
 
   def choose_layout
-    %w[show done].include?(action_name) ? 'detail' : 'app'
+    %w[show done new created_success].include?(action_name) ? 'detail' : 'app'
   end
 end
