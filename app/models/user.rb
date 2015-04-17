@@ -79,12 +79,6 @@ class User
   has_many :messages
   has_many :notifies, inverse_of: 'to', class_name: 'Message'
   has_and_belongs_to_many :invited_votes, class_name: 'Vote', inverse_of: 'users'
-  has_many :friendships, inverse_of: 'user'
-  has_many :friend_users, inverse_of: 'friend', class_name: 'Friendship', primary_key: :uid, foreign_key: :uid
-
-  def friends
-    friendships.includes(:friend).map(&:friend).compact
-  end
 
   def apply_omniauth(omniauth)
     #add some info about the user
