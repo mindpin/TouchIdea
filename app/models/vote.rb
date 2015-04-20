@@ -68,7 +68,7 @@ class Vote
   # 返回array
   def self.vote_items_rand_order_by_user vote_id, user
     vote = Vote.find(vote_id)
-    user_ord = user.created_at.to_i % 43 # 43是随便取的一个素数，可以随意换个大于选项个数的2~3位的数字代替
+    user_ord = (user.created_at.to_i % 43) + 1 # 43是随便取的一个素数，可以随意换个大于选项个数的2~3位的数字代替, +1为使之不为0
     vote.vote_items.sort{|x,y| (x.ord % user_ord) <=> (y.ord % user_ord)}
   end
 
