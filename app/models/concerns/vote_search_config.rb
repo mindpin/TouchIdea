@@ -4,9 +4,15 @@ module VoteSearchConfig
   included do
     include Searchable
 
-    settings :index => {:number_of_shards => 1}, :analysis => custom_analysis do
+    # settings :index => {:number_of_shards => 1}, :analysis => custom_analysis do
+    #   mappings :dynamic => "false" do
+    #     indexes :title, :analyzer => :chargram
+    #   end
+    # end
+
+    settings :index => {:number_of_shards => 1} do
       mappings :dynamic => "false" do
-        indexes :title, :analyzer => :chargram
+        indexes :title, :analyzer => :ik
       end
     end
 
@@ -27,7 +33,7 @@ module VoteSearchConfig
             :fields   => [:title],
             :type     => :phrase,
             :query    => query,
-            :analyzer => :chargram
+            :analyzer => :ik
           }
         },
 
