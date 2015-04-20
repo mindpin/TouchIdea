@@ -13,5 +13,12 @@ FactoryGirl.define do
         end
       end
     end
+    factory :vote_with_10_vote_item, :parent => :vote do
+      before(:create) do |vote|
+        10.times do
+          build(:vote_item, vote: vote)
+        end
+      end
+    end
   end
 end

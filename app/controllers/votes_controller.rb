@@ -17,7 +17,7 @@ class VotesController < ApplicationController
             :id           => vote.id.to_s,
             :title        => vote.title,
             :joiner_count => vote.voted_users_count,
-            :options      => vote.vote_items.map{|vi|vi.title}
+            :options      => Vote.vote_items_rand_order_by_user(vote.id, current_user).map{|vi|vi.title}
           }
         end
         render(json: votes_hash)
@@ -35,7 +35,7 @@ class VotesController < ApplicationController
             :id           => vote.id.to_s,
             :title        => vote.title,
             :joiner_count => vote.voted_users_count,
-            :options      => vote.vote_items.map{|vi|vi.title}
+            :options      => Vote.vote_items_rand_order_by_user(vote.id, current_user).map{|vi|vi.title}
           }
         end
         render(json: votes_hash)
@@ -45,6 +45,7 @@ class VotesController < ApplicationController
 
   def show
     @vote = Vote.find params[:id]
+    @vote_items = Vote.vote_items_rand_order_by_user @vote.id, current_user
   end
 
   def new

@@ -4,6 +4,7 @@ class VoteItem
   field :title, type: String
   field :praised_count, type: Integer, default: 0
   field :is_extra, type: Boolean, default: false
+  field :ord, type: Integer, default: -> { rand(1000) } # 随机生成随机数，用于议题中选项排序，对不同用户，选项随机位置显示
 
   validates_presence_of :title
 

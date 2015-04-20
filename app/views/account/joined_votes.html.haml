@@ -12,7 +12,7 @@
           .data
             .title= vote.title
             .options
-              - vote.vote_items.each do |vote_item|
+              - Vote.vote_items_rand_order_by_user(vote.id, current_user).each do |vote_item|
                 .option=vote_item.title
           .joiner-count
             = vote.voted_users.count
