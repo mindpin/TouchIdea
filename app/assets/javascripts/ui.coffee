@@ -245,6 +245,11 @@ class SearchPage
           @$el.find('.history .word').remove()
           @remove_all_search_history()
 
+    # 增加搜索历史
+    jQuery(document).on 'click', '.page-search .result .topic', ->
+      query = jQuery.trim(that.$input.val())
+      that.add_search_history(query)
+
   get_search_history: ->
     localStorage["search_history"] ||= JSON.stringify([])
     JSON.parse localStorage["search_history"]
@@ -271,8 +276,9 @@ class SearchPage
     #   return h
     # if !query_is_add
     #   search_history.push query
-    search_history.push query
-    localStorage["search_history"] = JSON.stringify(search_history)
+    if -1 == jQuery.inArray(query, search_history)
+      search_history.push query
+      localStorage["search_history"] = JSON.stringify(search_history)
 
   insert_search_histroy_dom: ->
     doms = jQuery.map @get_search_history(), (query)=>
@@ -320,7 +326,6 @@ class SearchPage
           q: query
         success: (res)=>
           @insert_result_dom(res)
-          @add_search_history(query)
           @$result.fadeIn(200)
     else
       @insert_search_histroy_dom()
