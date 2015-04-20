@@ -120,4 +120,20 @@ RSpec.describe Vote, type: :model do
 
     @vote.added_vote_item_by?(@user2).should == false
   end
+
+  # 还是有可能会遇见出错的(当阵列足够大时)，因为两个产生的user_ord一样，但是没有必要去纠结。
+  it "vote_items_rand_order_by_user" do
+    @test_array_count = 5
+    @users = []
+    @test_array_count.times{ @users << create(:user); sleep(1) }
+    @vote = create(:vote_with_10_vote_item, user: @users.first)
+    @array_vote_items = @users.map do |user|
+      Vote.vote_items_rand_order_by_user(@vote.id, user)
+    end
+    @array_vote_items.each_with_index do |vote_items, index|
+      (index+1).upto(@array_vote_items.length-1).each do |i|
+        vote_items.should_not == @array_vote_items[i]
+      end
+    end
+  end
 end
