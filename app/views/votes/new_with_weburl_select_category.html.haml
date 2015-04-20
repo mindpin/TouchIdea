@@ -15,5 +15,5 @@
     .categories
       - InfocardAppCategory.all.each do |category|
         %a.category{:href => new_vote_path(kind: 'weburl', category_id: category.id.to_s)}
-          %i.fa.fa-mobile{:style => 'color:#5BB4DA;'}
+          %img{:src => category.logo}
           %span= category.title

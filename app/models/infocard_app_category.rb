@@ -4,6 +4,7 @@ class InfocardAppCategory
 
   # 类型字段
   field :title,       type: String
+  field :logo,        type: String
 
   validates :title, uniqueness: true, presence: true
 
