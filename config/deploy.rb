@@ -3,7 +3,7 @@ require 'mina/rails'
 require 'mina/git'
 
 set :domain, '106.186.119.248'
-set :deploy_to, '/web/touch-idea'
+set :deploy_to, '/web/touch-idea-pre'
 set :current_path, 'current'
 set :repository, 'git://github.com/mindpin/TouchIdea.git'
 set :branch, 'master'
