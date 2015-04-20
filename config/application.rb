@@ -44,5 +44,6 @@ module TouchIdea
     #config.active_record.raise_in_transactional_callbacks = true
     config.i18n.default_locale = 'zh-CN'.to_sym
     config.autoload_paths += %W(#{config.root}/lib)
+    config.assets.precompile += ['*.png', '*.ttf','*.eot','*.svg','*.woff','*.otf']
   end
 end

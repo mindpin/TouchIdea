@@ -78,3 +78,5 @@ gem "mina",
 gem "elasticsearch-model", :require => "elasticsearch/model"
 gem "elasticsearch-rails", :require => "elasticsearch/rails"
 gem "sidekiq"
+
+gem "non-stupid-digest-assets"
