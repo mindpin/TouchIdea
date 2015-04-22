@@ -33,6 +33,8 @@ RailsAdmin.config do |config|
   end
 
   config.authorize_with do
-    redirect_to main_app.root_path unless warden.user.is_admin?
+    if warden.user.blank? || !warden.user.is_admin?
+      redirect_to main_app.root_path 
+    end
   end
 end
