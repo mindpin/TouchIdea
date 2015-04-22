@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount RailsAdmin::Engine => '/zmkm', as: 'rails_admin'
   resources :notifications
 
   resource :notification_setting

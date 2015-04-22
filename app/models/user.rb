@@ -108,6 +108,14 @@ class User
     messages.create to: to_user, vote: vote
   end
 
+  def is_admin?
+    return true if Rails.env == 'development' || Rails.env == 'test'
+    ENV['ADMIN_USER_IDS'].split(",").each do |id|
+      return true if self.id.to_s == id
+    end
+    false
+  end
+
   protected
   def add_to_vote_users
     Vote.where(:invite_uids.in => [self.uid]).each do |vote|

@@ -80,3 +80,5 @@ gem "elasticsearch-rails", :require => "elasticsearch/rails"
 gem "sidekiq"
 
 gem "non-stupid-digest-assets"
+
+gem "rails_admin"
