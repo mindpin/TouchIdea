@@ -8,5 +8,5 @@ class InfocardAppCategory
 
   validates :title, uniqueness: true, presence: true
 
-  has_many :infocards
+  has_and_belongs_to_many :infocards
 end
