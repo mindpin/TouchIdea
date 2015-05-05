@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     get :hot, on: :collection
     get :done, on: :collection
     resources :vote_items
-    match :lucky, on: :collection, via: [:get, :post]
+    get :lucky, on: :collection
 
     #resources :questions
     get :result, on: :member

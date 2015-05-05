@@ -1,0 +1,16 @@
+- case @infocard.kind
+  - when Infocard::Kind::PRODUCT
+    .infocard
+      .i-logo
+        %img{:src => @infocard.pictures[0]}
+      .data
+        .i-name= @infocard.title
+        .i-price= @infocard.price
+
+  - when Infocard::Kind::APP
+    .infocard
+      .i-logo
+        %img{:src => @infocard.logo}
+      .data
+        .i-name= @infocard.title
+        .i-desc= @infocard.desc

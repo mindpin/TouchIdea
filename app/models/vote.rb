@@ -72,6 +72,11 @@ class Vote
     vote.vote_items.sort{|x,y| (x.ord % user_ord) <=> (y.ord % user_ord)}
   end
 
+  # 判断是否被指定 user 投票过
+  def has_voted_by?(user)
+    voted_users.include? user
+  end
+
   protected
   before_create :fill_vote_items_user
   def fill_vote_items_user
