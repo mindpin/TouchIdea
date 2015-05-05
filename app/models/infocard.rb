@@ -25,13 +25,14 @@ class Infocard
   field :desc,         type: String  # 介绍
 
   # 只有 APP 类型的 infocard 才有这个关联
-  belongs_to :infocard_app_category
+  has_and_belongs_to_many :infocard_app_categories
 
   # 向 urlinfo-service http api 发送请求，并把获取的信息保存 infocard
   def self.parse(url)
+    url = URI.encode(url,"?&`")
     urlinfo_url = "http://urlinfo.4ye.me/api/fetch_infocard?url=#{url}"
 
-    uri = URI.parse(URI.encode(urlinfo_url))
+    uri = URI.parse(urlinfo_url)
     res = Net::HTTP.get_response(uri)
     json = JSON.parse(res.body)
     if json["status"] == "PARSED"
