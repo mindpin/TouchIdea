@@ -1,0 +1,12 @@
+.topic-options
+  - @vote_items.each do |vote_item|
+    :ruby
+      klass = 'option'
+      klass = 'option active' if vote_item.praised_by?(@user)
+
+    %a{:href => 'javascript:;', :class => klass, :data => {:id => vote_item.id}}
+      .text=vote_item.title
+      .icon.i0
+        %i.fa.fa-check
+      .icon.i1
+        %span +1

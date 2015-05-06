@@ -5,20 +5,13 @@
         %span 最新
       = link_to hot_votes_path, class: action_name == 'hot' ? 'item hotest active' : 'item hotest' do
         %span 最热
-    = link_to lucky_votes_path, method: :post, class: 'lucky' do
-      %i.fa.fa-smile-o
 
-  .topics.list
-    - @votes.each do |vote|
-      = link_to vote, class: 'topic' do
-        .data
-          .title=vote.title
-          .options
-            - Vote.vote_items_rand_order_by_user(vote.id, current_user).each do |vote_item|
-              .option=vote_item.title
-        .joiner-count
-          = vote.voted_users.count
+    %a.lucky{:href => url_for([:lucky, :votes])}
+      .dice
+        .p
 
-    .loading{:style => "display:none;"}
-      %i.fa.fa-circle-o-notch.fa-spin 
-      %span 读取中…
+  :ruby
+    url = '/votes'
+    url = '/votes/hot' if action_name == 'hot'
+
+  = render_cell :topics, :list, @votes, current_user, url

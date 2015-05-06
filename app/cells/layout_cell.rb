@@ -10,4 +10,9 @@ class LayoutCell < Cell::Rails
     @flash = flash
     render
   end
+
+  def list_loading(loading_url)
+    @loading_url = loading_url
+    render
+  end
 end

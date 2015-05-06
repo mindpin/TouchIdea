@@ -2,512 +2,102 @@
 # 事件加载参考
 # https://github.com/rails/turbolinks/#no-jquery-or-any-other-library
 
-# 事件检查
-jQuery(document).on 'ready page:load', ->
-  console.debug 'loaded'
+# 投票页面
+# =========================
 
-# 点亮 footer navbar
-jQuery(document).on 'ready page:load', ->
-  nav = jQuery('[data-nav]').data('nav')
-  jQuery(".layout-footer a.item.#{nav}").addClass('active')
+# 点击投票选项
+jQuery(document)
+  .on 'click', '.topic-options .option', ->
+    jQuery(this).toggleClass 'active'
+    refresh_voted_options()
 
-# 填充标题
-jQuery(document).on 'ready page:load', ->
-  title = jQuery('[data-title]').data('title')
-  jQuery(".layout-header .page").text title
+# 点击“投完了”
+jQuery(document)
+  .on 'click', '.vote-done a.done:not(.disabled)', ->
+    $topic = jQuery(this).closest('.page-topic')
+    vote_id = $topic.data('id')
+    vote_item_ids = []
+    $topic.find('a.option.active').each ->
+      vote_item_ids.push jQuery(this).data('id')
 
-# home 页页签
-jQuery(document).on 'click', '.page-landing .filter a.item', ->
-  $item = jQuery(this)
-  $item.closest('.filter').find('a.item').removeClass('active')
-  $item.addClass('active')
+    jQuery.ajax
+      url: "/votes/#{vote_id}/praise"
+      type: 'POST'
+      data:
+        vote_item_ids: vote_item_ids
+      success: ->
+        Turbolinks.visit('/votes/done')
+      error: ->
+        alert '系统出错啦'
 
-# back 按钮链接
-jQuery(document).on 'ready page:load', ->
-  back_url = jQuery('[data-back]').data('back')
-  jQuery(".layout-header .back").attr 'href', back_url
-
-# ----------------------------
 
 # 导航上的“新增”按钮
+# =========================
+
+# 点击新增
 jQuery(document).on 'click', '.footer-nav .item.new', ->
   jQuery('.footer-nav').addClass('new-topic-type-select')
   jQuery('.float-new-type-select').addClass('show')
 
+# 点击取消
 jQuery(document).on 'click', '.footer-nav a.cancel-new', ->
   jQuery('.footer-nav').removeClass('new-topic-type-select')
   jQuery('.float-new-type-select').removeClass('show')
 
-# ---------------------------------
 
-is_field_empty = ($field)->
-  return jQuery.trim($field.val()).length is 0
+# 无限滚动分页
+# =======================
 
-# 表单页的各种事件
-class TopicForm
+class ScrollingList
   constructor: (@$el)->
-    return if @$el.length is 0
-    @current_step = 1
-
-    @$url_textarea = @$el.find('textarea.url')
-    @$a_loadurl = @$el.find('a.loadurl')
-    @$infocard = @$el.find('.infocard')
     @$loading = @$el.find('.loading')
-    @$loadsuccess = @$el.find('.loaded-success')
-
-    @$tdesc_textarea = @$el.find('textarea.tdesc')
-
     @bind_events()
+    @scroll_event()
 
   bind_events: ->
-    # 上一步，下一步，完成
-    @$el.on 'click', 'a.next:not(.disabled)', => @to_next()
-    @$el.on 'click', 'a.prev:not(.disabled)', => @to_prev()
-    @$el.on 'click', 'a.done.disabled', (evt)->
-      evt.preventDefault()
+    @$el.on 'scroll', (evt)=> @scroll_event()
 
-    that = this
+  scroll_event: ->
+    # 计算底部区域是否进入屏幕
+    bottom1 = @$loading.offset().top + @$loading.outerHeight(true)
+    bottom2 = @$el.offset().top + @$el.outerHeight()
+    # console.debug bottom1, bottom2
+    # console.debug @$loading.offset().top, @$el.offset().top
+    # console.debug @$loading.outerHeight(true), @$el.outerHeight()
+    delta = bottom1 - bottom2
+    # console.debug delta
+    if delta < 70
+      @load_next_page()
 
-    # 增加选项
-    @$el.on 'click', 'a.additem', =>
-      $ipt = @$el.find('.item-inputs .ipt').last().clone()
-      $ipt.find('input').val('')
-      $ipt.hide().fadeIn(200)
-      @$el.find('.item-inputs').append $ipt
-      @refresh_item_ipts()
+  load_next_page: ->
+    return if @$loading.hasClass 'end'
+    return if @$loading.hasClass 'requesting'
 
-    # 移除选项
-    @$el.on 'click', '.ipt a.delete:not(.disabled)', ->
-      jQuery(this).closest('.ipt').remove()
-      that.refresh_item_ipts()
+    @$loading.addClass 'requesting'
+    url = @$loading.data('url')
+    page = @$loading.data('page') or 1
 
-    # 当输入选项时进行校验
-    @$el.find('.item-inputs').on 'input', =>
-      @refresh_item_ipts()
-
-    # ----------
-
-    # 输入网址后才点亮读取按钮
-    @$url_textarea.on 'input' , =>
-      if is_field_empty @$url_textarea
-        @$a_loadurl.addClass('disabled')
-      else
-        @$a_loadurl.removeClass('disabled')
-
-    # 读取网址
-    @$a_loadurl.on 'click', =>
-      return if @$a_loadurl.hasClass('disabled')
-      @loadurl()
-
-    # 如果成功读取了网址信息, 就把这些信息放到下一步表单中
-    @$el.on 'click', 'a.next.urldone:not(.disabled)', =>
-      @$el.find('.part.tdesc')
-        .find('.infocard').remove().end()
-        .prepend @$infocard.clone()
-
-    # -----------
-
-    # 议题描述校验
-    @$tdesc_textarea.on 'input' , =>
-      $a_next = @$tdesc_textarea.closest('.part').find('a.next')
-      if is_field_empty @$tdesc_textarea
-        $a_next.addClass('disabled')
-      else
-        $a_next.removeClass('disabled')
-
-
-  refresh_item_ipts: ->
-    count = 0
-    @$el.find('.item-inputs input').each (idx, i)->
-      jQuery(this).attr('placeholder', "选项 #{idx + 1}")
-      if jQuery.trim(jQuery(this).val()).length > 0
-        count += 1
-      if count >= 2
-        jQuery(this).closest('.part').find('a.done').removeClass('disabled')
-      else
-        jQuery(this).closest('.part').find('a.done').addClass('disabled')
-
-    if @$el.find('.item-inputs input').length < 3
-      @$el.find('.item-inputs .ipt a.delete').addClass('disabled')
-    else
-      @$el.find('.item-inputs .ipt a.delete').removeClass('disabled')
-
-  loadurl: ->
-    ## 读取 infocard 信息 开始
-    url = jQuery.trim(@$url_textarea.val())
+    console.debug 'load next page'
     jQuery.ajax
-      url: "/infocards"
-      method: "POST"
-      data:
-        url: url
+      url: url
+      type: 'GET'
+      data: 
+        page: page + 1
       success: (res)=>
-        @$infocard.find(".product-logo img").attr("src", res.pictures[0])
-        @$infocard.find(".data .product-name").text(res.title)
-        @$infocard.find(".data .product-price").text(res.price)
-        jQuery("<input name='vote[infocard_id]' value='#{res.id}' type='hidden'/>").appendTo(@$infocard)
+        that = @
+        $new_items = jQuery(res).find('.scrolling-list .list-item')
 
-    ## 读取 infocard 信息 结束
-    @$a_loadurl.hide()
-    @$loading.show()
-    @$el.find('a.next.skip').addClass('disabled')
-    @$loading.find('.p')
-      .css
-        'width': 0
-      .animate
-        'width': '100%'
-      , 3000, =>
-        @$infocard.fadeIn(200)
-        @$loading.hide()
-        @$loadsuccess.show()
-        @$el.find('a.next.skip').hide()
-        @$el.find('a.next.urldone').show()
-        @$url_textarea.attr('disabled', true)
+        @$loading.removeClass 'requesting'
 
-  to_next: ->
-    to_step = @current_step + 1
-    $current_link = @$el.find(".steps .step[data-step=#{@current_step}]")
-    $to_link = @$el.find(".steps .step[data-step=#{to_step}]")
-
-    if $to_link.length > 0
-      $current_part = @$el.find(".part[data-step=#{@current_step}]")
-      $to_part = @$el.find(".part[data-step=#{to_step}]")
-
-      $current_part.fadeOut(200)
-      $to_part.fadeIn(200)
-      $current_link.removeClass('active').addClass('done')
-      $to_link.addClass('active')
-
-      @current_step = to_step
-
-  to_prev: ->
-    to_step = @current_step - 1
-    $current_link = @$el.find(".steps .step[data-step=#{@current_step}]")
-    $to_link = @$el.find(".steps .step[data-step=#{to_step}]")
-
-    if $to_link.length > 0
-      $current_part = @$el.find(".part[data-step=#{@current_step}]")
-      $to_part = @$el.find(".part[data-step=#{to_step}]")
-
-      $current_part.fadeOut(200)
-      $to_part.fadeIn(200)
-      $current_link.removeClass('active')
-      $to_link.addClass('active').removeClass('done')
-
-      @current_step = to_step
-
+        if $new_items.length
+          $new_items.each ->
+            $item = jQuery(this)
+            that.$loading.before $item
+          @$loading.data('page', page + 1)
+          @scroll_event()
+        else
+          @$loading.addClass 'end'
 
 jQuery(document).on 'ready page:load', ->
-  if jQuery('.page-new-topic').length > 0
-    new TopicForm jQuery('.page-new-topic')
-
-class SearchPage
-  constructor: (@$el)->
-    @$history = @$el.find('.history')
-    @$result = @$el.find('.result')
-    @$input = @$el.find('input[name=q]')
-    @$topbar = @$el.find('.topbar')
-
-    @bind_events()
-    @insert_search_histroy_dom()
-
-  bind_events: ->
-    that = this
-
-    # 删除搜索历史项
-    @$el.on 'click', '.history .word a.delete', ->
-      jQuery(this).closest('.word').fadeOut 200, ->
-        query = jQuery(this).find('.t').text()
-        that.remove_search_history(query)
-        jQuery(this).remove()
-
-    # 点选搜索历史项
-    @$el.on 'click', '.history .word a.s', ->
-      q = jQuery(this).find('.t').text()
-      that.$input.val q
-      that.search()
-
-    # 取消搜索状态
-    @$el.on 'click', '.topbar a.cancel', ->
-      that.cancel()
-
-    # 输入搜索词
-    @$input.on 'input', =>
-      input_cache = @$input.val()
-      setTimeout =>
-        if @$input.val() == input_cache
-          @search()
-      , 500
-
-    # 清除搜索历史
-    @$el.on 'click', '.history a.clear', =>
-      if confirm '确定要清除吗？'
-        @$el.find('.history .word').fadeOut 200, =>
-          @$el.find('.history .word').remove()
-          @remove_all_search_history()
-
-    # 增加搜索历史
-    jQuery(document).on 'click', '.page-search .result .topic', ->
-      query = jQuery.trim(that.$input.val())
-      that.add_search_history(query)
-
-  get_search_history: ->
-    localStorage["search_history"] ||= JSON.stringify([])
-    JSON.parse localStorage["search_history"]
-
-  remove_all_search_history: (query)->
-    search_history = @get_search_history()
-    localStorage["search_history"] = JSON.stringify([])    
-
-  remove_search_history: (query)->
-    search_history = @get_search_history()
-    search_history.splice(jQuery.inArray(query,search_history),1);
-    localStorage["search_history"] = JSON.stringify(search_history)
-
-  add_search_history: (query)->
-    search_history = @get_search_history()
-    # query_is_add = false
-    # search_history = jQuery.map search_history, (h)=>
-    #   if h.indexOf(query) == 0
-    #     query_is_add = true
-    #     return h
-    #   else if query.indexOf(h) == 0
-    #     query_is_add = true
-    #     return query
-    #   return h
-    # if !query_is_add
-    #   search_history.push query
-    if -1 == jQuery.inArray(query, search_history)
-      search_history.push query
-      localStorage["search_history"] = JSON.stringify(search_history)
-
-  insert_search_histroy_dom: ->
-    doms = jQuery.map @get_search_history(), (query)=>
-      "
-        <div class='word'>
-          <a class='s' href='javascript:;'>
-            <i class='fa fa-clock-o'></i>
-            <div class='t'>#{query}</div>
-          </a>
-          <a class='delete' href='javascript:;'>
-            <i class='fa fa-times'></i>
-          </a>
-        </div>
-      "
-    @$history.find(".word").remove()
-    @$history.find('.clear').before(doms.join(""))
-
-  insert_result_dom: (votes)->
-    doms = jQuery.map votes, (vote)=>
-      "
-        <a class='topic' href='/votes/#{vote.id}'>
-          <div class='data'>
-            <div class='title'>#{vote.title}</div>
-            <div class='stat'>
-              <span>#{vote.vote_items_count} 个选项</span>
-              <span>#{vote.voted_users_count} 人参与</span>
-            </div>
-          </div>
-          <div class='joiner-count'>#{vote.voted_users_count}</div>
-        </a>
-      "
-    @$result.find('.topic').remove()
-    @$result.append(doms.join(""))
-
-
-  search: ->
-    query = jQuery.trim(@$input.val())
-    @$topbar.addClass 'filled'
-    if not is_field_empty @$input
-      @$history.hide()
-      jQuery.ajax
-        url: '/votes/search.json'
-        method: 'GET'
-        data:
-          q: query
-        success: (res)=>
-          @insert_result_dom(res)
-          @$result.fadeIn(200)
-    else
-      @insert_search_histroy_dom()
-      @$history.fadeIn 200
-      @$result.hide()
-
-  cancel: ->
-    @$history.fadeIn 200
-    @$result.hide()
-    @$input.val ''
-    @$topbar.removeClass 'filled'
-
-
-jQuery(document).on 'ready page:load', ->
-  if jQuery('.page-search').length > 0
-    new SearchPage jQuery('.page-search')
-
-# 登出
-jQuery(document).on 'click', '.page-me a.quit', ->
-  if confirm('确定要退出吗？')
-    jQuery.ajax
-      url: '/users/sign_out'
-      method: 'DELETE'
-
-# 点击设置项
-jQuery(document).on 'click', '.page-me a.toggler', ->
-  jQuery(this).toggleClass('on')
-  jQuery(this).toggleClass('off')
-  if jQuery(this).hasClass('on')
-    jQuery.ajax
-      method: 'PUT'
-      url: '/notification_setting'
-      data:
-        key: jQuery(this).data('key')
-        value: true
-  if jQuery(this).hasClass('off')
-    jQuery.ajax
-      method: 'PUT'
-      url: '/notification_setting'
-      data:
-        key: jQuery(this).data('key')
-        value: false
-
-# 输入反馈
-jQuery(document).on 'input', 'textarea.feedback-ipt', ->
-  if is_field_empty jQuery(this)
-    jQuery(this).next('a.btn').addClass('disabled')
-  else
-    jQuery(this).next('a.btn').removeClass('disabled')
-
-# 提交反馈
-jQuery(document).on 'click', 'a.submit-feedback:not(.disabled)', ->
-  jQuery('.feedback .form').hide()
-  jQuery('.feedback .success').fadeIn()
-  jQuery.ajax
-    url: '/feedbacks'
-    method: 'POST'
-    data:
-      content: jQuery.trim(jQuery('textarea.feedback-ipt').val())
-
-# ------------
-
-# 在选项详情界面增加选项
-jQuery(document).on 'click', '.page-topic .topic-new-option a.new:not(.disabled)', ->
-  console.debug jQuery('.new-option-overlay')
-  jQuery('.new-option-overlay').addClass('show')
-
-jQuery(document).on 'click', '.new-option-overlay a.cancel', ->
-  jQuery('.new-option-overlay').removeClass('show')
-
-jQuery(document).on 'click', '.new-option-overlay a.ok:not(.disabled)', ->
-  $('#new_vote_item').submit()
-  # 移至vote_items/create.js.coffee
-
-jQuery(document).on 'input', '.new-option-overlay textarea', ->
-  if is_field_empty jQuery('.new-option-overlay textarea')
-    jQuery('.new-option-overlay a.ok').addClass('disabled')
-  else
-    jQuery('.new-option-overlay a.ok').removeClass('disabled')
-
-# 分享
-jQuery(document).on 'click', '.page-topic a.share', ->
-  jQuery('.share-overlay').addClass('show')
-
-jQuery(document).on 'click', '.share-overlay a.cancel', ->
-  jQuery('.share-overlay').removeClass('show')
-
-# 投票结束确认
-jQuery(document).on 'click', '.vote-done a.done:not(.disabled)', ->
-  vote_id = $('.page-topic').data('id')
-  vote_item_ids = []
-  # todo 提交投票
-  $('a.option.active').each ->
-    vote_item_ids.push $(this).data('vote_item_id')
-  $.post "/votes/#{vote_id}/praise", {vote_item_ids: vote_item_ids}, (data)->
-    if data == true
-      Turbolinks.visit('/votes/done')
-    else
-      alert('投票出错')
-
-# ----------
-
-@refresh_voted_options = ->
-  if jQuery('.topic-options .option.active').length > 0
-    jQuery('.vote-done a.done').removeClass('disabled')
-  else
-    jQuery('.vote-done a.done').addClass('disabled')
-
-# 投票选项点击
-jQuery(document).on 'click', '.topic-options .option', ->
-  jQuery(this).toggleClass 'active'
-  refresh_voted_options()
-
-
-# 完成投票，加载下一个
-jQuery(document).on 'ready page:load', ->
-  if jQuery('.page-vote-done').length
-    setTimeout ->
-      Turbolinks.visit('/votes/lucky')
-    , 1000
-
-
-# --------------
-
-# 下拉加载更多
-# .topics.list
-class VoteListMore
-  constructor: (@$el)->
-    @$loading = @$el.find('.loading')
-    @$is_loading_bool = false
-    @$current_page = 1
-    @bind_events()
-
-  generate_vote_dom: (vote_json)->
-    opts = jQuery.map vote_json.options, (opt)->
-      "<div class='option'>#{opt}</div>"
-    opts_str = opts.join("")
-    "
-      <a class='topic' href='/votes/#{vote_json.id}'>
-        <div class='data'>
-          <div class='title'>#{vote_json.title}</div>
-          <div class='options'>
-            #{opts_str}
-          </div>
-        </div>
-        <div class='joiner-count'>
-          #{vote_json.joiner_count}
-        </div>
-      </a>
-    "
-
-  is_loading: ->
-    @$is_loading_bool
-
-  start_loading: ->
-    @$is_loading_bool = true
-    @$loading.show()
-
-  end_loading: ->
-    @$is_loading_bool = false
-    @$loading.hide()
-
-  bind_events: ->
-    @$el.scroll ()=>
-      if @$el.get(0).scrollHeight-5 < @$el.get(0).clientHeight + @$el.get(0).scrollTop
-        if !@is_loading()
-          @start_loading()
-          @$current_page+=1
-          jQuery.ajax
-            url: "/votes.json"
-            method: "GET"
-            data:
-              page: @$current_page
-            success: (res)=>
-              vote_doms = jQuery.map res, (vote)=>
-                @generate_vote_dom(vote)
-              doms = vote_doms.join("")
-              @$loading.before(doms)
-              @end_loading()
-
-
-
-jQuery(document).on 'ready page:load', ->
-  if jQuery('.page-landing .topics.list').length > 0
-    new VoteListMore jQuery('.page-landing .topics.list')
+  if jQuery('.scrolling-list').length > 0
+    new ScrollingList jQuery('.scrolling-list')
