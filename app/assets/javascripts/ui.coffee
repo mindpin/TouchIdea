@@ -2,14 +2,30 @@
 # 事件加载参考
 # https://github.com/rails/turbolinks/#no-jquery-or-any-other-library
 
+# jquery 扩展
+jQuery.fn.extend
+  is_val_empty: ->
+    this.trim_val().length is 0
+
+  trim_val: ->
+    jQuery.trim this.val()
+
 # 投票页面
 # =========================
 
+@refresh_voted_options = ->
+  if jQuery('.topic-options .option.active').length > 0
+    jQuery('.vote-done a.done').removeClass('disabled')
+  else
+    jQuery('.vote-done a.done').addClass('disabled')
+
 # 点击投票选项
-jQuery(document)
-  .on 'click', '.topic-options .option', ->
-    jQuery(this).toggleClass 'active'
-    refresh_voted_options()
+jQuery(document).on 'click', '.topic-options .option', ->
+  if jQuery(this).hasClass('tiny') and not jQuery(this).hasClass('active')
+    jQuery('.topic-options .option.tiny').removeClass('active')
+
+  jQuery(this).toggleClass 'active'
+  refresh_voted_options()
 
 # 点击“投完了”
 jQuery(document)

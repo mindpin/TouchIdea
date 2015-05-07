@@ -410,20 +410,20 @@ body.auth {
     position: relative;
     text-align: center;
     $w: 66px;
-    a {
+    a.new {
       @include circle($w);
       color: white;
       font-size: $w * 0.4;
       position: absolute;
       top:0;left:50%;
       margin-left:-$w/2;
-      &.text {
+      &.common {
         background-color: #35B87F;
       }
-      &.comment {
+      &.shopping {
         background-color: #5BB4DA;
       }
-      &.weburl {
+      &.quote {
         background-color: #66CCCC;
       }
     }
@@ -1072,12 +1072,55 @@ body.auth {
         margin-right: -$gpd;
         margin-bottom: -$gpd;
       }
+      .loaded-failure {
+        margin-top: $gpd;
+        margin-left: -$gpd;
+        margin-right: -$gpd;
+        margin-bottom: -$gpd;
+        padding: $gpd;
+        color:$area-danger;
+        background-color: lighten($area-danger, 40%);
+        border-top:solid 1px rgba(black, 0.05);
+      }
 
       &.tdesc .infocard {
         margin-top: -15px;
         margin-bottom: 15px;
         border-top: 0 none;
         border-bottom: dashed 1px #ddd;
+      }
+
+      &.titems .fields.default-items {
+        margin-bottom: $gpd;
+        @include clearfix;
+        .items {
+          margin:0 0-$gpd;
+        }
+        .items .item {
+          box-sizing: border-box;
+          width: percentage(1/3);
+          float: left;
+          text-align: center;
+          padding: 0;
+          @include height(60px);
+          border-top: dashed 1px #ddd;
+          border-bottom: dashed 1px #ddd;
+          background-color: rgba(white, 0.7);
+          position: relative;
+          i {
+            font-size: 32px;
+            opacity: 0.4;
+            @include square(40px);
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            margin-left: -20px;
+          }
+          &:nth-child(2) {
+            border-left:dashed 1px #ddd;
+            border-right:dashed 1px #ddd;
+          }
+        }
       }
     }
   }

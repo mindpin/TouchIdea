@@ -6,7 +6,7 @@
       .data
         .title= vote.title
         - if vote.infocard
-          = render_cell :topics, :infocard, vote
+          = render_cell :topics, :infocard, vote.infocard
         - if vote.user == @user
           .user-created
             %span 这是我创建的议题
@@ -15,6 +15,7 @@
             %span 我参与过这个议题
         .options
           - Vote.vote_items_rand_order_by_user(vote.id, @user).each do |vote_item|
-            .option= vote_item.title
+            - if not vote_item.title.index('SYSTEM:')
+              .option= vote_item.title
 
   = render_cell :layout, :list_loading, @loading_url

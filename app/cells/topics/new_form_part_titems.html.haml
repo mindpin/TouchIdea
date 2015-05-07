@@ -1,0 +1,47 @@
+- style = @step_num > 1 ? 'display:none;' : ''
+.part.titems{style: style, data: {step: @step_num}}
+  .fields.default-items{style: 'display:none;'}
+    %label 购物分享会自动添加三个默认选项
+    %input{name: 'vote[vote_items_attributes][][title]', value: 'SYSTEM:GOOD', disabled: true, type: :hidden}
+    %input{name: 'vote[vote_items_attributes][][title]', value: 'SYSTEM:SOSO', disabled: true, type: :hidden}
+    %input{name: 'vote[vote_items_attributes][][title]', value: 'SYSTEM:BAD', disabled: true, type: :hidden}
+    .items
+      .item
+        %i.fa.fa-thumbs-up
+      .item
+        %i.fa.fa-meh-o
+      .item
+        %i.fa.fa-thumbs-down
+
+  .fields.add-items
+    %label.add-item 请输入预置选项（至少两个）
+    .sample{style: 'display:none;'}
+      .ipt
+        %input.form-control{:placeholder => '选项 1', name: 'vote[vote_items_attributes][][title]', disabled: true}
+        %a.delete.disabled{:href => 'javascript:;'}
+          %i.fa.fa-times
+
+    .item-inputs{data: {limit: 2}}
+      .ipt
+        %input.form-control{:placeholder => '选项 1', name: 'vote[vote_items_attributes][][title]'}
+        %a.delete.disabled{:href => 'javascript:;'}
+          %i.fa.fa-times
+      .ipt
+        %input.form-control{:placeholder => '选项 2', name: 'vote[vote_items_attributes][][title]'}
+        %a.delete.disabled{:href => 'javascript:;'}
+          %i.fa.fa-times
+  .submits
+    - if @step_num > 1
+      %a.prev{:href => 'javascript:;'}
+        %i.fa.fa-arrow-left
+        %span 上一步
+
+    %a.additem{:href => 'javascript:;'}
+      %i.fa.fa-plus
+    .additem-text
+      %i.fa.fa-arrow-up
+      %span 按这里增加选项
+      
+    %a.done.disabled{:href => 'javascript:;'}
+      %span 完成
+      %i.fa.fa-check

@@ -9,7 +9,7 @@
   .so
     .topic-header
       %h2.title= @vote.title
-      = render_cell :topics, :infocard, @vote
+      = render_cell :topics, :infocard, @vote.infocard
 
     = render_cell :topics, :topic_options, @vote_items, current_user
 

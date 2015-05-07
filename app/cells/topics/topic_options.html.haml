@@ -1,12 +1,43 @@
-.topic-options
-  - @vote_items.each do |vote_item|
-    :ruby
-      klass = 'option'
-      klass = 'option active' if vote_item.praised_by?(@user)
+:ruby
+  system_items = @vote_items.select {|vi|
+    vi.title.index('SYSTEM:')
+  }
 
-    %a{:href => 'javascript:;', :class => klass, :data => {:id => vote_item.id}}
-      .text=vote_item.title
-      .icon.i0
-        %i.fa.fa-check
-      .icon.i1
-        %span +1
+  good_si = system_items.select {|si| si.title == 'SYSTEM:GOOD'}.first
+  soso_si = system_items.select {|si| si.title == 'SYSTEM:SOSO'}.first
+  bad_si = system_items.select {|si| si.title == 'SYSTEM:BAD'}.first
+
+- if good_si and soso_si and bad_si
+  .topic-options.system
+    %a.option.tiny{:href => 'javascript:;', data: {id: good_si.id}}
+      %i.fa.fa-thumbs-up
+    %a.option.tiny{:href => 'javascript:;', data: {id: soso_si.id}}
+      %i.fa.fa-meh-o
+    %a.option.tiny{:href => 'javascript:;', data: {id: bad_si.id}}
+      %i.fa.fa-thumbs-down
+
+.sample{style: 'display:none;'}
+  %a.option{href: 'javascript:;'}
+    .text
+    .icon.i0
+      %i.fa.fa-check
+    .icon.i1
+      %span +1
+
+:ruby
+  style = ''
+  style = 'margin-top:0;' if @vote_items.length == system_items.length
+
+.topic-options.normal{style: style}
+  - @vote_items.each do |vote_item|
+    - if not vote_item.title.index('SYSTEM:')
+      :ruby
+        klass = 'option'
+        klass = 'option active' if vote_item.praised_by?(@user)
+
+      %a{:href => 'javascript:;', :class => klass, :data => {:id => vote_item.id}}
+        .text=vote_item.title
+        .icon.i0
+          %i.fa.fa-check
+        .icon.i1
+          %span +1

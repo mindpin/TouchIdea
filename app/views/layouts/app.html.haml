@@ -34,14 +34,14 @@
       .tips 请选择要创建的议题类型
       .items
         .item
-          = link_to new_vote_path(kind: 'text'), class: 'text' do
+          %a.new.common{href: new_common_votes_path}
             %i.fa.fa-edit
           %span.t 普通议题
         .item
-          = link_to new_vote_path(kind: 'comment'), class: 'comment' do
+          %a.new.shopping{href: new_shopping_votes_path}
             %i.fa.fa-rocket
-          %span.t 网址分享
+          %span.t 购物分享
         .item
-          = link_to new_vote_path(kind: 'weburl'), class: 'weburl' do
+          %a.new.quote{href: new_quote_votes_path}
             %i.fa.fa-star
-          %span.t 分类点评
+          %span.t 引用点评

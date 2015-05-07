@@ -15,6 +15,12 @@ Rails.application.routes.draw do
     #resources :questions
     get :result, on: :member
     match :search, on: :collection, via: [:get, :post]
+
+    # 三种不同类型的新建表单
+    # 普通议题，购物分享，引用点评
+    get :new_common,   on: :collection
+    get :new_shopping, on: :collection
+    get :new_quote,  on: :collection
   end
   devise_for :users, :controllers => { omniauth_callbacks: 'omniauth_callbacks' }
   root 'home#index'
@@ -27,5 +33,8 @@ Rails.application.routes.draw do
   get '/account/about'     => 'account#about'
   get '/account/info'      => 'account#info'
   resources :feedbacks
-  resources :infocards
+
+  resources :infocards do
+    get :parse_url, on: :collection
+  end
 end

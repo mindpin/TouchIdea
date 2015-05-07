@@ -1,0 +1,6 @@
+.page-new-topic
+  = render_cell :topics, :new_form_topbar
+
+  = form_for @vote, html: {class: 'form'} do |f|
+    = render_cell :topics, :new_form_part_tdesc, step_num: 1
+    = render_cell :topics, :new_form_part_titems, step_num: 2

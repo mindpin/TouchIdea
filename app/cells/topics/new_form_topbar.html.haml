@@ -1,0 +1,10 @@
+.topbar
+  = link_to votes_path, class: 'back' do
+    %i.fa.fa-chevron-left
+  .steps
+    - @step_count.times do |i|
+      - klass = i == 0 ? 'active' : ''
+      .step{class: klass, data: {step: i + 1}}
+        %span
+          .no= i + 1
+          %i.fa.fa-check

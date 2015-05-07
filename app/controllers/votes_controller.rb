@@ -21,30 +21,47 @@ class VotesController < ApplicationController
     @vote_items = Vote.vote_items_rand_order_by_user @vote.id, current_user
   end
 
-  def new
+  # !!R
+  # def new
+  #   @vote = current_user.votes.new
+  #   case params[:kind]
+  #   when 'text'
+  #     respond_with(@vote)
+  #   when 'comment'
+  #     render :new_with_comment
+  #   when 'weburl'
+  #     _new_with_weburl
+  #   end
+  # end
+
+  # def _new_with_weburl
+  #   return render :new_with_weburl_select_category if params[:category_id].blank?
+
+  #   if params[:infocard_id].blank?
+  #     @category = InfocardAppCategory.find(params[:category_id])
+  #     return render :new_with_weburl_select_infocard
+  #   end
+
+  #   @category = InfocardAppCategory.find(params[:category_id])
+  #   @infocard = Infocard.find(params[:infocard_id])
+  #   render :new_with_weburl_by_infocard
+  # end
+
+  # 创建普通议题
+  def new_common
     @vote = current_user.votes.new
-    case params[:kind]
-    when 'text'
-      respond_with(@vote)
-    when 'comment'
-      render :new_with_comment
-    when 'weburl'
-      _new_with_weburl
-    end
   end
 
-  def _new_with_weburl
-    return render :new_with_weburl_select_category if params[:category_id].blank?
-
-    if params[:infocard_id].blank?
-      @category = InfocardAppCategory.find(params[:category_id])
-      return render :new_with_weburl_select_infocard
-    end
-
-    @category = InfocardAppCategory.find(params[:category_id])
-    @infocard = Infocard.find(params[:infocard_id])
-    render :new_with_weburl_by_infocard
+  # 创建购物点评
+  def new_shopping
+    @vote = current_user.votes.new
   end
+
+  # 创建引用分享
+  def new_quote
+    @vote = current_user.votes.new
+  end
+
 
   def created_success
     @vote = current_user.votes.find params[:id]
@@ -75,11 +92,6 @@ class VotesController < ApplicationController
       respond_with(@vote)
     end
   end
-
-  #def destroy
-    #@vote.destroy
-    #respond_with(@vote)
-  #end
 
   def result
     @vote = Vote.find params[:id]
@@ -153,6 +165,8 @@ class VotesController < ApplicationController
   end
 
   def choose_layout
-    %w[show done new created_success].include?(action_name) ? 'detail' : 'app'
+    return 'detail' if %w(new_common new_shoping new_quote).include? action_name
+    return 'detail' if %w(show done).include? action_name
+    return 'app'
   end
 end

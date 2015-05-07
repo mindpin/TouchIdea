@@ -1,0 +1,14 @@
+- style = @step_num > 1 ? 'display:none;' : ''
+.part.tdesc{style: style, data: {step: @step_num}}
+  .fields
+    %label 请输入议题描述
+    %textarea.form-control.tdesc{:placeholder => '有什么事情想知道大家的看法呢？', :rows => 5, name: 'vote[title]'}
+  .submits
+    - if @step_num > 1
+      %a.prev{:href => 'javascript:;'}
+        %i.fa.fa-arrow-left
+        %span 上一步
+        
+    %a.next.disabled{:href => 'javascript:;'}
+      %span 下一步
+      %i.fa.fa-arrow-right
