@@ -29,7 +29,11 @@ class Infocard
 
   # 向 urlinfo-service http api 发送请求，并把获取的信息保存 infocard
   def self.parse(url)
-    url = URI.encode(url,"?&`")
+    # 编码 ^ ` 等字符
+    url = URI.encode(url)
+    # 编码 ? & 这两个字符
+    url = URI.encode(url,"&?")
+    # 经过两次编码后的 url 可以安全的作为 query 参数了
     urlinfo_url = "http://urlinfo.4ye.me/api/fetch_infocard?url=#{url}"
 
     uri = URI.parse(urlinfo_url)
