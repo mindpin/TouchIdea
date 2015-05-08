@@ -9,8 +9,12 @@
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
 
   %body
-    .layout-content
-      .container-full
-        .row
-          .content-inner.col-pad-12
-            = yield
+    .phone-wrapper
+      .phone-top
+      .phone-menubar
+      .phone-screen
+        = yield
+      .phone-bottom
+      .qr-code
+        .s 扫一扫，用手机访问！
+        .qr

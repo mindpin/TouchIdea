@@ -9,39 +9,47 @@
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
 
   %body
-    .layout-content
-      = yield
+    .phone-wrapper
+      .phone-top
+      .phone-menubar
+      .phone-screen
+        .layout-content
+          = yield
 
-    .layout-footer
-      .footer-nav
-        = link_to votes_path, class: 'item home' do
-          %i.fa.fa-list
-          %span.text 列表
-        = link_to search_votes_path, class: 'item search' do
-          %i.fa.fa-search
-          %span.text 搜索
-        %a.item.new{:href => 'javascript:;'}
-          %i.fa.fa-plus
-        = link_to notifications_path, class: 'item notification' do
-          %i.fa.fa-bell
-          %span.text 通知
-        = link_to '/account', class: 'item me' do
-          %i.fa.fa-user
-          %span.text 用户
-        %a.cancel-new{:href => 'javascript:;'}
-          %i.fa.fa-times
-    .float-new-type-select
-      .tips 请选择要创建的议题类型
-      .items
-        .item
-          %a.new.common{href: new_common_votes_path}
-            %i.fa.fa-edit
-          %span.t 普通议题
-        .item
-          %a.new.shopping{href: new_shopping_votes_path}
-            %i.fa.fa-rocket
-          %span.t 购物分享
-        .item
-          %a.new.quote{href: new_quote_votes_path}
-            %i.fa.fa-star
-          %span.t 引用点评
+        .layout-footer
+          .footer-nav
+            = link_to votes_path, class: 'item home' do
+              %i.fa.fa-list
+              %span.text 列表
+            = link_to search_votes_path, class: 'item search' do
+              %i.fa.fa-search
+              %span.text 搜索
+            %a.item.new{:href => 'javascript:;'}
+              %i.fa.fa-plus
+            = link_to notifications_path, class: 'item notification' do
+              %i.fa.fa-bell
+              %span.text 通知
+            = link_to '/account', class: 'item me' do
+              %i.fa.fa-user
+              %span.text 用户
+            %a.cancel-new{:href => 'javascript:;'}
+              %i.fa.fa-times
+        .float-new-type-select
+          .tips 请选择要创建的议题类型
+          .items
+            .item
+              %a.new.common{href: new_common_votes_path}
+                %i.fa.fa-edit
+              %span.t 普通议题
+            .item
+              %a.new.shopping{href: new_shopping_votes_path}
+                %i.fa.fa-rocket
+              %span.t 购物分享
+            .item
+              %a.new.quote{href: new_quote_votes_path}
+                %i.fa.fa-star
+              %span.t 引用点评
+      .phone-bottom
+      .qr-code
+        .s 扫一扫，用手机访问！
+        .qr

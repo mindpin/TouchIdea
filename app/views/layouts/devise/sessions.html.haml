@@ -8,8 +8,12 @@
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
   %body.auth
-    .page-auth
-      .container-full
-        .row
-          .page-content-inner.col-pad-12
-            = yield
+    .phone-wrapper
+      .phone-top
+      .phone-menubar
+      .phone-screen
+        = yield
+      .phone-bottom
+      .qr-code
+        .s 扫一扫，用手机访问！
+        .qr

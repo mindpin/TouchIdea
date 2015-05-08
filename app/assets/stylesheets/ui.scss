@@ -289,17 +289,89 @@ body {
     outline: 0 none !important;
   }
   textarea {resize: none; padding: 6px;}
+
+  @include -above(pad) {
+    background-image: url(http://img.teamkn.com/i/bGCuWXSO.jpg);
+    background-repeat: no-repeat;
+    background-size: cover; 
+  }
+
+  .phone-wrapper {
+    .phone-top, .phone-bottom, .phone-menubar, .qr-code {
+      display: none;
+    }
+
+    .phone-screen {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background-color: $body-bg-color;
+    }
+
+    @include -above(pad) {
+      position: absolute;
+      $h: 480px + 42px + 47px + 20px;
+      width: 322px; height: $h;
+      left: 25%; margin-left: -161px;
+      top: 50%; margin-top: - $h / 2;
+
+      .phone-top {
+        display: block;
+        width:322px;height:42px;
+        background: url(http://img.teamkn.com/i/t8o5mxxE.png) no-repeat;
+      }
+      .phone-bottom {
+        display: block;
+        width:322px;height:47px;
+        background: url(http://img.teamkn.com/i/myi35YIW.png) no-repeat;
+      }
+      .phone-menubar {
+        display: block;
+        width:322px;height:20px;
+        background: url(http://img.teamkn.com/i/aFDSKXnG.jpg) no-repeat;
+      }
+      .phone-screen {
+        width:320px;height:480px;
+        position: relative;
+        border-left:solid 1px #f6f6f6;
+        border-right:solid 1px #f6f6f6;
+      }
+      .qr-code {
+        display: block;
+        position: absolute;
+        left: 472px; top: 100px;
+        width:200px;height:200px;
+        .s {
+          text-align: center;
+          color:white;
+          text-shadow: 0 0 1px black;
+          font-size: 16px;
+          margin-bottom: 10px;
+          font-weight: bold;
+        }
+        .qr {
+          @include square(175px);
+          background: url(http://img.teamkn.com/i/a5kFjDi9.png) no-repeat;
+          border:solid 10px white;
+        }
+      }
+    }
+  }
 }
-body.auth {
+
+body.auth .phone-screen {
   background-color: #012755;
   background-image: url($img-auth-bg);
   background-size: cover;
   color: white;
 }
 
+// -------------------
+
 .layout-footer {
   $h: 55px;
-  position: fixed;
+  position: absolute;
   left:0;right:0;bottom:0;
   height:$h;
   background-color: $footer-bg-color;
@@ -366,6 +438,9 @@ body.auth {
   .footer-nav.new-topic-type-select {
     background-color: $filter-bg-color;
     a.item {opacity:0;pointer-events:none;}
+    @include -above(pad) {
+      a.item {display:none;}
+    }
     a.cancel-new {
       opacity:1;
       pointer-events:auto;
@@ -374,7 +449,7 @@ body.auth {
 }
 
 .float-new-type-select {
-  position: fixed;
+  position: absolute;
   top:0;left:0;right:0;
   bottom: 55px;
   background-color: rgba($body-bg-color, 1);
@@ -458,7 +533,7 @@ body.auth {
     }
   }
   .form {
-    position: fixed;
+    position: absolute;
     bottom:0;left:0;right:0;
     padding: $gpd;
     a.login {
@@ -478,12 +553,12 @@ body.auth {
 }
 
 .page-landing {
-  position: fixed;
+  position: absolute;
   top:0;left:0;right:0;bottom:55px;
 
   &:before {
     content:"";
-    position: fixed;
+    position: absolute;
     top:0;left:34px;width:2px;bottom:0;
     top:0px;bottom:50px;
     background-color: $list-border-color;
@@ -586,9 +661,8 @@ body.auth {
   }
 
   .topics.list {
-    position: fixed;
-    // 这里必须用 fixed 否则骰子旋转动画会导致不能滚动的 bug
-    top: $bar-height;left:0px;right:0;bottom:55px;
+    position: absolute;
+    top: $bar-height;left:0px;right:0;bottom:0;
     overflow-y: auto;
     padding: $gpd $gpd 0;
 
@@ -603,11 +677,11 @@ body.auth {
 }
 
 .page-topic {
-  position: fixed;
+  position: absolute;
   top:0;left:0;right:0;bottom:0px;
 
   .header {
-    position: fixed;
+    position: absolute;
     top:0;left:0;right:0;height:50px;
     box-shadow: $common-box-shadow;
     background-color: $detail-header-bg-color;
@@ -640,7 +714,7 @@ body.auth {
   }
 
   .so {
-    position: fixed;
+    position: absolute;
     top:50px;left:0;right:0;bottom:0px;
     padding-top: 10px;
     overflow-y: auto;
@@ -780,7 +854,7 @@ body.auth {
 
   .new-option-overlay, .share-overlay {
     background-color: rgba(black, 0.5);
-    position: fixed;
+    position: absolute;
     top:0;left:0;right:0;bottom:0;
     padding: 5px;
     opacity: 0;
@@ -831,7 +905,7 @@ body.auth {
     @include height($bar-height);
     background-color: $detail-header-bg-color;
     box-shadow: $common-box-shadow;
-    position: fixed;
+    position: absolute;
     top:0;left:0;right:0;
     z-index: 1;
 
@@ -1158,11 +1232,14 @@ body.auth {
 
 .page-search {
   $bar-height: 60px;
+  position: absolute;
+  top:0;left:0;right:0;bottom:55px;
+
   .topbar {
     @include height($bar-height);
     background-color: $detail-header-bg-color;
     box-shadow: $common-box-shadow;
-    position: fixed;
+    position: absolute;
     top:0;left:0;right:0;
     z-index: 1;
 
@@ -1203,7 +1280,7 @@ body.auth {
   .search-content {
     position: absolute;
     top: $bar-height;left:0px;right:0;bottom:0;
-    overflow-y: scroll;
+    overflow-y: auto;
     .history {
       @include clearfix;
       margin-top: 10px;
@@ -1269,7 +1346,7 @@ body.auth {
 }
 
 .page-notification {
-  position: fixed;
+  position: absolute;
   top:0;left:0;right:0;bottom:55px;
   overflow-y: auto;
 
@@ -1323,19 +1400,19 @@ body.auth {
 }
 
 .page-me {
-  position: fixed;
+  position: absolute;
   top:0;left:0;right:0;bottom:55px;
   overflow-y: auto;
 
   &.detail {
     bottom:0px;
     .header {
-      position: fixed;
+      position: absolute;
       top:0px; left:0; right:0;
       z-index: 1;
     }
     .info-detail {
-      position: fixed;
+      position: absolute;
       top:50px; left:0; right:0; bottom:0;
       overflow-y: auto;
       padding-top: 10px;
@@ -1471,7 +1548,7 @@ body.auth {
 
 .page-infocard-list {
   .header {
-    position: fixed;
+    position: absolute;
     top:0px; left:0; right:0;
     z-index: 1;
     box-shadow: $common-box-shadow;
@@ -1492,7 +1569,7 @@ body.auth {
     }
   }
   .info-detail {
-    position: fixed;
+    position: absolute;
     top:50px; left:0; right:0; bottom:0;
     overflow-y: auto;
     padding-top: 10px;
