@@ -5,7 +5,7 @@ class AccountController < ApplicationController
   end
 
   def created_votes
-    @created_votes = current_user.votes.page(params[:page])
+    @created_votes = current_user.votes.recent.page(params[:page])
   end
 
   def joined_votes
