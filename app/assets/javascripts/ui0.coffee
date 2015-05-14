@@ -78,7 +78,7 @@ class SearchPage
           @remove_all_search_history()
 
     # 增加搜索历史
-    jQuery(document).on 'click', '.page-search .result .topic', ->
+    @$el.on 'click', '.result .topic', ->
       query = jQuery.trim(that.$input.val())
       that.add_search_history(query)
 
