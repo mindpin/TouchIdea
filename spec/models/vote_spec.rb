@@ -42,11 +42,12 @@ RSpec.describe Vote, type: :model do
       end
     end
 
-    it "Vote.rand_next user should not be @finished_vote" do
-      30.times.each do 
-        Vote.rand_next(@user).should_not == @finished_vote
-      end
-    end
+    # 取消过期概念
+    #it "Vote.rand_next user should not be @finished_vote" do
+      #30.times.each do 
+        #Vote.rand_next(@user).should_not == @finished_vote
+      #end
+    #end
   end
 
   describe "scope hot" do
@@ -135,5 +136,11 @@ RSpec.describe Vote, type: :model do
         vote_items.should_not == @array_vote_items[i]
       end
     end
+  end
+
+  it "取消过期概念，过期议题可以随机找到。" do
+    @user = create(:user)
+    @vote = create(:vote, finish_at: 14.days.ago)
+    Vote.rand_next(@user).should_not be_nil
   end
 end
