@@ -9,7 +9,7 @@ class AccountController < ApplicationController
   end
 
   def joined_votes
-    @joined_votes = current_user.voted_votes.page(params[:page])
+    @joined_votes = current_user.voted_votes.recent.page(params[:page])
   end
 
   def notification_setting

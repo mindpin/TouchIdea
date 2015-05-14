@@ -1544,6 +1544,10 @@ body.auth .phone-screen {
       }
     }
   }
+  .loading {
+    @include list-loading;
+    text-align: center;
+  }
 }
 
 .page-infocard-list {
