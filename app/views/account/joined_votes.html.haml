@@ -6,13 +6,4 @@
           %i.fa.fa-chevron-left
         .title 我参与的议题
   .info-detail
-    .topics
-      -@joined_votes.each do |vote|
-        %a.topic{:href => "/votes/#{vote.id}"}
-          .data
-            .title= vote.title
-            .options
-              - Vote.vote_items_rand_order_by_user(vote.id, current_user).each do |vote_item|
-                .option=vote_item.title
-          .joiner-count
-            = vote.voted_users.count
+    = render_cell :topics, :list, @joined_votes, current_user, '/account/joined_votes'

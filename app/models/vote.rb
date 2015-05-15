@@ -7,7 +7,7 @@ class Vote
   include Infocard::VoteMethods
 
   field :title, type: String
-  field :finish_at, type: Time, default: ->{ 7.days.from_now }
+  field :finish_at, type: Time#, default: ->{ 7.days.from_now }
   field :token, type: String
   field :url, type: String
   # 创建当周的第一天,用于排序
@@ -29,7 +29,7 @@ class Vote
   scope :recent, -> { desc(:id) }
   scope :hot, -> { desc(:first_day, :voted_users_count).recent}
   scope :not_finished, -> { where(:finish_at.gt => Time.now) }
-  scope :not_voted, -> (user) { not_finished.where({:voted_user_ids.nin => [user.id]}) }
+  scope :not_voted, -> (user) { where({:voted_user_ids.nin => [user.id]}) }
   #scope :by_user, -> (user) { any_of({:user_id => user.id}, {:user_ids.in => [user.id]}, {:invite_uids.in => [user.uid]}) }
 
 
