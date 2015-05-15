@@ -111,7 +111,8 @@ class VotesController < ApplicationController
 
   def search
     if !params[:q].blank?
-      @votes = Vote.page_search(params[:q], params[:page]).records
+      vote_result = Vote.page_search(params[:q], params[:page])
+      @votes = vote_result.map{|vote_info|Vote.find(vote_info["_id"])}
     else
       @votes = []
     end

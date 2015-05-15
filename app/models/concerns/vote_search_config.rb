@@ -4,18 +4,11 @@ module VoteSearchConfig
   included do
     include Searchable
 
-    # settings :index => {:number_of_shards => 1}, :analysis => custom_analysis do
-    #   mappings :dynamic => "false" do
-    #     indexes :title, :analyzer => :chargram
-    #   end
-    # end
-
-    settings :index => {:number_of_shards => 1} do
+    settings :index => {:number_of_shards => 1}, :analysis => custom_analysis do
       mappings :dynamic => "false" do
-        indexes :title, :analyzer => :ik
+        indexes :title, :analyzer => :chargram
       end
     end
-
   end
 
   def as_indexed_json(options={})
@@ -30,10 +23,9 @@ module VoteSearchConfig
         :size => per,
         :query => {
           :multi_match => {
-            :fields   => [:title],
-            :type     => :phrase,
-            :query    => query,
-            :analyzer => :ik
+            :type  => :best_fields, 
+            :query => query,
+            :fields => [:title]
           }
         },
 

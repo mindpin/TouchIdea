@@ -31,14 +31,12 @@ module Searchable
             :filter => [:lowercase]
           }
         },
-
         :tokenizer => {
           :chargram => {
-            :type => :edgeNGram,
+            :type => :nGram,
             :min_gram => 1,
-            :max_gram => 128,
-            :token_chars => [:letter, :digit],
-            :side => :front
+            :max_gram => 20,
+            :token_chars => [:letter, :digit]
           }
         }
       }
