@@ -2,15 +2,6 @@
 # 事件加载参考
 # https://github.com/rails/turbolinks/#no-jquery-or-any-other-library
 
-# 事件检查
-jQuery(document).on 'ready page:load', ->
-  console.debug 'loaded'
-
-# 点亮 footer navbar
-jQuery(document).on 'ready page:load', ->
-  nav = jQuery('[data-nav]').data('nav')
-  jQuery(".layout-footer a.item.#{nav}").addClass('active')
-
 # 填充标题
 jQuery(document).on 'ready page:load', ->
   title = jQuery('[data-title]').data('title')
@@ -28,9 +19,6 @@ jQuery(document).on 'ready page:load', ->
   jQuery(".layout-header .back").attr 'href', back_url
 
 # ---------------------------------
-
-window.is_field_empty = ($field)->
-  return jQuery.trim($field.val()).length is 0
 
 class SearchPage
   constructor: (@$el)->
@@ -217,12 +205,3 @@ jQuery(document).on 'click', 'a.submit-feedback:not(.disabled)', ->
     method: 'POST'
     data:
       content: jQuery.trim(jQuery('textarea.feedback-ipt').val())
-
-# ----------
-
-# 完成投票，加载下一个
-jQuery(document).on 'ready page:load', ->
-  if jQuery('.page-vote-done').length
-    setTimeout ->
-      Turbolinks.visit('/votes/lucky')
-    , 1000

@@ -18,23 +18,46 @@
           = yield
 
         .layout-footer
-          .footer-nav
-            = link_to lucky_votes_path, class: 'item lucky-vote' do
+          .footer-nav#footer-nav
+            :ruby
+              arr = [:'lucky-vote', :search, :notification, :me]
+              klasses = arr.map { |name|
+                @footer_nav_active == name ? 'active' : ''
+              }
+
+              lucky_url = lucky_votes_path
+              begin
+                if session[:lucky]
+                  vote = Vote.where(:id => session[:lucky]).first
+                  if vote
+                    lucky_url = vote_path(vote)
+                  end
+                end
+              rescue
+              end
+
+            %a.item.lucky-vote{:class => klasses[0], :href => 'javascript:;', :data => {:url => lucky_url}}
               %i.fa.fa-comment
               %span.text 议题
-            = link_to search_votes_path, class: 'item search' do
+
+            %a.item.search{:class => klasses[1], :href => 'javascript:;', :data => {:url => search_votes_path}}
               %i.fa.fa-search
               %span.text 搜索
+
             %a.item.new{:href => 'javascript:;'}
               %i.fa.fa-plus
-            = link_to notifications_path, class: 'item notification' do
+
+            %a.item.notification{:class => klasses[2], :href => 'javascript:;', :data => {:url => notifications_path}}
               %i.fa.fa-bell
               %span.text 通知
-            = link_to '/account', class: 'item me' do
+
+            %a.item.me{:class => klasses[3], :href => 'javascript:;', :data => {:url => account_path}}
               %i.fa.fa-user
               %span.text 用户
+
             %a.cancel-new{:href => 'javascript:;'}
               %i.fa.fa-times
+              
         .float-new-type-select
           .tips 请选择要创建的议题类型
           .items

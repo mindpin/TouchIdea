@@ -30,7 +30,7 @@ class NewOptionPanel
 
     # 输入文字时激活确定按钮
     @$elm.on 'input', '.new-option-overlay textarea', =>
-      if is_field_empty @$overlay.find('textarea')
+      if @$overlay.find('textarea').is_val_empty()
         @$overlay.find('a.ok').addClass('disabled')
       else
         @$overlay.find('a.ok').removeClass('disabled')
@@ -104,7 +104,9 @@ class VoteShowPage
 
   jump_to_next: ->
     # 不保存历史记录
-    location.replace '/votes/lucky'
+    path = '/votes/lucky'
+    Turbolinks.visit_without_history path
+
 
   refresh_done_btn: ->
     if @find('.topic-options .option.active').length
@@ -133,10 +135,8 @@ class VoteShowPage
 
 
 
-
-jQuery(document).on 'ready page:load', ->
-  FastClick.attach document.body
-
+jQuery(document).on 'page:change', ->
+  console.log jQuery('.page-topic').length
   if jQuery('.page-topic').length
     new VoteShowPage jQuery('.page-topic')
     new NewOptionPanel jQuery('.page-topic')

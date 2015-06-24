@@ -13,7 +13,8 @@ class LuckyPage
       success: (res)->
         id = res.id
         # 不保存历史记录
-        location.replace "/votes/#{id}"
+        path = "/votes/#{id}"
+        Turbolinks.visit_without_history path, {keep: 'footer-nav'}
       statusCode: {
         404: =>
           setTimeout =>

@@ -149,6 +149,7 @@ class VotesController < ApplicationController
     vote = Vote.rand_next current_user
 
     if vote.present?
+      session[:lucky] = vote.id.to_s
       render :json => {
         :id => vote.id.to_s
       }
@@ -168,7 +169,6 @@ class VotesController < ApplicationController
 
   def choose_layout
     return 'detail' if %w(new_common new_shoping new_quote).include? action_name
-    return 'detail' if %w(done).include? action_name
     return 'app'
   end
 end

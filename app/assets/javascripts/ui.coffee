@@ -2,32 +2,6 @@
 # 事件加载参考
 # https://github.com/rails/turbolinks/#no-jquery-or-any-other-library
 
-# jquery 扩展
-jQuery.fn.extend
-  is_val_empty: ->
-    this.trim_val().length is 0
-
-  trim_val: ->
-    jQuery.trim this.val()
-
-# 投票页面
-# =========================
-
-
-# 导航上的“新增”按钮
-# =========================
-
-# 点击新增
-jQuery(document).on 'click', '.footer-nav .item.new', ->
-  jQuery('.footer-nav').addClass('new-topic-type-select')
-  jQuery('.float-new-type-select').addClass('show')
-
-# 点击取消
-jQuery(document).on 'click', '.footer-nav a.cancel-new', ->
-  jQuery('.footer-nav').removeClass('new-topic-type-select')
-  jQuery('.float-new-type-select').removeClass('show')
-
-
 # 无限滚动分页
 # =======================
 
@@ -82,5 +56,7 @@ class ScrollingList
           @$loading.addClass 'end'
 
 jQuery(document).on 'ready page:load', ->
+  FastClick.attach document.body
+  
   if jQuery('.scrolling-list').length > 0
     new ScrollingList jQuery('.scrolling-list')

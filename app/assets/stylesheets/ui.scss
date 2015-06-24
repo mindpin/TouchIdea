@@ -85,7 +85,8 @@ $header-bg-color: #E8E8E7;
 $header-text-color: #444;
 $header-border-color: #BEBEBE;
 $footer-bg-color: #383535;
-$footer-hover-bg-color: #202427; 
+// $footer-hover-bg-color: #202427; 
+$footer-hover-bg-color: #2C2929;
 $footer-icon-color: #E9E9E9;
 $footer-hover-icon-color: $base-color;
 $footer-new-botton-color: #4C4849;
@@ -427,12 +428,48 @@ body.auth .phone-screen {
       background-color: $footer-hover-bg-color !important;
       i, .text{color: $footer-hover-icon-color};
     }
-    &:nth-child(2) {
-      padding-right: percentage(1/10)
+    &:nth-child(2) {padding-right: percentage(1/10)}
+    &:nth-child(4) {padding-left: percentage(1/10)}
+
+    &:nth-child(1), &:nth-child(4){
+      position: relative;
+      &:after {
+        content: "";
+        position: absolute;
+        top:0;bottom:0;right:0;width:1px;
+        background-color: $footer-hover-bg-color;
+      }
+      &:hover, &:focus, &:active, &.active {
+        &:after {
+          background-color: darken($footer-hover-bg-color, 5%);
+        }
+      }
     }
-    &:nth-child(4) {
-      padding-left: percentage(1/10)
+
+    &:nth-child(2), , &:nth-child(5){
+      position: relative;
+      &:after {
+        content: "";
+        position: absolute;
+        top:0;bottom:0;left:0;width:1px;
+        background-color: #403E3E;
+      }
+      &:before {
+        content: "";
+        position: absolute;
+        top:0;bottom:0;left:-1px;width:1px;
+        background-color: transparent;
+      }
+      &:hover, &:focus, &:active, &.active {
+        &:before {
+          background-color: #403E3E;
+        }
+        &:after {
+          background-color: darken($footer-hover-bg-color, 5%);
+        }
+      }
     }
+
 
     &.new {
       $iw: $h + 20px;

@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   after_filter :store_location
-
   def store_location
     # store last url - this is needed for post-login redirect to whatever the user last visited.
     return unless request.get? 
@@ -16,6 +15,20 @@ class ApplicationController < ActionController::Base
         request.path != "/users/sign_out" &&
         !request.xhr?) # don't store ajax calls
       session[:previous_url] = request.fullpath 
+    end
+  end
+
+  before_filter :set_footer_nav_active
+  def set_footer_nav_active
+    case [controller_name, action_name]
+    when ['votes', 'lucky'], ['votes', 'show']
+      @footer_nav_active = :'lucky-vote'
+    when ['votes', 'search']
+      @footer_nav_active = :search
+    when ['notifications', 'index']
+      @footer_nav_active = :notification
+    when ['account', 'index']
+      @footer_nav_active = :me
     end
   end
 
