@@ -18,7 +18,7 @@ class VotesController < ApplicationController
 
   def show
     @vote = Vote.find params[:id]
-    @vote_items = Vote.vote_items_rand_order_by_user @vote.id, current_user
+    @vote_items = @vote.vote_items_rand_order_by_user current_user
   end
 
   # !!R
@@ -132,16 +132,6 @@ class VotesController < ApplicationController
     end
   end
 
-  def lucky
-    @vote = Vote.rand_next current_user
-    if @vote
-      redirect_to @vote
-    else
-      flash[:error] = '没有您未投票的议题了!'
-      redirect_to votes_path
-    end
-  end
-
   def praise
     @vote = Vote.find params[:id]
     @vote_items = @vote.vote_items
@@ -152,8 +142,19 @@ class VotesController < ApplicationController
     render json: true
   end
 
-  def done
-    
+  # 随机获取一个未投票的议题
+  def lucky
+    return if not request.xhr?
+
+    vote = Vote.rand_next current_user
+
+    if vote.present?
+      render :json => {
+        :id => vote.id.to_s
+      }
+    else
+      render :status => 404
+    end
   end
 
   private
@@ -167,7 +168,7 @@ class VotesController < ApplicationController
 
   def choose_layout
     return 'detail' if %w(new_common new_shoping new_quote).include? action_name
-    return 'detail' if %w(show done).include? action_name
+    return 'detail' if %w(done).include? action_name
     return 'app'
   end
 end

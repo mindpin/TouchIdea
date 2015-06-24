@@ -1,45 +1,48 @@
 .page-topic{:data => {:id => @vote.id}}
-  .header
-    = link_to votes_path, class: 'back' do
-      %i.fa.fa-chevron-left
-    .title 为议题投票
-    %a.share{:href => 'javascript:;'}
-      %i.fa.fa-share
-
   .so
     .topic-header
+      .btns
+        %a.next-vote{:href => 'javascript:;'}
+          %i.fa.fa-fast-forward
+
       %h2.title= @vote.title
       = render_cell :topics, :infocard, @vote.infocard
 
     = render_cell :topics, :topic_options, @vote_items, current_user
 
-    .topic-new-option
-      - if @vote.added_vote_item_by?(current_user)
-        %a.new.btn.btn-flat-success.btn-block.disabled{:href => 'javascript:;'}
-          %i{style: 'display: none'}.fa.fa-plus
-          %span 已经补充过选项了
-      - else
-        %a.new.btn.btn-flat-success.btn-block{:href => 'javascript:;'}
-          %i.fa.fa-plus
-          %span 补充一个选项
+    .topic-btns
+      .topic-new-option
+        :ruby
+          if @vote.added_vote_item_by?(current_user)
+            klass = 'disabled'
+          else
+            klass = ''
+          end
 
-    .vote-done
-      %a.done.btn.btn-flat-success.btn-block.disabled{:href => 'javascript:;'}
-        %i.fa.fa-check
-        %span 投完了
+        %a.new{:href => 'javascript:;', :class => klass}
+          .bc-new
+            %i.fa.fa-plus
+            %span.new 补充选项
+          .bc-done
+            %span.done 补充过了
 
-  .new-option-overlay
-    = form_for [@vote, VoteItem.new], remote: true, html: {class: 'form'} do |f|
-      .fields
-        %label 补充新选项
-        = f.text_area :title, class: 'form-control', placeholder: '输入选项内容', rows: 3
-      .submits
-        %a.cancel{:href => 'javascript:;'}
-          %i.fa.fa-times
-          %span 取消
-        %a.ok.disabled{:href => 'javascript:;'}
+      .vote-done
+        %a.done.disabled{:href => 'javascript:;'}
           %i.fa.fa-check
-          %span 确定
+          %span 投完了
+
+    .new-option-overlay
+      .form{:data => {:url => "/votes/#{@vote.id}/vote_items"}}
+        .fields
+          %label 补充新选项
+          %textarea.form-control{:placeholder => '输入选项内容', :rows => 3}
+        .submits
+          %a.cancel{:href => 'javascript:;'}
+            %i.fa.fa-times
+            %span 取消
+          %a.ok.disabled{:href => 'javascript:;'}
+            %i.fa.fa-check
+            %span 确定
 
   .share-overlay
     .form

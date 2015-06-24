@@ -13,39 +13,6 @@ jQuery.fn.extend
 # 投票页面
 # =========================
 
-@refresh_voted_options = ->
-  if jQuery('.topic-options .option.active').length > 0
-    jQuery('.vote-done a.done').removeClass('disabled')
-  else
-    jQuery('.vote-done a.done').addClass('disabled')
-
-# 点击投票选项
-jQuery(document).on 'click', '.topic-options .option', ->
-  if jQuery(this).hasClass('tiny') and not jQuery(this).hasClass('active')
-    jQuery('.topic-options .option.tiny').removeClass('active')
-
-  jQuery(this).toggleClass 'active'
-  refresh_voted_options()
-
-# 点击“投完了”
-jQuery(document)
-  .on 'click', '.vote-done a.done:not(.disabled)', ->
-    $topic = jQuery(this).closest('.page-topic')
-    vote_id = $topic.data('id')
-    vote_item_ids = []
-    $topic.find('a.option.active').each ->
-      vote_item_ids.push jQuery(this).data('id')
-
-    jQuery.ajax
-      url: "/votes/#{vote_id}/praise"
-      type: 'POST'
-      data:
-        vote_item_ids: vote_item_ids
-      success: ->
-        Turbolinks.visit('/votes/done')
-      error: ->
-        alert '系统出错啦'
-
 
 # 导航上的“新增”按钮
 # =========================

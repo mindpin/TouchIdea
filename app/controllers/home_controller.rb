@@ -1,10 +1,7 @@
 class HomeController < ApplicationController
-  before_filter :authenticate_user!#, only: [:dashboard]
+  before_filter :authenticate_user!
   def index
-    if current_user
-      redirect_to votes_path
-    else
-      redirect_to new_user_session_path
-    end
+    # 登录后直接跳转到随机议题页面
+    redirect_to lucky_votes_path
   end
 end

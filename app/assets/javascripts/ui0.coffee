@@ -29,7 +29,7 @@ jQuery(document).on 'ready page:load', ->
 
 # ---------------------------------
 
-is_field_empty = ($field)->
+window.is_field_empty = ($field)->
   return jQuery.trim($field.val()).length is 0
 
 class SearchPage
@@ -217,33 +217,6 @@ jQuery(document).on 'click', 'a.submit-feedback:not(.disabled)', ->
     method: 'POST'
     data:
       content: jQuery.trim(jQuery('textarea.feedback-ipt').val())
-
-# ------------
-
-# 在选项详情界面增加选项
-jQuery(document).on 'click', '.page-topic .topic-new-option a.new:not(.disabled)', ->
-  console.debug jQuery('.new-option-overlay')
-  jQuery('.new-option-overlay').addClass('show')
-
-jQuery(document).on 'click', '.new-option-overlay a.cancel', ->
-  jQuery('.new-option-overlay').removeClass('show')
-
-jQuery(document).on 'click', '.new-option-overlay a.ok:not(.disabled)', ->
-  $('#new_vote_item').submit()
-  # 移至vote_items/create.js.coffee
-
-jQuery(document).on 'input', '.new-option-overlay textarea', ->
-  if is_field_empty jQuery('.new-option-overlay textarea')
-    jQuery('.new-option-overlay a.ok').addClass('disabled')
-  else
-    jQuery('.new-option-overlay a.ok').removeClass('disabled')
-
-# 分享
-jQuery(document).on 'click', '.page-topic a.share', ->
-  jQuery('.share-overlay').addClass('show')
-
-jQuery(document).on 'click', '.share-overlay a.cancel', ->
-  jQuery('.share-overlay').removeClass('show')
 
 # ----------
 

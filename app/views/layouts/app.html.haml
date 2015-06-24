@@ -9,6 +9,7 @@
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
 
   %body
+    .body-wallpaper
     .phone-wrapper
       .phone-top
       .phone-menubar
@@ -18,9 +19,9 @@
 
         .layout-footer
           .footer-nav
-            = link_to votes_path, class: 'item home' do
-              %i.fa.fa-list
-              %span.text 列表
+            = link_to lucky_votes_path, class: 'item lucky-vote' do
+              %i.fa.fa-comment
+              %span.text 议题
             = link_to search_votes_path, class: 'item search' do
               %i.fa.fa-search
               %span.text 搜索

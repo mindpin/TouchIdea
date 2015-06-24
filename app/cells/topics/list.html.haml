@@ -14,7 +14,7 @@
           .user-voted
             %span 我参与过这个议题
         .options
-          - Vote.vote_items_rand_order_by_user(vote.id, @user).each do |vote_item|
+          - vote.vote_items_rand_order_by_user(@user).each do |vote_item|
             - if not vote_item.title.index('SYSTEM:')
               .option= vote_item.title
 

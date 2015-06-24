@@ -25,15 +25,17 @@
       %span +1
 
 :ruby
-  style = ''
-  style = 'margin-top:0;' if @vote_items.length == system_items.length
+  klass = ''
+  klass = 'blank' if @vote_items.length == system_items.length
 
-.topic-options.normal{style: style}
+.topic-options.normal{class: klass}
   - @vote_items.each do |vote_item|
     - if not vote_item.title.index('SYSTEM:')
       :ruby
-        klass = 'option'
-        klass = 'option active' if vote_item.praised_by?(@user)
+        klass = ['option']
+        klass << 'active' if vote_item.praised_by?(@user)
+        klass << 'my-extra' if vote_item.user == @user and vote_item.is_extra
+        klass = klass.join(' ')
 
       %a{:href => 'javascript:;', :class => klass, :data => {:id => vote_item.id}}
         .text=vote_item.title

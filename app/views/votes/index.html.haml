@@ -1,11 +1,5 @@
 .page-landing{:data => {:nav => :home, :title => '议题大厅'}}
   .topbar
-    .filter
-      = link_to votes_path, class: action_name == 'index' ? 'item newest active' : 'item newest' do
-        %span 最新
-      = link_to hot_votes_path, class: action_name == 'hot' ? 'item hotest active' : 'item hotest' do
-        %span 最热
-
     %a.lucky{:href => url_for([:lucky, :votes])}
       .dice
         .p
