@@ -136,7 +136,6 @@ class VoteShowPage
 
 
 jQuery(document).on 'page:change', ->
-  console.log jQuery('.page-topic').length
   if jQuery('.page-topic').length
     new VoteShowPage jQuery('.page-topic')
     new NewOptionPanel jQuery('.page-topic')

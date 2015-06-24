@@ -11,4 +11,5 @@
 //= require form
 //= require page-vote-show
 //= require page-lucky
+//= require page-search
 //= require footer-nav

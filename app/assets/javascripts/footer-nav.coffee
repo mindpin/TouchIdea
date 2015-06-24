@@ -32,7 +32,7 @@ class FooterNav
       that.find('.footer-nav a.item').removeClass('active')
       # jQuery(this).addClass 'active'
       url = jQuery(this).data('url')
-      Turbolinks.visit_without_history url#, {keep: 'footer-nav'}
+      Turbolinks.visit_without_history url
 
 
 jQuery(document).on 'page:change', ->

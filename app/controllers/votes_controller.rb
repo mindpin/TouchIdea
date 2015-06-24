@@ -19,6 +19,7 @@ class VotesController < ApplicationController
   def show
     @vote = Vote.find params[:id]
     @vote_items = @vote.vote_items_rand_order_by_user current_user
+    session[:lucky] = @vote.id.to_s
   end
 
   # !!R
@@ -147,9 +148,7 @@ class VotesController < ApplicationController
     return if not request.xhr?
 
     vote = Vote.rand_next current_user
-
     if vote.present?
-      session[:lucky] = vote.id.to_s
       render :json => {
         :id => vote.id.to_s
       }

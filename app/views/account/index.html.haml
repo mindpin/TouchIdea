@@ -24,6 +24,6 @@
       %span 关于我们
 
   .set.signout
-    = link_to '/users/sign_out', class: 'item quit', method: 'delete' do
+    %a.item.quit{:href => '/users/sign_out', :data => {:method => :delete, :confirm => '确定要退出吗？'}}
       %i.fa.fa-power-off
       %span 退出当前账号

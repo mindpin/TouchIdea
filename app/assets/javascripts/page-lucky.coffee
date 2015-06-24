@@ -14,7 +14,7 @@ class LuckyPage
         id = res.id
         # 不保存历史记录
         path = "/votes/#{id}"
-        Turbolinks.visit_without_history path, {keep: 'footer-nav'}
+        Turbolinks.visit_without_history path
       statusCode: {
         404: =>
           setTimeout =>
