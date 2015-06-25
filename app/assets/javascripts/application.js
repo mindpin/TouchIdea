@@ -6,8 +6,8 @@
 
 //= require mindpin/util
 
-//= require ui
 //= require ui0
+//= require scrolling-list
 //= require form
 //= require page-vote-show
 //= require page-lucky

@@ -18,6 +18,15 @@ cp config/application.example.yml config/application.yml
 ### 其他需要运行工具
 **elasticsearch**，不运行搜索页面会报错
 
+ElasticSearch 安装说明：<br/>
+https://github.com/mindpin/tech-exp/issues/89
+
+第一次运行需创建索引：<br/>
+```
+rake elasticsearch:import
+# 这个命令也可以在有索引时重建索引
+```
+
 ### 测试环境直接执行
 ```
 rails s

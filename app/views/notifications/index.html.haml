@@ -1,17 +1,22 @@
-.page-notification{:data => {:nav => :notification}}
-  .notifications
-    - @notifications.each do |notification|
-      = content_tag :div, class: notification.read? ? 'notification read' : 'notification' do
-        = link_to notification.vote, class: 'topic' do
-          %i.fa.fa-exclamation-circle
-          .title= notification.vote.title
-          .desc
-            %span= t("notification.style_front.#{notification.style}")
-            %span.count= notification.total
-            %span= t("notification.style_back.#{notification.style}")
+.page-notification
+  .mobile-header
+    .title 通知消息
 
-  .loading
-    %i.fa.fa-circle-o-notch.fa-spin 
-    %span 读取中…
+  .notifications.scrolling-list
+    .box
+      - @notifications.each do |notification|
+        :ruby
+          klass = notification.read? ? 'read' : ''
+
+        .notification.list-item{:class => klass}
+          %a.topic{:href => url_for(notification.vote)}
+            %i.fa.fa-exclamation-circle
+            .title= notification.vote.title
+            .desc
+              %span= t("notification.style_front.#{notification.style}")
+              %span.count= notification.total
+              %span= t("notification.style_back.#{notification.style}")
+
+      = render_cell :layout, :list_loading, "/notifications"
 
 - @notifications.each(&:read!)

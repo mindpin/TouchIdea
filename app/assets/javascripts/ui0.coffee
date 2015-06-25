@@ -4,6 +4,8 @@
 
 # 填充标题
 jQuery(document).on 'ready page:load', ->
+  FastClick.attach document.body
+  
   title = jQuery('[data-title]').data('title')
   jQuery(".layout-header .page").text title
 

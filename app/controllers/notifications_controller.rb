@@ -4,7 +4,9 @@ class NotificationsController < ApplicationController
   respond_to :json
 
   def index
-    @notifications = current_user.notifies.recent.page(params[:page])
+    @notifications = current_user.notifies
+      .recent
+      .page(params[:page]).per(20)
     respond_with(@notifications)
   end
 end

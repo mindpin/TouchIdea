@@ -31,6 +31,11 @@ $gpd : $grid-gap / 2;
   @include transition(all ease $time);
 }
 
+@mixin page_first_nav {
+  position: absolute;
+  top:0;left:0;right:0;bottom:55px;
+}
+
 // 呼吸闪烁
 @include keyframes(breathe) {
   0%   { opacity: 1;}
@@ -270,11 +275,13 @@ $step-active-bg-color: $base-color;
 }
 
 @mixin list-loading {
-  padding: $gpd 0 $gpd * 3;
-  font-size: 16px;
   color: #999;
-  margin:0 55px;
   text-align: center;
+  font-size: 16px;
+  height:50px;line-height:50px;
+  margin-bottom: 50px;
+  background-color: #f4f4f4;
+
   i {
     @include square(24px);
     display: inline-block;
@@ -1472,60 +1479,6 @@ body.auth .phone-screen {
   }
 }
 
-.page-notification {
-  position: absolute;
-  top:0;left:0;right:0;bottom:55px;
-  overflow-y: auto;
-
-  .notifications {
-    box-shadow: $common-box-shadow;
-    .notification {
-      background-color: $detail-header-bg-color;
-      border-bottom: solid 1px #ddd;
-      &:last-child {
-        border-bottom:0 none;
-      }
-
-      a.topic {
-        padding: 10px 15px;
-        display: block;
-        color: #444;
-        text-decoration: none;
-        &:hover {background-color: $list-hover-bg-color;}
-        position: relative;
-        padding-left:40px;
-
-        i {
-          position: absolute;
-          top:10px;left:10px;
-          color: $area-fresh;
-          @include circle(20px);
-          font-size: 16px;
-        }
-        .title {
-          font-size: 16px;
-          color: #444;
-          margin-bottom: 10px;
-        }
-        .desc {
-          color: #999;
-          font-size: 12px;
-        }
-      }
-
-      &.read {
-        background-color: #f4f4f4;
-        a.topic i {color: #888;}
-        a.topic .title {color: #888;}
-      }
-    }
-  }
-  .loading {
-    @include list-loading;
-    text-align: center;
-  }
-}
-
 .page-me {
   position: absolute;
   top:0;left:0;right:0;bottom:55px;
@@ -1817,4 +1770,82 @@ body.auth .phone-screen {
       }
     }
   }
+}
+
+.page-notification {
+  @include page_first_nav;
+
+  .notifications .notification {
+    background-color: $detail-header-bg-color;
+    border-bottom: solid 1px #ddd;
+    &:last-child {
+      border-bottom:0 none;
+    }
+
+    a.topic {
+      padding: 10px 15px;
+      display: block;
+      color: #444;
+      text-decoration: none;
+      &:hover {background-color: $list-hover-bg-color;}
+      position: relative;
+      padding-left:40px;
+
+      i {
+        position: absolute;
+        top:10px;left:10px;
+        color: $area-fresh;
+        @include circle(20px);
+        font-size: 16px;
+      }
+      .title {
+        font-size: 16px;
+        color: #444;
+        margin-bottom: 10px;
+      }
+      .desc {
+        color: #999;
+        font-size: 12px;
+      }
+    }
+
+    &.read {
+      background-color: #f4f4f4;
+      a.topic i {color: #888;}
+      a.topic .title {color: #888;}
+    }
+  }
+}
+
+
+// --------------------------
+
+.mobile-header {
+  height:50px;line-height:50px;
+  position: absolute;
+  top:0;left:0;right:0;
+  z-index: 1;
+  background-color: #f4f4f4;
+  box-shadow: $common-box-shadow;
+
+  .title {
+    text-align: center;
+    font-size: 16px;
+  }
+}
+
+.scrolling-list {
+  position: absolute;
+  top:50px;left:0px;right:0;bottom:0;
+  overflow-y: auto;
+  padding:10px 0 0;
+
+  .box {
+    box-shadow: $common-box-shadow;
+
+    .loading {
+      @include list-loading;
+    }
+  }
+
 }
