@@ -43,7 +43,7 @@ jQuery(document).on 'click', '.page-me a.toggler', ->
 
 # 输入反馈
 jQuery(document).on 'input', 'textarea.feedback-ipt', ->
-  if is_field_empty jQuery(this)
+  if jQuery(this).is_val_empty()
     jQuery(this).next('a.btn').addClass('disabled')
   else
     jQuery(this).next('a.btn').removeClass('disabled')

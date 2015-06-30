@@ -5,11 +5,13 @@ class AccountController < ApplicationController
   end
 
   def created_votes
-    @created_votes = current_user.votes.recent.page(params[:page])
+    @created_votes = current_user
+      .votes.recent.page(params[:page])
   end
 
   def joined_votes
-    @joined_votes = current_user.voted_votes.recent.page(params[:page])
+    @joined_votes = current_user
+      .voted_votes.recent.page(params[:page])
   end
 
   def notification_setting

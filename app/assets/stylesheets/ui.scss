@@ -259,6 +259,8 @@ $step-active-bg-color: $base-color;
   padding: 15px;
   border-bottom: solid 1px #ddd;
   margin-bottom: 0;
+  background-color: #f4f4f4;
+
   &:last-child { border-bottom: 0 none; }
   .joiner-count{top:15px;left:15px;}
   .stat {
@@ -1580,18 +1582,32 @@ body.auth .phone-screen {
       &:hover {
         background-color: inherit;
       }
+
+      &.userdesc {
+        height:auto;
+        .v {
+          float: none;
+          margin-left: 60px;
+          text-align: right;
+          font-size: 14px;
+        }
+      }
     }
     .item.back {
       background-color: #f4f4f4;
       &:after {display:none;}
-      a.back {color:#666;}
-      i {
-        @include height(30px);
-        position: absolute;
-        top:11px;left:15px;
-      }
       .title {
         text-align: center;
+      }
+      a.back {
+        position: absolute;
+        top:0;left:0;bottom:0;width:50px;
+        text-align: center;line-height: 50px;
+        font-size: 16px;
+        color: #666;
+        &:hover {
+          background-color: rgba(white, 0.5);
+        }
       }
     }
     .item.info.desc {
@@ -1832,6 +1848,17 @@ body.auth .phone-screen {
     text-align: center;
     font-size: 16px;
   }
+  a.back {
+    position: absolute;
+    top:0;left:0;bottom:0;width:50px;
+    line-height:50px;
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+    &:hover {
+      background-color: rgba(white, 0.5);
+    }
+  }
 }
 
 .scrolling-list {
@@ -1847,5 +1874,14 @@ body.auth .phone-screen {
       @include list-loading;
     }
   }
+}
 
+.scrolling-list.topics.list {
+  a.topic {
+    @include list-item-topic-flat;
+  }
+
+  .loading {
+    @include list-loading;
+  }
 }

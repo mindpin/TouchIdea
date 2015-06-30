@@ -1,19 +1,7 @@
-.page-me.detail{:data => {:nav => :me}}
-  .header
-    .set.info
-      .item.back
-        %a.back{:href => '/account'}
-          %i.fa.fa-chevron-left
-        .title 我发起的议题
-  .info-detail
-    .topics.list.scrolling-list
-      -@created_votes.each do |vote|
-        %a.topic.list-item{:href => "/votes/#{vote.id}"}
-          .data
-            .title= vote.title
-            .stat
-              %span= "#{vote.vote_items.count} 个选项"
-              %span= "#{vote.voted_users.count} 人参与" 
-          .joiner-count= vote.voted_users.count
+.page-votes
+  .mobile-header
+    .title 我发起的议题
+    %a.back{:href => '/account'}
+      %i.fa.fa-chevron-left
 
-      = render_cell :layout, :list_loading, '/account/created_votes'
+  = render_cell :topics, :list, @created_votes, current_user, '/account/created_votes'

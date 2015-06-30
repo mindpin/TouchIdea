@@ -1,21 +1,22 @@
 .topics.list.scrolling-list
-  - @paged_votes.each do |vote|
-    %a.topic.list-item{:href => url_for(vote)}
-      .joiner-count
-        .c= vote.voted_users.count
-      .data
-        .title= vote.title
-        - if vote.infocard
-          = render_cell :topics, :infocard, vote.infocard
-        - if vote.user == @user
-          .user-created
-            %span 这是我创建的议题
-        - if vote.has_voted_by? @user
-          .user-voted
-            %span 我参与过这个议题
-        .options
-          - vote.vote_items_rand_order_by_user(@user).each do |vote_item|
-            - if not vote_item.title.index('SYSTEM:')
-              .option= vote_item.title
+  .box
+    - @paged_votes.each do |vote|
+      %a.topic.list-item{:href => url_for(vote)}
+        .joiner-count
+          .c= vote.voted_users.count
+        .data
+          .title= vote.title
+          - if vote.infocard
+            = render_cell :topics, :infocard, vote.infocard
+          - if vote.user == @user
+            .user-created
+              %span 这是我发起的议题
+          - if vote.has_voted_by? @user
+            .user-voted
+              %span 我参与过这个议题
+          .options
+            - vote.vote_items_rand_order_by_user(@user).each do |vote_item|
+              - if not vote_item.title.index('SYSTEM:')
+                .option= vote_item.title
 
-  = render_cell :layout, :list_loading, @loading_url
+    = render_cell :layout, :list_loading, @loading_url

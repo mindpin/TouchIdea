@@ -1,9 +1,7 @@
-.page-me.detail{:data => {:nav => :me}}
-  .header
-    .set.info
-      .item.back
-        %a.back{:href => '/account'}
-          %i.fa.fa-chevron-left
-        .title 我参与的议题
-  .info-detail
-    = render_cell :topics, :list, @joined_votes, current_user, '/account/joined_votes'
+.page-votes
+  .mobile-header
+    .title 我参与的议题
+    %a.back{:href => '/account'}
+      %i.fa.fa-chevron-left
+
+  = render_cell :topics, :list, @joined_votes, current_user, '/account/joined_votes'
