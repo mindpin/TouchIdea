@@ -1035,42 +1035,37 @@ body.auth .phone-screen {
 }
 
 .page-new-topic {
-  $bar-height:70px;
+  $bar-height:50px;
 
   .topbar {
     @include height($bar-height);
-    background-color: $detail-header-bg-color;
+    background-color: #f4f4f4;
     box-shadow: $common-box-shadow;
     position: absolute;
     top:0;left:0;right:0;
     z-index: 1;
 
     a.back {
-      float:left;
-      background-color: $filter-bg-color;
-      color:white;
-      @include circle(40px);
-      margin-top: $gpd;
-      margin-left: $gpd;
-      font-size: $top-nav-icon-size;
+      position: absolute;
+      top:0;left:0;bottom:0;width:50px;
+      text-align: center;
+      color: #666;
+      line-height: 50px;
       text-decoration: none;
-      i {
-        @include square(40px);
-        position: relative;
-        left: - 1px;
-        top: 1px;
+      &:hover {
+        background-color: rgba(white, 0.5);
       }
     }
 
     .steps {
       @include height($bar-height);
       position: absolute;
-      top:0;left:$bar-height + $gpd;right:0;
+      top:0;left:$bar-height;right:0;
 
       .step {
         float:left;
         @include height($bar-height);
-        width: $bar-height;
+        width: 60px;
         position: relative;
         &:after {
           position: absolute;
@@ -1078,26 +1073,28 @@ body.auth .phone-screen {
           height:6px;
           border-radius:10px;
           top: ($bar-height - 6px) / 2;
-          right: 15px + 40px + 5px;
+          right: 30px + 15px + 5px;
           width: 20px;
           background-color: $step-bg-color;
           @include default-transition($time: .5s);
         }
 
         span {
-          @include circle(40px);
+          @include circle(30px);
           position: absolute;
-          top: $gpd;
-          left: 50%;
-          margin-left: -20px;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto;
           background-color: $step-bg-color;
           color: white;
-          font-size: 20px;
+          font-size: 15px;
           @include default-transition($time: .5s);
 
           .no, i{
             font-weight: bold;
-            @include square(40px);
+            @include square(30px);
             position: absolute; top:0;left:0;
             @include default-transition($time: .5s);
           }
@@ -1133,7 +1130,7 @@ body.auth .phone-screen {
   .form {
     .part {
       position: absolute;
-      top:75px;left:0;width:100%;
+      top:60px;left:0;width:100%;
       box-sizing:border-box;
 
       background-color: $detail-header-bg-color;
@@ -1584,6 +1581,7 @@ body.auth .phone-screen {
       }
 
       &.userdesc {
+        min-height: 30px;
         height:auto;
         .v {
           float: none;

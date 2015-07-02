@@ -59,6 +59,9 @@
               %i.fa.fa-times
               
         .float-new-type-select
+          :ruby
+            session[:new_from] = request.path
+
           .tips 请选择要创建的议题类型
           .items
             .item

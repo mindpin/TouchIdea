@@ -1,5 +1,5 @@
 .topbar
-  = link_to votes_path, class: 'back' do
+  %a.back{:href => session[:new_from]}
     %i.fa.fa-chevron-left
   .steps
     - @step_count.times do |i|
