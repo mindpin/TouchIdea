@@ -1,5 +1,5 @@
 language: ruby
-bundler_args: --without development
+bundler_args: --without development production
 before_script: ./bin/ci/before_build.sh
 env:
   - CI=true

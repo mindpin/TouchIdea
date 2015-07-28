@@ -52,6 +52,13 @@ group :development do
   gem 'spring-commands-rspec'
 end
 
+group :development, :production do
+  gem "mina",
+      :git => "git://github.com/fushang318/mina.git",
+      :tag => "v0.2.0fix"
+end
+
+
 group :test do
   gem 'capybara'
   gem 'database_cleaner'
@@ -71,9 +78,6 @@ gem 'cocoon'
 
 gem "haml"
 gem "cells"
-gem "mina",
-    :git => "git://github.com/fushang318/mina.git",
-    :tag => "v0.2.0fix"
 
 gem "elasticsearch-model", :require => "elasticsearch/model"
 gem "elasticsearch-rails", :require => "elasticsearch/rails"
