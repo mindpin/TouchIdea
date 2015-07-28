@@ -8,3 +8,6 @@ rvm:
   - 2.2.0
 gemfile:
   - Gemfile
+services:
+  - mongodb      # start mongodb
+  - redis-server  # start redis-server
